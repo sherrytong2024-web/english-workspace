@@ -3,8 +3,7 @@ services:
     name: english-workspace
     runtime: docker
     plan: free
-    rootDir: .
-    dockerfilePath: ./Dockerfile
+    dockerfilePath: Dockerfile
     healthCheckPath: /api/stats
     envVars:
       - key: DATABASE_URL
