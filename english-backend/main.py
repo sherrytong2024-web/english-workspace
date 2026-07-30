@@ -48,32 +48,6 @@ def startup():
         print("[startup] auto-seed skipped:", e)
 
 
-# ==================== 同源托管前端 / 管理后台 ====================
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-FRONTEND_DIR = os.path.join(BASE_DIR, "..", "english-workspace")
-ADMIN_DIR = os.path.join(BASE_DIR, "admin")
-
-
-@app.get("/{full_path:path}")
-async def spa(full_path: str):
-    """兜底路由：前端静态页（同源部署，免 CORS）。
-
-    /api/* 交给上面的接口；/admin/* 从管理后台目录取文件。
-    """
-    if full_path.startswith("api"):
-        raise HTTPException(status_code=404, detail="Not found")
-    if full_path.startswith("admin"):
-        candidate = os.path.join(ADMIN_DIR, full_path[len("admin"):].lstrip("/"))
-        if os.path.isfile(candidate):
-            return FileResponse(candidate)
-        return FileResponse(os.path.join(ADMIN_DIR, "index.html"))
-    # 前端目录：存在具体文件则直接返回，否则回退到 index.html
-    candidate = os.path.join(FRONTEND_DIR, full_path)
-    if os.path.isfile(candidate):
-        return FileResponse(candidate)
-    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
-
-
 # ==================== 单词 ====================
 @app.get("/api/words", response_model=List[WordOut])
 def list_words(
@@ -344,6 +318,27 @@ ADMIN_DIR = os.path.join(os.path.dirname(__file__), "admin")
 @app.get("/admin/")
 def admin_page():
     return FileResponse(os.path.join(ADMIN_DIR, "index.html"))
+
+
+# ==================== 同源托管前端（必须放在所有 /api 路由之后） ====================
+FRONTEND_DIR = os.path.join(os.path.dirname(__file__), "..", "english-workspace")
+
+
+@app.get("/{full_path:path}")
+async def spa(full_path: str):
+    """兜底路由：前端静态页（同源部署，免 CORS）。
+
+    /api/* 已在上面定义并优先匹配；这里只兜底前端页面与管理后台子资源。
+    """
+    if full_path.startswith("admin"):
+        candidate = os.path.join(ADMIN_DIR, full_path[len("admin"):].lstrip("/"))
+        if os.path.isfile(candidate):
+            return FileResponse(candidate)
+        return FileResponse(os.path.join(ADMIN_DIR, "index.html"))
+    candidate = os.path.join(FRONTEND_DIR, full_path)
+    if os.path.isfile(candidate):
+        return FileResponse(candidate)
+    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
 
 
 if __name__ == "__main__":
