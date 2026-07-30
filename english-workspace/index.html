@@ -383,7 +383,7 @@ tr:hover td{background:#f9fafb}
         </div>
       </div>
       <div class="grid-3" style="margin-bottom:20px">
-        <div class="stat-box" style="grid-column: span 2" id="ov-motivation-box">
+        <div class="stat-box" style="grid-column: span 2;cursor:pointer" id="ov-motivation-box" onclick="refreshMotivation()" title="点击换一句">
           <div class="label">今日一句</div>
           <div style="font-size:15px;line-height:1.6;color:var(--text);font-style:italic" id="ov-motivation-text">加载中...</div>
           <div style="font-size:11px;color:var(--muted);margin-top:6px" id="ov-motivation-author"></div>
@@ -906,7 +906,9 @@ function populateWordSourceSelect(sources){
   var sel = document.getElementById('word-source-sel');
   if(!sel) return;
   sel.innerHTML = sources.map(function(s){
-    return '<option value="'+s.id+'"' + (s.id===_activeWordSource?' selected':'') + '>' + s.name + '</option>';
+    var label = s.name + (s.available ? '' : ' (待接入)');
+    var disabled = s.available ? '' : ' disabled style="color:var(--muted)"';
+    return '<option value="'+s.id+'"' + (s.id===_activeWordSource?' selected':'') + disabled + '>' + label + '</option>';
   }).join('');
 }
 
@@ -914,7 +916,9 @@ function populateDlgSourceSelect(sources){
   var sel = document.getElementById('dlg-source-sel');
   if(!sel) return;
   sel.innerHTML = sources.map(function(s){
-    return '<option value="'+s.id+'"' + (s.id===_activeDlgSource?' selected':'') + '>' + s.name + '</option>';
+    var label = s.name + (s.available ? '' : ' (待接入)');
+    var disabled = s.available ? '' : ' disabled style="color:var(--muted)"';
+    return '<option value="'+s.id+'"' + (s.id===_activeDlgSource?' selected':'') + disabled + '>' + label + '</option>';
   }).join('');
 }
 
