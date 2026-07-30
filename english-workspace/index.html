@@ -288,7 +288,6 @@ tr:hover td{background:#f9fafb}
         <div id="daily-dialog-list"></div>
       </div>
 
-      <div class="filter-bar" id="dialog-filter"></div>
       <div id="dialog-list"></div>
     </section>
 
@@ -1152,22 +1151,13 @@ function markMastered(w){
 }
 
 // ===== 对话 =====
-const DCATS={finance:{name:'金融职场',cls:'fin'},biz:{name:'商业会议',cls:'biz'},daily:{name:'日常',cls:'daily'},travel:{name:'旅游',cls:'travel'}};
-let curDialogFilter='all';
-function renderDialogFilter(){
-  const cats=[{key:'all',name:'全部'}].concat(Object.entries(DCATS).map(([k,v])=>({key:k,name:v.name})));
-  $('#dialog-filter').innerHTML=cats.map(c=>`<span class="filter-chip ${c.key===curDialogFilter?'active':''}" onclick="setDialogFilter('${c.key}')">${c.name}</span>`).join('');
-}
-function setDialogFilter(k){curDialogFilter=k;renderDialogFilter();renderDialogs()}
 function renderDialogs(){
   initSourceSelects();
-  renderDialogFilter();
   renderDailyDialogs();
   var sortedList=state.allDialogues.slice().sort(function(a,b){return (a.order||99)-(b.order||99)});
-  var filtered=sortedList.filter(function(d){return curDialogFilter==='all'||d.cat===curDialogFilter});
   // 从数据中提取阶段（去重、去空、按 stage_order 排序）
   var stageMap = {};
-  filtered.forEach(function(d){
+  var filtered = sortedList; filtered.forEach(function(d){
     var st = d.stage||'其他';
     if(!stageMap[st]) stageMap[st] = {name:st, dialogues:[], minOrder:9999};
     stageMap[st].dialogues.push(d);
