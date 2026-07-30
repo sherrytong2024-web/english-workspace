@@ -209,7 +209,7 @@ tr:hover td{background:#f9fafb}
 
       <div class="card" id="daily-words-card">
         <div class="card-title">
-          <span>今日单词推荐 (<span id="daily-word-count">0</span>/10 已完成)</span>
+          <span>今日单词推荐 (<span id="daily-word-count">0</span>/0 已完成)</span>
           <div>
             <button class="btn sm ghost" onclick="logDailyWords()" style="margin-right:6px">全标记</button>
             <button class="btn sm ghost" onclick="navigate('review')">去复习</button>
@@ -922,9 +922,9 @@ function renderDashboard(){
 
   // 今日推荐预览
   const r=getTodayRecommend();
-  const dw = state.dailyWords.length ? state.dailyWords[0].words : [];
-  const dwDone = dw.filter(w => w.done).length;
-  const dwTotal = dw.length;
+  const allDw = state.dailyWords.flatMap(g => g.words);
+  const dwDone = allDw.filter(w => w.done).length;
+  const dwTotal = allDw.length;
   $('#dashboard-rec').innerHTML = '<div class="recommend-item"><div class="thumb">' + (r.type==='video'?'📺':r.type==='podcast'?'🎧':'💬') + '</div><div class="info"><div class="title">' + r.title + '</div><div class="meta">' + r.src + ' · ' + r.level + '</div></div><button class="btn sm" onclick="navigate(\'recommend\')">查看</button></div>' +
     '<div style="margin-top:10px;padding:10px;background:#f0fdf4;border-radius:6px;font-size:13px"><b>今日单词</b>: ' + dwDone + '/' + dwTotal + ' 已完成 <button class="btn sm ghost" onclick="navigate(\'words\')">去学习 →</button></div>';
 }
@@ -972,63 +972,96 @@ function renderWordList(search){
 }
 function goWordPage(p){if(p<1)return;wordPage=p;renderWordList(curWordSearch)}
 function renderDailyWords(){
-  ensureDailyWords(); // 确保当天每日单词已生成（含结构容错）
-  const todayWords = state.dailyWords[0].words;
-  const doneCount = todayWords.filter(function(w){return w.done}).length;
-  $('#daily-word-count').textContent = doneCount;
-  $('#daily-word-progress').style.width = (doneCount / todayWords.length * 100) + '%';
+  ensureDailyWords();
+  const allWords = state.dailyWords.flatMap(g => g.words);
+  const doneCount = allWords.filter(w => w.done).length;
+  const total = allWords.length;
+  $('#daily-word-count').textContent = doneCount + '/' + total;
+  $('#daily-word-progress').style.width = (total ? doneCount/total*100 : 0) + '%';
+
   var catMap = {finance:"fin",professional:"pro",daily:"daily",travel:"travel",academic:"pro"};
   var catName = {finance:"金融",professional:"职场",daily:"日常",travel:"旅游",academic:"学术"};
-  var rows = "";
-  for(var wi=0;wi<todayWords.length;wi++){
-    var w = todayWords[wi];
-    var checked = w.done ? " checked" : "";
-    var pinyin = w.phonetic ? '<br><span style="color:var(--muted);font-size:11px">'+w.phonetic+'</span>' : "";
-    var tc = catMap[w.cat] || "pro";
-    var tn = catName[w.cat] || w.cat;
-    var sw = w.word.replace(/'/g, function(m){return "&apos;"});
-    rows += '<tr><td><input type="checkbox"'+checked+' onchange="toggleDailyWord(\''+sw+'\')"></td><td><b>'+w.word+'</b>'+pinyin+'</td><td>'+(w.meaning||'')+'</td><td><span class="tag '+tc+'">'+tn+'</span></td><td style="color:var(--muted);max-width:200px;font-size:12px">'+(w.example||'')+'</td></tr>';
+  var rows = '';
+  for(var gi=0;gi<state.dailyWords.length;gi++){
+    var group = state.dailyWords[gi];
+    if(gi>0) rows += '<tr><td colspan="5" style="text-align:center;color:var(--muted);font-size:11px;padding:8px">第 '+(gi+1)+' 组（10 个）</td></tr>';
+    for(var wi=0;wi<group.words.length;wi++){
+      var w = group.words[wi];
+      var checked = w.done ? " checked" : "";
+      var pinyin = w.phonetic ? '<br><span style="color:var(--muted);font-size:11px">'+w.phonetic+'</span>' : "";
+      var tc = catMap[w.cat] || "pro";
+      var tn = catName[w.cat] || w.cat;
+      var sw = (w.word||'').replace(/'/g, "&apos;");
+      rows += '<tr><td><input type="checkbox"'+checked+' onchange="toggleDailyWord(\''+sw+'\')"></td><td><b>'+w.word+'</b>'+pinyin+'</td><td>'+(w.meaning||'')+'</td><td><span class="tag '+tc+'">'+tn+'</span></td><td style="color:var(--muted);max-width:200px;font-size:12px">'+(w.example||'')+'</td></tr>';
+    }
   }
-  $('#daily-words-list').innerHTML = '<table><thead><tr><th style="width:30px">&#10003;</th><th>&#21333;&#35789;</th><th>&#37322;&#20041;</th><th>&#20998;&#31867;</th><th>&#20363;&#21477;</th></tr></thead><tbody>'+rows+'</tbody></table>';
-
+  var moreBtn = doneCount===total ? '<div style="text-align:center;margin-top:10px"><button class="btn" onclick="addMoreDailyWords()">+ 再学 10 个</button></div>' : '';
+  $('#daily-words-list').innerHTML = '<table style="margin-bottom:8px"><thead><tr><th style="width:30px">&#10003;</th><th>单词</th><th>释义</th><th>分���</th><th>例句</th></tr></thead><tbody>'+rows+'</tbody></table>' + moreBtn;
 }
+
+function addMoreDailyWords(){
+  const used = new Set(state.dailyWords.flatMap(g => g.words.map(w => w.word)));
+  const candidates = state.words.filter(w => !used.has(w.word));
+  if(!candidates.length){ toast('词库中所有单词都已加入今日学习'); return; }
+  const shuffled = [...candidates].sort(() => Math.random() - 0.5);
+  const today = todayStr();
+  const group = {
+    date: today,
+    words: shuffled.slice(0,10).map(w => ({
+      word: w.word, meaning: w.meaning, phonetic: w.phonetic,
+      cat: w.cat, example: w.example,
+      done: false
+    }))
+  };
+  state.dailyWords.push(group);
+  DB.save('dailyWords', state.dailyWords);
+  toast('已追加 10 个新单词');
+  renderDailyWords();
+  renderDashboard();
+}
+
 function toggleDailyWord(word){
   const today = todayStr();
-  const words = state.dailyWords[0].words;
-  const w = words.find(x => x.word === word);
-  if(w){
-    w.done = !w.done;
-    const key = today + ':' + word;
-    if(w.done){
-      if(!state.completedDailyWords.includes(key)) state.completedDailyWords.push(key);
-      addLog('dailyword','完成今日单词: ' + word);
-    } else {
-      state.completedDailyWords = state.completedDailyWords.filter(x => x !== key);
+  for(var gi=0;gi<state.dailyWords.length;gi++){
+    var w = state.dailyWords[gi].words.find(x => x.word === word);
+    if(w){
+      w.done = !w.done;
+      const key = today + ':' + word;
+      if(w.done){
+        if(!state.completedDailyWords.includes(key)) state.completedDailyWords.push(key);
+        addLog('dailyword','完成今日单词: ' + word);
+      } else {
+        state.completedDailyWords = state.completedDailyWords.filter(x => x !== key);
+      }
+      DB.save('dailyWords', state.dailyWords);
+      DB.save('completedDailyWords', state.completedDailyWords);
+      renderDailyWords();
+      renderDashboard();
+      return;
     }
-    DB.save('dailyWords', state.dailyWords);
-    DB.save('completedDailyWords', state.completedDailyWords);
-    renderDailyWords();
-    renderDashboard();
   }
 }
+
 function logDailyWords(){
   const today = todayStr();
-  if(state.dailyWords.length && state.dailyWords[0].date === today){
-    state.dailyWords[0].words.forEach(w => {
-      if(!w.done){
-        w.done = true;
-        const key = today + ':' + w.word;
-        if(!state.completedDailyWords.includes(key)) state.completedDailyWords.push(key);
-        addLog('dailyword','完成今日单词: ' + w.word);
-      }
-    });
-    DB.save('dailyWords', state.dailyWords);
-    DB.save('completedDailyWords', state.completedDailyWords);
-    renderDailyWords();
-    renderDashboard();
-    toast('今日单词已全部标记完成');
-  }
+  state.dailyWords.forEach(g => {
+    if(g.date === today){
+      g.words.forEach(w => {
+        if(!w.done){
+          w.done = true;
+          const key = today + ':' + w.word;
+          if(!state.completedDailyWords.includes(key)) state.completedDailyWords.push(key);
+          addLog('dailyword','完成今日单词: ' + w.word);
+        }
+      });
+    }
+  });
+  DB.save('dailyWords', state.dailyWords);
+  DB.save('completedDailyWords', state.completedDailyWords);
+  renderDailyWords();
+  toast('已全部标记为完成');
 }
+
 function delWord(w){
   state.words=state.words.filter(x=>x.word!==w);DB.save('words',state.words);
   addLog('word','删除单词: '+w);
