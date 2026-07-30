@@ -6,7 +6,7 @@ from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import Optional, List
-import os
+import os, random, hashlib, datetime as dt
 
 from database import init_db, get_db, SessionLocal
 from models import Word, Dialogue, Resource, LearningLog, UserProgress
@@ -309,6 +309,103 @@ def stats(db: Session = Depends(get_db)):
         "resources": db.query(Resource).count(),
         "logs": db.query(LearningLog).count(),
     }
+
+
+# ==================== 每日推荐（RSS 博客 + iTunes 歌曲） ====================
+_daily_cache = {}
+
+# 英文学习 RSS 源列表
+RSS_SOURCES = [
+    {"name": "BBC Learning English", "url": "https://feeds.bbci.co.uk/learningenglish/rss.xml"},
+    {"name": "VOA Learning English", "url": "https://learningenglish.voanews.com/api/zq$omekviwquq"},
+    {"name": "Breaking News English", "url": "https://feeds.feedburner.com/breakingnewsenglish"},
+    {"name": "EnglishClub", "url": "https://www.englishclub.com/feed/"},
+]
+
+# iTunes 搜索关键词池（每次随机选 2 个组合）
+SONG_KEYWORDS = ["english pop", "acoustic", "indie folk", "jazz vocal", "singer songwriter",
+                 "classic rock", "british pop", "american folk", "alternative rock", "soul music"]
+
+def _fetch_blogs():
+    """聚合 RSS 源，返回 3 篇文章"""
+    import feedparser
+    items = []
+    for src in RSS_SOURCES:
+        try:
+            feed = feedparser.parse(src["url"])
+            for entry in feed.entries[:5]:
+                items.append({
+                    "title": entry.get("title", "").strip(),
+                    "url": entry.get("link", ""),
+                    "summary": (entry.get("summary", "") or entry.get("description", ""))[:200],
+                    "source": src["name"],
+                    "published": entry.get("published", "")
+                })
+        except Exception as e:
+            print(f"[RSS] {src['name']} failed:", e)
+    # 按发布时间排序，取前 3
+    items.sort(key=lambda x: x.get("published", ""), reverse=True)
+    return items[:3] if items else _fallback_blogs()
+
+def _fallback_blogs():
+    """RSS 全失败时的候补"""
+    return [
+        {"title": "How to Improve Your English Speaking Skills", "url": "https://www.bbc.co.uk/learningenglish/", "summary": "Practical tips for improving spoken English.", "source": "候补推荐"},
+        {"title": "The Secret to Learning English Grammar", "url": "https://learningenglish.voanews.com/", "summary": "Understanding grammar through real-world examples.", "source": "候补推荐"},
+        {"title": "10 English Idioms You Should Know", "url": "https://www.englishclub.com/", "summary": "Common idioms used in business and daily conversation.", "source": "候补推荐"},
+    ]
+
+def _fetch_songs():
+    """从 iTunes API 随机搜索英文歌曲，返回 3 首"""
+    import requests as req
+    kw1, kw2 = random.sample(SONG_KEYWORDS, 2)
+    query = f"{kw1} {kw2}"
+    track_ids_seen = set()
+    songs = []
+    for kw in [query, random.choice(SONG_KEYWORDS)]:
+        try:
+            r = req.get("https://itunes.apple.com/search", 
+                       params={"term": kw, "media": "music", "entity": "song", "limit": 50},
+                       timeout=10)
+            data = r.json()
+            for item in data.get("results", []):
+                tid = str(item.get("trackId", ""))
+                if tid in track_ids_seen:
+                    continue
+                track_ids_seen.add(tid)
+                songs.append({
+                    "id": tid,
+                    "title": item.get("trackName", ""),
+                    "artist": item.get("artistName", ""),
+                    "preview_url": item.get("previewUrl", ""),
+                    "artwork_url": (item.get("artworkUrl100") or "").replace("100x100", "300x300"),
+                    "collection": item.get("collectionName", "")
+                })
+            if len(songs) >= 6:
+                break
+        except Exception as e:
+            print(f"[iTunes] search failed for '{kw}':", e)
+    random.shuffle(songs)
+    return songs[:3] if len(songs) >= 3 else _fallback_songs()
+
+def _fallback_songs():
+    return [
+        {"id": "fb1", "title": "Shape of You", "artist": "Ed Sheeran", "preview_url": "", "artwork_url": ""},
+        {"id": "fb2", "title": "Rolling in the Deep", "artist": "Adele", "preview_url": "", "artwork_url": ""},
+        {"id": "fb3", "title": "Blinding Lights", "artist": "The Weeknd", "preview_url": "", "artwork_url": ""},
+    ]
+
+@app.get("/api/daily/recommend")
+def daily_recommend():
+    today = dt.datetime.utcnow().strftime("%Y-%m-%d")
+    if today in _daily_cache:
+        return _daily_cache[today]
+    blogs = _fetch_blogs()
+    songs = _fetch_songs()
+    result = {"date": today, "blogs": blogs, "songs": songs}
+    _daily_cache.clear()
+    _daily_cache[today] = result
+    return result
 
 
 # ==================== 管理后台 ====================

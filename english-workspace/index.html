@@ -125,6 +125,20 @@ tr:hover td{background:#f9fafb}
 .highlight-dialog{border-color:var(--primary)!important;box-shadow:0 0 0 3px rgba(37,99,235,.2)!important;transition:all .5s}
 .badge.todo{background:var(--accent)}
 .badge.new{background:var(--primary)}
+
+/* 每日推荐 */
+.blog-card .src{font-size:11px;color:var(--muted);margin-bottom:4px}
+.blog-card .name{font-weight:600;font-size:14px;margin-bottom:6px}
+.blog-card .desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:8px}
+.blog-card .link{font-size:12px;font-weight:500}
+.song-card{text-align:center}
+.song-card .song-art{width:100%;max-height:160px;object-fit:cover;border-radius:6px}
+.song-card .song-art-placeholder{width:100%;height:120px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff}
+.song-card .song-play{margin:8px 0;width:100%;max-width:100%}
+.song-card .song-no-preview{font-size:11px;color:var(--muted);margin:8px 0;font-style:italic}
+.song-card .song-actions{display:flex;gap:6px;justify-content:center;margin-top:8px}
+.song-card.liked{border-color:var(--danger)}
+.song-card.disliked{opacity:.6}
 </style>
 </head>
 <body>
@@ -133,14 +147,13 @@ tr:hover td{background:#f9fafb}
     <h1>EN Workspace</h1>
     <div class="nav-section">学习</div>
     <div class="nav-item active" data-page="overview"><span class="icon">📅</span>学习概览</div>
+    <div class="nav-item" data-page="recommend"><span class="icon">✨</span>每日推荐</div>
     <div class="nav-item" data-page="words"><span class="icon">📖</span>单词本</div>
     <div class="nav-item" data-page="dialogues"><span class="icon">💬</span>对话练习</div>
-    <div class="nav-section">资源</div>
-    <div class="nav-item" data-page="resources"><span class="icon">🔗</span>资源中心</div>
-    <div class="nav-item" data-page="recommend"><span class="icon">✨</span>每日推荐</div>
     <div class="nav-section">记录</div>
-    <div class="nav-item" data-page="log"><span class="icon">📝</span>学习记录</div>
     <div class="nav-item" data-page="review"><span class="icon">🔁</span>复习</div>
+    <div class="nav-item" data-page="resources"><span class="icon">🔗</span>资源中心</div>
+    <div class="nav-item" data-page="log"><span class="icon">📝</span>学习记录</div>
   </aside>
 
   <main class="main">
@@ -301,24 +314,13 @@ tr:hover td{background:#f9fafb}
     <!-- 每日推荐 -->
     <section id="page-recommend" class="page">
       <div class="page-header">
-        <div><h2>每日个性化推荐</h2><div class="sub">基于你的学习偏好 · 不感兴趣可换一个</div></div>
-        <button class="btn" onclick="refreshRecommend()">🔄 换一批</button>
+        <div><h2>每日推荐</h2><div class="sub" id="recommend-date"></div></div>
+        <button class="btn" onclick="refreshRecommend()">⟳ 换一批</button>
       </div>
-      <div class="card">
-        <div class="card-title">今日为你推荐</div>
-        <div id="recommend-list"></div>
-      </div>
-      <div class="card">
-        <div class="card-title">学习偏好</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.8">
-          <div>偏好方向：<b id="pref-cat">金融 / 职场</b></div>
-          <div>当前水平：<b id="pref-level">中级 (B2)</b></div>
-          <div>每日目标：<b id="pref-goal">15 词 + 1 段对话</b></div>
-          <div style="margin-top:8px">
-            <button class="btn sm ghost" onclick="updatePref()">修改偏好</button>
-          </div>
-        </div>
-      </div>
+      <div class="section-title">📰 今日博客/学习资源</div>
+      <div id="blog-list" class="grid-3" style="margin-bottom:20px"></div>
+      <div class="section-title">🎵 随机英文歌曲</div>
+      <div id="song-list" class="grid-3"></div>
     </section>
 
     <!-- 学习记录 -->
@@ -1138,72 +1140,89 @@ function toggleFav(name,url){
   renderResources(curWordSearch);toast(state.favorites.some(f=>f.name===name)?'已收藏':'已取消');
 }
 
-// ===== 推荐 =====
-function getTodayRecommend(){
-  // 基于日期的稳定推荐
-  const seed=parseInt(todayStr().replace(/-/g,''));
-  const prefs=state.prefs.cat;
-  const pool=RECOMMEND_POOL.filter(r=>prefs.includes(r.tag));
-  const p=pool.length?pool:RECOMMEND_POOL;
-  return p[seed%p.length];
-}
-function renderRecommend(){
-  const r=getTodayRecommend();
-  $('#recommend-list').innerHTML=`<div class="recommend-item">
-    <div class="thumb">${r.type==='video'?'📺':r.type==='podcast'?'🎧':'💬'}</div>
-    <div class="info"><div class="title">${r.title}</div><div class="meta">${r.src} · ${r.level} · ${r.tag}</div><div class="meta" style="margin-top:4px">${r.desc}</div></div>
-    <div class="actions">
-      <a class="btn sm" href="${r.url}" target="_blank" rel="noopener" onclick="logRecommend('${r.title.replace(/'/g,"\\'")}')">立即学习</a>
-      <button class="btn sm outline" onclick="skipRecommend()">不感兴趣，换一个</button>
-    </div>
-  </div>`;
-  $('#pref-cat').textContent=state.prefs.cat.join(' / ');
-  $('#pref-level').textContent=state.prefs.level;
-  $('#pref-goal').textContent=state.prefs.goal;
-}
-let skipCount=0;
-function skipRecommend(){
-  skipCount++;
-  const seed=parseInt(todayStr().replace(/-/g,''))+skipCount;
-  const prefs=state.prefs.cat;
-  const pool=RECOMMEND_POOL.filter(r=>prefs.includes(r.tag));
-  const p=pool.length?pool:RECOMMEND_POOL;
-  const r=p[seed%p.length];
-  $('#recommend-list').innerHTML=`<div class="recommend-item">
-    <div class="thumb">${r.type==='video'?'📺':r.type==='podcast'?'🎧':'💬'}</div>
-    <div class="info"><div class="title">${r.title}</div><div class="meta">${r.src} · ${r.level} · ${r.tag}</div><div class="meta" style="margin-top:4px">${r.desc}</div></div>
-    <div class="actions">
-      <a class="btn sm" href="${r.url}" target="_blank" rel="noopener" onclick="logRecommend('${r.title.replace(/'/g,"\\'")}')">立即学习</a>
-      <button class="btn sm outline" onclick="skipRecommend()">再换一个</button>
-    </div>
-  </div>`;
-  toast('已为你换一个');
+// ===== 每日推荐（RSS 博客 + iTunes 歌曲）=====
+var _dailyRecData = null;  // 当天缓存
+var _songFeedback = DB.load('songFeedback', {like:[], dislike:[]});
+
+async function renderRecommend(){
+  $('#recommend-date').textContent = todayStr();
+  var data = _dailyRecData;
+  if(!data){
+    try{
+      data = await API.get('/api/daily/recommend');
+      _dailyRecData = data;
+    }catch(e){
+      console.warn('推荐加载失败', e);
+      $('#blog-list').innerHTML = '<div class="empty">加载失败，请稍后重试</div>';
+      $('#song-list').innerHTML = '';
+      return;
+    }
+  }
+  renderBlogs(data.blogs || []);
+  renderSongs(data.songs || []);
 }
 
-function handleRecommendClick(event, title, type, url){
-  if(type === 'dialog' && url.startsWith('#dialog-')){
-    event.preventDefault();
-    logRecommend(title, true, url.replace('#',''));
-    return false;
+function renderBlogs(blogs){
+  if(!blogs.length){ $('#blog-list').innerHTML='<div class="empty">暂无文章</div>'; return; }
+  $('#blog-list').innerHTML = blogs.map(function(b){
+    return '<div class="card blog-card">' +
+      '<div class="src">' + esc(b.source||'') + '</div>' +
+      '<div class="name">' + esc(b.title||'') + '</div>' +
+      '<div class="desc">' + esc(b.summary||'') + '</div>' +
+      '<a class="link" href="' + esc(b.url||'#') + '" target="_blank" rel="noopener">阅读全文 →</a>' +
+    '</div>';
+  }).join('');
+}
+
+function renderSongs(songs){
+  if(!songs.length){ $('#song-list').innerHTML='<div class="empty">暂无歌曲</div>'; return; }
+  var fb = _songFeedback;
+  $('#song-list').innerHTML = songs.map(function(s){
+    var liked = fb.like.indexOf(s.id) >= 0;
+    var disliked = fb.dislike.indexOf(s.id) >= 0;
+    var img = s.artwork_url ? '<img src="' + esc(s.artwork_url) + '" class="song-art" alt="">' : '<div class="song-art-placeholder">🎵</div>';
+    var play = s.preview_url ? '<audio controls class="song-play"><source src="' + esc(s.preview_url) + '"></audio>' : '<div class="song-no-preview">��预览</div>';
+    return '<div class="card song-card' + (liked?' liked':'') + (disliked?' disliked':'') + '">' +
+      img +
+      '<div class="name" style="font-size:14px;margin-top:8px">' + esc(s.title||'') + '</div>' +
+      '<div class="meta" style="font-size:12px;color:var(--muted)">' + esc(s.artist||'') + '</div>' +
+      play +
+      '<div class="song-actions">' +
+        '<button class="btn sm ' + (liked?'':'outline') + '" onclick="toggleSong(&apos;' + s.id + '&apos;,&apos;like&apos;)">' + (liked?'❤️ 已喜欢':'♡ 喜欢') + '</button>' +
+        '<button class="btn sm ' + (disliked?'danger':'ghost') + '" onclick="toggleSong(&apos;' + s.id + '&apos;,&apos;dislike&apos;)">' + (disliked?'✕ 已跳过':'跳过') + '</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function toggleSong(id, type){
+  var fb = _songFeedback;
+  var other = type==='like'?'dislike':'like';
+  if(fb[type].indexOf(id) >= 0){
+    fb[type] = fb[type].filter(function(x){return x!==id});
+  } else {
+    fb[type].push(id);
+    fb[other] = fb[other].filter(function(x){return x!==id});
   }
-  logRecommend(title, false, null);
-  return true;
+  DB.save('songFeedback', fb);
+  API.put('/api/progress/'+USER_ID, {song_likes:fb.like, song_dislikes:fb.dislike}).catch(function(){});
+  if(_dailyRecData && _dailyRecData.songs) renderSongs(_dailyRecData.songs);
+  addLog('recommend', (type==='like'?'喜欢':'跳过')+'歌曲: '+id);
 }
-function logRecommend(title, isDialog, dialogId){
-  addLog('recommend','学习推荐: '+title);
-  if(isDialog && dialogId){
-    navigate('dialogues');
-    setTimeout(() => {
-      document.getElementById(dialogId)?.scrollIntoView({behavior:'smooth', block:'center'});
-      document.getElementById(dialogId)?.classList.add('highlight-dialog');
-    }, 200);
-  }
+
+function refreshRecommend(){
+  _dailyRecData = null;
+  renderRecommend();
+  toast('已刷新推荐');
 }
-function refreshRecommend(){skipCount=0;renderRecommend();toast('已刷新')}
-function updatePref(){
-  const cats=prompt('输入偏好方向（逗号分隔），可选: finance,biz,daily,travel,learning',state.prefs.cat.join(','));
-  if(cats){state.prefs.cat=cats.split(',').map(s=>s.trim()).filter(Boolean);DB.save('prefs',state.prefs);renderRecommend();toast('已更新偏好')}
-}
+
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+function getTodayRecommend(){ return _dailyRecData ? {title:'每日推荐已就绪',type:'link',src:'云端',level:'',desc:''} : {title:'加载中...',type:'link',src:'',level:'',desc:''}; }
+function skipRecommend(){ refreshRecommend(); }
+function updatePref(){}
+function logRecommend(title){ addLog('recommend','学习推荐: '+title); }
+function handleRecommendClick(){ return true; }
 
 // ===== 学习记录 =====
 function renderLog(){
