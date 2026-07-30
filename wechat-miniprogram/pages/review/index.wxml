@@ -1,0 +1,37 @@
+<nav-drawer title="复习" current="review">
+  <view class="card">
+    <view class="tab-row">
+      <text class="tab {{tab === 'dialog' ? 'on' : ''}}" data-tab="dialog" bindtap="setTab">已学对话</text>
+      <text class="tab {{tab === 'word' ? 'on' : ''}}" data-tab="word" bindtap="setTab">已掌握单词</text>
+    </view>
+  </view>
+
+  <view class="card" wx:if="{{tab === 'dialog'}}">
+    <view class="card-title"><text>💬 已学对话 ({{dialogs.length}})</text></view>
+    <view wx:for="{{dialogs}}" wx:key="id" class="dialog-item">
+      <view class="d-scene">{{item.scene}}</view>
+      <view wx:if="{{expanded === item.id}}" class="d-body">
+        <view wx:for="{{item.body}}" wx:for-item="line" wx:key="_i" class="d-line">
+          <text class="d-speaker">{{line.s}}:</text><text>{{line.t}}</text>
+        </view>
+      </view>
+      <view class="d-keywords muted">关键表达: <text wx:for="{{item.keywords}}" wx:for-item="k" wx:key="*this" class="tag">{{k}}</text></view>
+      <view class="d-actions">
+        <text class="link" data-id="{{item.id}}" bindtap="toggleBody">{{expanded === item.id ? '收起' : '展开'}}</text>
+        <text class="link" data-id="{{item.id}}" bindtap="toggleLearned">取消已学</text>
+      </view>
+    </view>
+    <view class="empty" wx:if="{{!dialogs.length}}">还没有已学对话</view>
+  </view>
+
+  <view class="card" wx:if="{{tab === 'word'}}">
+    <view class="card-title"><text>📚 已掌握单词 ({{words.length}})</text></view>
+    <view wx:for="{{words}}" wx:key="word" class="word-row">
+      <view class="wr-top"><text class="wr-word">{{item.word}}</text></view>
+      <view class="wr-phon muted">{{item.phonetic}}</view>
+      <view class="wr-mean">{{item.meaning}}</view>
+      <view class="wr-act"><text class="link" data-word="{{item.word}}" bindtap="markMastered">取消掌握</text></view>
+    </view>
+    <view class="empty" wx:if="{{!words.length}}">还没有已掌握单词</view>
+  </view>
+</nav-drawer>

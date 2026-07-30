@@ -1,0 +1,4 @@
+.picker { background: #f8fafc; border: 1rpx solid #e2e8f0; border-radius: 10rpx; padding: 16rpx; font-size: 26rpx; margin-bottom: 14rpx; }
+.log-item { display: flex; gap: 16rpx; padding: 14rpx 0; border-bottom: 1rpx solid #f1f5f9; }
+.log-time { font-size: 22rpx; width: 150rpx; flex-shrink: 0; }
+.log-text { flex: 1; font-size: 26rpx; }

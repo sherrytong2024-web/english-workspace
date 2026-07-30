@@ -1,0 +1,20 @@
+{
+  "pages": [
+    "pages/dashboard/index",
+    "pages/words/index",
+    "pages/dialogues/index",
+    "pages/resources/index",
+    "pages/recommend/index",
+    "pages/log/index",
+    "pages/review/index",
+    "pages/overview/index"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "backgroundColor": "#f1f5f9",
+    "backgroundTextStyle": "dark",
+    "enablePullDownRefresh": false
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

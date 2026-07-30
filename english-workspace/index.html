@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英语综合提升工作台</title>
+<style>
+:root{
+  --bg:#f7f8fa; --card:#fff; --border:#e5e7eb; --text:#1f2937; --muted:#6b7280;
+  --primary:#2563eb; --primary-hover:#1d4ed8; --accent:#f59e0b;
+  --success:#10b981; --danger:#ef4444; --light-blue:#eff6ff;
+  --tag-fin:#dbeafe; --tag-daily:#fef3c7; --tag-travel:#d1fae5; --tag-biz:#f3e8ff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6}
+a{color:var(--primary);text-decoration:none}
+a:hover{text-decoration:underline}
+button{cursor:pointer;border:none;border-radius:6px;font-family:inherit;font-size:14px;transition:all .15s}
+button:active{transform:translateY(1px)}
+
+.app{display:grid;grid-template-columns:220px 1fr;height:100vh;overflow:hidden}
+.sidebar{background:#1e293b;color:#cbd5e1;padding:20px 0;height:100vh;overflow-y:auto}
+.sidebar h1{font-size:18px;padding:0 20px 20px;color:#fff;border-bottom:1px solid #334155;margin-bottom:12px}
+.nav-item{padding:12px 20px;cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:10px}
+.nav-item:hover{background:#334155}
+.nav-item.active{background:var(--primary);color:#fff}
+.nav-item .icon{font-size:16px;width:20px;text-align:center}
+.nav-section{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;padding:16px 20px 8px}
+.main{padding:24px 32px;max-width:1280px;min-width:0;height:100vh;overflow:hidden}
+.page{display:none}
+.page.active{display:block}
+.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.page-header h2{font-size:24px;font-weight:600}
+.page-header .sub{color:var(--muted);font-size:13px;margin-top:4px}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px}
+.card-title{font-size:16px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+
+.stat-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px}
+.stat-box .label{color:var(--muted);font-size:12px;margin-bottom:6px}
+.stat-box .value{font-size:26px;font-weight:700;color:var(--primary)}
+.stat-box .delta{font-size:12px;color:var(--success);margin-top:4px}
+
+.btn{padding:8px 14px;background:var(--primary);color:#fff;font-size:13px}
+.btn:hover{background:var(--primary-hover)}
+.btn.ghost{background:transparent;color:var(--primary);border:1px solid var(--primary)}
+.btn.ghost:hover{background:var(--light-blue)}
+.btn.danger{background:var(--danger)}
+.btn.sm{padding:4px 10px;font-size:12px}
+.btn.outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn.outline:hover{border-color:var(--primary);color:var(--primary)}
+
+.tag{display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:500}
+.tag.fin{background:var(--tag-fin);color:#1e40af}
+.tag.daily{background:var(--tag-daily);color:#92400e}
+.tag.travel{background:var(--tag-travel);color:#065f46}
+.tag.biz{background:var(--tag-biz);color:#6b21a8}
+.tag.pro{background:#e0e7ff;color:#3730a3}
+
+.input,select,textarea{padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:14px;background:#fff;color:var(--text);width:100%}
+.input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary)}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+.form-row{margin-bottom:12px}
+
+table{width:100%;border-collapse:collapse;font-size:13px;word-break:break-word;overflow-wrap:break-word}
+th{text-align:left;padding:10px 12px;background:#f9fafb;border-bottom:1px solid var(--border);color:var(--muted);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.3px}
+td{padding:10px 12px;border-bottom:1px solid #f3f4f6}
+tr:hover td{background:#f9fafb}
+
+.dialog-item{border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;background:#fff}
+.dialog-item:hover{box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.dialog-meta{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12px;color:var(--muted)}
+.dialog-meta .title{font-size:15px;font-weight:600;color:var(--text);flex:1}
+.dialog-body{background:#f9fafb;border-radius:6px;padding:14px;margin:10px 0;font-size:13px;line-height:1.8;max-height:200px;overflow-y:auto}
+.dialog-body .speaker{font-weight:600;color:var(--primary);margin-right:8px}
+.dialog-body .line{margin-bottom:6px}
+.dialog-body .line em{background:#fef3c7;padding:1px 4px;border-radius:3px;font-style:normal;font-weight:500}
+.dialog-actions{display:flex;gap:8px;align-items:center;margin-top:8px}
+
+.resource-card{display:flex;flex-direction:column;border:1px solid var(--border);border-radius:8px;padding:10px;background:#fff;transition:box-shadow .15s;height:100%}
+.resource-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.resource-card .src{font-size:11px;color:var(--muted);margin-bottom:3px}
+.resource-card .name{font-weight:600;font-size:13px;margin-bottom:4px}
+.resource-card .desc{font-size:11px;color:var(--muted);line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.resource-card .link{font-size:11px}
+.res-collapsed{display:none}
+
+.recommend-item{display:flex;gap:12px;padding:10px;border:1px solid var(--border);border-radius:8px;background:#fff;margin-bottom:8px;align-items:center}
+.recommend-item .thumb{width:50px;height:50px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:8px;color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.recommend-item .info{flex:1;min-width:0}
+.recommend-item .info .title{font-weight:600;margin-bottom:2px;font-size:13px}
+.recommend-item .info .meta{font-size:11px;color:var(--muted)}
+.recommend-item .actions{display:flex;gap:6px;flex-shrink:0}
+
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.filter-chip{padding:6px 14px;border:1px solid var(--border);border-radius:16px;background:#fff;font-size:13px;cursor:pointer;color:var(--muted)}
+.filter-chip.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.filter-chip:hover:not(.active){border-color:var(--primary);color:var(--primary)}
+
+.empty{text-align:center;padding:40px;color:var(--muted);font-size:13px}
+.toast{position:fixed;bottom:24px;right:24px;background:#1f2937;color:#fff;padding:10px 16px;border-radius:6px;font-size:13px;z-index:9999;opacity:0;transform:translateY(20px);transition:all .25s}
+.toast.show{opacity:1;transform:translateY(0)}
+
+.flash-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:30px;text-align:center;min-height:180px;display:flex;flex-direction:column;justify-content:center}
+.flash-card .word{font-size:32px;font-weight:700;margin-bottom:10px;color:var(--primary)}
+.flash-card .phonetic{color:var(--muted);font-size:14px;margin-bottom:14px;font-style:italic}
+.flash-card .meaning{font-size:16px;margin-bottom:6px}
+.flash-card .example{font-size:13px;color:var(--muted);margin-top:14px;background:#f9fafb;padding:10px;border-radius:6px;font-style:italic}
+.flash-card .category{font-size:11px;margin-top:14px;color:var(--muted)}
+
+.review-bar{display:flex;gap:10px;justify-content:center;margin-top:20px}
+.progress-bar{height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;margin-top:8px}
+.progress-bar .fill{height:100%;background:var(--primary);border-radius:3px;transition:width .3s}
+
+.section-title{font-size:14px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin:24px 0 12px}
+
+.weekly-list .item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #f3f4f6;font-size:13px}
+.weekly-list .item:last-child{border:none}
+.weekly-list .day{width:50px;color:var(--muted);font-size:12px}
+
+.badge{display:inline-block;background:var(--success);color:#fff;padding:2px 8px;border-radius:10px;font-size:11px}
+.highlight-dialog{border-color:var(--primary)!important;box-shadow:0 0 0 3px rgba(37,99,235,.2)!important;transition:all .5s}
+.badge.todo{background:var(--accent)}
+.badge.new{background:var(--primary)}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <h1>EN Workspace</h1>
+    <div class="nav-section">学习</div>
+    <div class="nav-item active" data-page="dashboard"><span class="icon">📊</span>仪表盘</div>
+    <div class="nav-item" data-page="words"><span class="icon">📖</span>单词本</div>
+    <div class="nav-item" data-page="dialogues"><span class="icon">💬</span>对话练习</div>
+    <div class="nav-section">资源</div>
+    <div class="nav-item" data-page="resources"><span class="icon">🔗</span>资源中心</div>
+    <div class="nav-item" data-page="recommend"><span class="icon">✨</span>每日推荐</div>
+    <div class="nav-section">记录</div>
+    <div class="nav-item" data-page="log"><span class="icon">📝</span>学习记录</div>
+    <div class="nav-item" data-page="review"><span class="icon">🔁</span>复习</div>
+    <div class="nav-section">概览</div>
+    <div class="nav-item" data-page="overview"><span class="icon">📅</span>学习概览</div>
+  </aside>
+
+  <main class="main">
+    <!-- 仪表盘 -->
+    <section id="page-dashboard" class="page active">
+      <div class="page-header">
+        <div>
+          <h2 id="greet">早上好</h2>
+          <div class="sub" id="today-date"></div>
+        </div>
+        <div><button class="btn ghost" onclick="navigate('recommend')">今日推荐 →</button></div>
+      </div>
+
+      <div class="grid-4" style="margin-bottom:20px">
+        <div class="stat-box"><div class="label">累计单词</div><div class="value" id="stat-words">0</div><div class="delta">本工作台记录</div></div>
+        <div class="stat-box"><div class="label">完成对话</div><div class="value" id="stat-dialogs">0</div><div class="delta">段</div></div>
+        <div class="stat-box"><div class="label">本周学习天数</div><div class="value" id="stat-days">0</div><div class="delta">天</div></div>
+        <div class="stat-box"><div class="label">收藏资源</div><div class="value" id="stat-fav">0</div><div class="delta">个</div></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">本周学习概览 <button class="btn sm ghost" onclick="navigate('log')">查看全部</button></div>
+          <div class="weekly-list" id="weekly-activity"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">今日推荐</div>
+          <div id="dashboard-rec"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">学习路径建议（金融硕士求职方向）</div>
+        <div style="font-size:13px;color:var(--muted);line-height:2">
+          <div>① <b>词汇层</b>：金融专业核心词 + 日常高频词，每日 15-20 个</div>
+          <div>② <b>听读层</b>：Bloomberg / CNBC 早间播报跟读，建立金融语境</div>
+          <div>③ <b>口语层</b>：金融面试 + 客户对话 + 路演场景模拟</div>
+          <div>④ <b>实战层</b>：每周 2 段完整对话跟读录音，模仿语调</div>
+          <div>⑤ <b>输出层</b>：用英语写一段市场评论，对照 FT/Bloomberg 修正</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 单词本 -->
+    <section id="page-words" class="page">
+      <div class="page-header">
+        <div><h2>单词本</h2><div class="sub">分类管理 · 复习 · 自动记录学习历史</div></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn ghost" onclick="navigate('review')">开始复习</button>
+          <button class="btn" onclick="showAddWord()">+ 添加单词</button>
+        </div>
+      </div>
+
+      <div class="card" id="daily-words-card">
+        <div class="card-title">
+          <span>今日单词推荐 (<span id="daily-word-count">0</span>/10 已完成)</span>
+          <div>
+            <button class="btn sm ghost" onclick="logDailyWords()" style="margin-right:6px">全标记</button>
+            <button class="btn sm ghost" onclick="navigate('review')">去复习</button>
+          </div>
+        </div>
+        <div id="daily-words-list" style="font-size:13px"></div>
+        <div class="progress-bar" style="margin-top:8px"><div class="fill" id="daily-word-progress" style="width:0%"></div></div>
+      </div>
+
+      <div class="filter-bar" id="word-filter"></div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>词库 (<span id="word-count">0</span>)</span>
+          <input class="input" style="width:240px" placeholder="搜索单词或释义..." oninput="renderWordList(this.value)">
+        </div>
+        <div id="word-list"></div>
+      </div>
+
+<div id="add-word-form" class="card" style="display:none">
+        <div class="card-title">添加新单词</div>
+        <div class="grid-2">
+          <div class="form-row"><label>单词</label><input class="input" id="w-word"></div>
+          <div class="form-row"><label>音标 (可选)</label><input class="input" id="w-phonetic" placeholder="/ˈwɜːrd/"></div>
+          <div class="form-row"><label>释义</label><input class="input" id="w-meaning"></div>
+          <div class="form-row"><label>分类</label>
+            <select id="w-cat">
+              <option value="finance">金融</option>
+              <option value="professional">职场专业</option>
+              <option value="daily">日常</option>
+              <option value="travel">旅游</option>
+              <option value="academic">学术</option>
+            </select>
+          </div>
+          <div class="form-row" style="grid-column:1/-1"><label>例句 (可选)</label><textarea id="w-example" rows="2"></textarea></div>
+          <div class="form-row" style="grid-column:1/-1"><label>备注 (可选)</label><input class="input" id="w-note"></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn" onclick="saveWord()">保存</button>
+          <button class="btn outline" onclick="hideAddWord()">取消</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 对话练习 -->
+    <section id="page-dialogues" class="page">
+      <div class="page-header">
+        <div><h2>对话练习</h2><div class="sub">分场景完整对话 · ��日推荐 · 已学对话自动进入复习</div></div>
+      </div>
+
+      <div class="card" id="daily-dialog-card">
+        <div class="card-title">
+          <span>今日对话推荐 (<span id="daily-dialog-count">0</span> 段)</span>
+          <div style="display:flex;gap:8px;align-items:center">
+            <label style="margin:0;font-size:12px">每天</label>
+            <select id="dd-count" style="width:60px;padding:4px 6px" onchange="saveDialogPrefs()">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+            <label style="margin:0;font-size:12px">段，类型</label>
+            <select id="dd-cat" style="width:100px;padding:4px 6px" onchange="saveDialogPrefs()">
+              <option value="all">全部</option>
+              <option value="finance">金融职场</option>
+              <option value="biz">商业会议</option>
+              <option value="daily">日常</option>
+              <option value="travel">旅游</option>
+            </select>
+            <button class="btn sm ghost" onclick="refreshDailyDialogs()">换一批</button>
+          </div>
+        </div>
+        <div id="daily-dialog-list"></div>
+      </div>
+
+      <div class="filter-bar" id="dialog-filter"></div>
+      <div id="dialog-list"></div>
+    </section>
+
+    <!-- 资源中心 -->
+    <section id="page-resources" class="page">
+      <div class="page-header">
+        <div><h2>资源中心</h2><div class="sub">官方来源 · 链接已验证 · 每日更新内容源</div></div>
+        <input class="input" style="width:280px" placeholder="搜索资源..." oninput="renderResources(this.value)">
+      </div>
+
+      <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleResCat('video',this)">📺 财经视频 ▾</div>
+      <div class="grid-3" id="res-video" data-res-cat="video"></div>
+
+      <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleResCat('podcast',this)">🎧 英语学习播客 ▸</div>
+      <div class="grid-3 res-collapsed" id="res-podcast" data-res-cat="podcast"></div>
+
+      <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleResCat('dict',this)">📚 词典 & 学习工具 ▸</div>
+      <div class="grid-3 res-collapsed" id="res-dict" data-res-cat="dict"></div>
+
+      <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleResCat('biz',this)">💼 职场 & 商业内容 ▸</div>
+      <div class="grid-3 res-collapsed" id="res-biz" data-res-cat="biz"></div>
+
+      <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleResCat('news',this)">📰 每日新闻 & 市场 ▸</div>
+      <div class="grid-3 res-collapsed" id="res-news" data-res-cat="news"></div>
+    </section>
+
+    <!-- 每日推荐 -->
+    <section id="page-recommend" class="page">
+      <div class="page-header">
+        <div><h2>每日个性化推荐</h2><div class="sub">基于你的学习偏好 · 不感兴趣可换一个</div></div>
+        <button class="btn" onclick="refreshRecommend()">🔄 换一批</button>
+      </div>
+      <div class="card">
+        <div class="card-title">今日为你推荐</div>
+        <div id="recommend-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">学习偏好</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.8">
+          <div>偏好方向：<b id="pref-cat">金融 / 职场</b></div>
+          <div>当前水平：<b id="pref-level">中级 (B2)</b></div>
+          <div>每日目标：<b id="pref-goal">15 词 + 1 段对话</b></div>
+          <div style="margin-top:8px">
+            <button class="btn sm ghost" onclick="updatePref()">修改偏好</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 学习记录 -->
+    <section id="page-log" class="page">
+      <div class="page-header">
+        <div><h2>学习记录</h2><div class="sub">所有学习活动自动记录</div></div>
+        <button class="btn outline sm" onclick="clearLog()">清空记录</button>
+      </div>
+      <div class="grid-4" style="margin-bottom:20px">
+        <div class="stat-box"><div class="label">总学习活动</div><div class="value" id="log-total">0</div></div>
+        <div class="stat-box"><div class="label">单词新增</div><div class="value" id="log-words">0</div></div>
+        <div class="stat-box"><div class="label">对话学习</div><div class="value" id="log-dialogs">0</div></div>
+        <div class="stat-box"><div class="label">资源收藏</div><div class="value" id="log-fav">0</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">活动历史</div>
+        <table>
+          <thead><tr><th>时间</th><th>类型</th><th>内容</th></tr></thead>
+          <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center">
+            <label style="margin:0;font-size:12px">按日期筛选:</label>
+            <input type="date" id="log-date-filter" style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;font-size:13px" onchange="filterLog()">
+            <button class="btn sm outline" onclick="resetLogFilter()">显示全部</button>
+            <span id="log-filter-info" style="font-size:12px;color:var(--muted)"></span>
+          </div>
+          <tbody id="log-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 复习 -->
+    <section id="page-review" class="page">
+      <div class="page-header">
+        <div><h2>复习</h2><div class="sub">单词复习 · 对话回看</div></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <button class="btn outline sm" onclick="setReviewTab('word')" id="rtab-word">单词复习</button>
+        <button class="btn outline sm" onclick="setReviewTab('dialog')" id="rtab-dialog">对话复习 (<span id="rtab-dialog-count">0</span>)</button>
+      </div>
+      <div id="review-word-area">
+        <div class="page-header" style="margin-bottom:12px"><div><h3 style="font-size:18px">单词复习</h3></div></div>
+        <div id="review-area"></div>
+      </div>
+      <div id="review-dialog-area" style="display:none">
+        <div class="page-header" style="margin-bottom:12px"><div><h3 style="font-size:18px">对话复习</h3><div class="sub">已学对话回顾 · 可重新学习</div></div></div>
+        <div id="review-dialog-list"></div>
+      </div>
+    </section>
+  
+    <section id="page-overview" class="page">
+      <div class="page-header">
+        <div><h2>学习概览</h2><div class="sub">按月查看学习日历，掌握每日进度</div></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn outline sm" onclick="overviewPrev()">&#9664;</button>
+          <span id="overview-month-label" style="font-weight:600;font-size:16px;padding:0 12px"></span>
+          <button class="btn outline sm" onclick="overviewNext()">&#9654;</button>
+        </div>
+      </div>
+      <div class="grid-3" style="margin-bottom:20px">
+        <div class="stat-box"><div class="label">本月学习天数</div><div class="value" id="ov-month-days">0</div></div>
+        <div class="stat-box"><div class="label">本月学习活动</div><div class="value" id="ov-month-acts">0</div></div>
+        <div class="stat-box"><div class="label">连续学习</div><div class="value" id="ov-streak">0</div><div class="delta">天</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span id="ov-cal-title">2026年7月</span> <span style="font-weight:400;font-size:12px;color:var(--muted)">点选日期查看详情</span></div>
+        <div id="ov-calendar" style="min-height:300px"></div>
+      </div>
+      <div class="card" id="ov-day-detail" style="display:none">
+        <div class="card-title" id="ov-day-title">详情</div>
+        <div id="ov-day-content"></div>
+      </div>
+    </section>
+
+</main>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+// ===== 数据层 =====
+const DB = {
+  load(k,def){try{const v=localStorage.getItem('enws_'+k);return v?JSON.parse(v):def}catch(e){return def}},
+  save(k,v){localStorage.setItem('enws_'+k,JSON.stringify(v))}
+};
+
+// 预设单词包
+const SEED_WORDS = [
+  // ===== 金融核心 投行/行研/资管 =====
+  {word:'leverage',phonetic:'/ˈlevərɪdʒ/',meaning:'杠杆；撬动',cat:'finance',example:'The fund used excessive leverage to amplify returns.',note:'高频面试词'},
+  {word:'liquidity',phonetic:'/lɪˈkwɪdəti/',meaning:'流动性',cat:'finance',example:'Market liquidity dried up during the sell-off.'},
+  {word:'diversification',phonetic:'/daɪˌvɜːsɪfɪˈkeɪʃn/',meaning:'分散投资',cat:'finance',example:'Diversification reduces portfolio risk.'},
+  {word:'yield curve',phonetic:'/jiːld kɜːv/',meaning:'收益率曲线',cat:'finance',example:'An inverted yield curve often signals a recession.'},
+  {word:'blue chip',phonetic:'/bluː tʃɪp/',meaning:'蓝筹股',cat:'finance',example:'Blue chip stocks are favored by conservative investors.'},
+  {word:'hedge',phonetic:'/hedʒ/',meaning:'对冲',cat:'finance',example:'They hedged currency exposure using forwards.'},
+  {word:'benchmark',phonetic:'/ˈbentʃmɑːk/',meaning:'基准',cat:'finance',example:'The fund outperformed its benchmark by 2%.'},
+  {word:'derivative',phonetic:'/dɪˈrɪvətɪv/',meaning:'衍生品',cat:'finance',example:'Options and futures are common derivatives.'},
+  {word:'valuation',phonetic:'/ˌvæljuˈeɪʃn/',meaning:'估值',cat:'finance',example:'The valuation model assumes 8% revenue growth.'},
+  {word:'volatility',phonetic:'/ˌvɒləˈtɪləti/',meaning:'波动率',cat:'finance',example:'Implied volatility spiked ahead of the earnings call.'},
+  {word:'asset allocation',phonetic:'/ˈæset ˌæləˈkeɪʃn/',meaning:'资产配置',cat:'finance',example:'Strategic asset allocation drives long-term returns.'},
+  {word:'capital structure',phonetic:'/ˈkæpɪtl ˈstrʌktʃə(r)/',meaning:'资本结构',cat:'finance',example:'Optimal capital structure minimizes WACC.'},
+  {word:'underwrite',phonetic:'/ˌʌndəˈraɪt/',meaning:'承销',cat:'finance',example:'Goldman Sachs underwrote the IPO.'},
+  {word:'due diligence',phonetic:'/djuː ˈdɪlɪdʒəns/',meaning:'尽职调查',cat:'finance',example:'The acquirer completed due diligence in three weeks.'},
+  {word:'yield',phonetic:'/jiːld/',meaning:'收益；收益率',cat:'finance',example:'The 10-year yield rose to 4.2%.'},
+  {word:'equity',phonetic:'/ˈekwəti/',meaning:'股权；权益',cat:'finance',example:'The company raised equity to fund expansion.'},
+  {word:'IPO',phonetic:'/ˌaɪ piː ˈəʊ/',meaning:'首次公开募股',cat:'finance',example:'The IPO was oversubscribed by 15x.'},
+  {word:'EBITDA',phonetic:'/ˈiːbɪtdɑː/',meaning:'息税折旧摊销前利润',cat:'finance',example:'EBITDA margin improved to 35%.',note:'估值模型核心指标'},
+  {word:'P/E ratio',phonetic:'/piː iː ˈreɪʃiəʊ/',meaning:'市盈率',cat:'finance',example:'The stock trades at a P/E ratio of 22.'},
+  {word:'arbitrage',phonetic:'/ˈɑːrbɪtrɑːʒ/',meaning:'套利',cat:'finance',example:'The price difference created an arbitrage opportunity.'},
+  {word:'amortization',phonetic:'/əˌmɔːtaɪˈzeɪʃn/',meaning:'摊销',cat:'finance',example:'Goodwill amortization is recorded annually.'},
+  {word:'depreciation',phonetic:'/dɪˌpriːʃiˈeɪʃn/',meaning:'折旧',cat:'finance',example:'Depreciation reduces the book value of assets.'},
+  {word:'dividend',phonetic:'/ˈdɪvɪdend/',meaning:'股息',cat:'finance',example:'The company pays a quarterly dividend of 50 cents.'},
+  {word:'fiscal year',phonetic:'/ˈfɪskl jɪə(r)/',meaning:'财年',cat:'finance',example:'Fiscal year 2025 revenue exceeded guidance.'},
+  {word:'goodwill',phonetic:'/ɡʊdˈwɪl/',meaning:'商誉',cat:'finance',example:'The acquisition created goodwill of 200 million.'},
+  {word:'impairment',phonetic:'/ɪmˈpeəmənt/',meaning:'减值',cat:'finance',example:'The company took a goodwill impairment charge.'},
+  {word:'interest coverage',phonetic:'/ˈɪntrəst ˈkʌvərɪdʒ/',meaning:'利息覆盖倍数',cat:'finance',example:'Interest coverage of 5x is considered healthy.'},
+  {word:'leverage ratio',phonetic:'/ˈlevərɪdʒ ˈreɪʃiəʊ/',meaning:'杠杆率',cat:'finance',example:'The bank reduced its leverage ratio to 10:1.'},
+  {word:'margin call',phonetic:'/ˈmɑːdʒɪn kɔːl/',meaning:'追加保证金',cat:'finance',example:'The client faced a margin call when the stock dropped.'},
+  {word:'mark to market',phonetic:'/mɑːk tə ˈmɑːkɪt/',meaning:'市值计价',cat:'finance',example:'The portfolio is marked to market daily.'},
+  {word:'Monte Carlo',phonetic:'/ˈmɒnteɪ ˈkɑːrləʊ/',meaning:'蒙特卡洛模拟',cat:'finance',example:'A Monte Carlo simulation estimated the range of outcomes.'},
+  {word:'net present value',phonetic:'/net ˈpreznt ˈvæljuː/',meaning:'净现值',cat:'finance',example:'The NPV of the project is 3.2 million.'},
+  {word:'IRR',phonetic:'/ˌaɪ ɑːr ˈɑːr/',meaning:'内部收益率',cat:'finance',example:'The internal rate of return exceeds the hurdle rate.'},
+  {word:'overweight',phonetic:'/ˌəʊvəˈweɪt/',meaning:'超配',cat:'finance',example:'We maintain an overweight rating on the sector.'},
+  {word:'underweight',phonetic:'/ˌʌndəˈweɪt/',meaning:'低配',cat:'finance',example:'The fund is underweight in energy stocks.'},
+  {word:'par value',phonetic:'/pɑːr ˈvæljuː/',meaning:'面值',cat:'finance',example:'The bond was issued at par value.'},
+  {word:'premium',phonetic:'/ˈpriːmiəm/',meaning:'溢价',cat:'finance',example:'The stock trades at a premium to its peers.'},
+  {word:'recession',phonetic:'/rɪˈseʃn/',meaning:'衰退',cat:'finance',example:'The economy entered a technical recession.'},
+  {word:'refinance',phonetic:'/ˌriːˈfaɪnæns/',meaning:'再融资',cat:'finance',example:'The company refinanced its debt at a lower rate.'},
+  {word:'risk premium',phonetic:'/rɪsk ˈpriːmiəm/',meaning:'风险溢价',cat:'finance',example:'Equity risk premium has widened amid uncertainty.'},
+  {word:'securitization',phonetic:'/sɪˌkjʊ��rɪtaɪˈzeɪʃn/',meaning:'证券化',cat:'finance',example:'Mortgage securitization fueled the housing boom.'},
+  {word:'capital markets',phonetic:'/ˈkæpɪtl ˈmɑːkɪts/',meaning:'资本市场',cat:'finance',example:'The firm is a leader in capital markets advisory.'},
+  {word:'private equity',phonetic:'/ˈpraɪvət ˈekwəti/',meaning:'私募股权',cat:'finance',example:'Private equity firms are sitting on record dry powder.'},
+  {word:'sovereign wealth fund',phonetic:'/ˈsɒvrɪn welθ fʌnd/',meaning:'主权财富基金',cat:'finance',example:'The sovereign wealth fund increased its allocation to tech.'},
+  {word:'carry trade',phonetic:'/ˈkæri treɪd/',meaning:'套息交易',cat:'finance',example:'The yen carry trade unwound sharply.'},
+  {word:'credit default swap',phonetic:'/ˈkredɪt dɪˈfɔːlt swɒp/',meaning:'信用违约互换',cat:'finance',example:'CDS spreads widened on the banking sector.'},
+  {word:'GICS',phonetic:'/dʒɪks/',meaning:'全球行业分类',cat:'finance',example:'The stock is classified under GICS sector Technology.'},
+  {word:'ESG',phonetic:'/iː es dʒiː/',meaning:'环境、社会与治理',cat:'finance',example:'ESG factors are increasingly integrated.'},
+  {word:'earnings call',phonetic:'/ˈɜːnɪŋz kɔːl/',meaning:'业绩电话会',cat:'finance',example:'The CEO addressed margin concerns on the earnings call.'},
+  {word:'guidance',phonetic:'/ˈɡaɪdns/',meaning:'业绩指引',cat:'finance',example:'The company raised its full-year guidance.'},
+  {word:'counterparty risk',phonetic:'/ˈkaʊntəpɑːti rɪsk/',meaning:'交易对手风险',cat:'finance',example:'Counterparty risk increased during the credit crisis.'},
+  {word:'moral hazard',phonetic:'/ˈmɒrəl ˈhæzəd/',meaning:'道德风险',cat:'finance',example:'The bailout created a moral hazard for large banks.'},
+  {word:'adverse selection',phonetic:'/ˈædvɜːs sɪˈlekʃn/',meaning:'逆向选择',cat:'finance',example:'Adverse selection occurs when information is asymmetric.'},
+  // ===== 职场专业 会议/邮件/汇报/谈判 =====
+  {word:'stakeholder',phonetic:'/ˈsteɪkhəʊldə(r)/',meaning:'利益相关者',cat:'professional',example:'We must align with all key stakeholders.'},
+  {word:'synergy',phonetic:'/ˈsɪnədʒi/',meaning:'协同效应',cat:'professional',example:'The merger created significant cost synergies.'},
+  {word:'KPI',phonetic:'/ˌkeɪ piː ˈaɪ/',meaning:'关键绩效指标',cat:'professional',example:'Revenue growth is our primary KPI this quarter.'},
+  {word:'deliverable',phonetic:'/dɪˈlɪvərəbl/',meaning:'交付物',cat:'professional',example:'The final deliverable is due next Friday.'},
+  {word:'alignment',phonetic:'/əˈlaɪnmənt/',meaning:'对齐',cat:'professional',example:'Ensure alignment across teams before launch.'},
+  {word:'benchmarking',phonetic:'/ˈbentʃmɑːkɪŋ/',meaning:'对标分析',cat:'professional',example:'We benchmarked our process against industry leaders.'},
+  {word:'onboarding',phonetic:'/ˈɒnbɔːdɪŋ/',meaning:'入职；上手',cat:'professional',example:'The onboarding process takes two weeks.'},
+  {word:'escalate',phonetic:'/ˈeskəleɪt/',meaning:'升级问题',cat:'professional',example:'We should escalate this to the VP.'},
+  {word:'bandwidth',phonetic:'/ˈbændwɪdθ/',meaning:'精力；容量',cat:'professional',example:'I do not have the bandwidth for another project.'},
+  {word:'circle back',phonetic:'/ˈsɜːkl bæk/',meaning:'回头再讨论',cat:'professional',example:'Let me circle back with you after I check the data.'},
+  {word:'touch base',phonetic:'/tʌtʃ beɪs/',meaning:'沟通对接',cat:'professional',example:'Let us touch base before the end of the week.'},
+  {word:'action item',phonetic:'/ˈækʃn ˈaɪtəm/',meaning:'待办事项',cat:'professional',example:'The action items from the meeting are in the minutes.'},
+  {word:'run rate',phonetic:'/rʌn reɪt/',meaning:'年化速率',cat:'professional',example:'Based on Q1, our run rate revenue is 50 million.'},
+  {word:'deep dive',phonetic:'/diːp daɪv/',meaning:'深入分析',cat:'professional',example:'We need to do a deep dive into the cost structure.'},
+  {word:'low hanging fruit',phonetic:'/ləʊ ˈhæŋɪŋ fruːt/',meaning:'易实现目标',cat:'professional',example:'We should pick the low hanging fruit first.'},
+  {word:'pipeline',phonetic:'/ˈpaɪplaɪn/',meaning:'项目储备',cat:'professional',example:'The sales pipeline is strong for Q3.'},
+  {word:'stretch goal',phonetic:'/stretʃ ɡəʊl/',meaning:'挑战目标',cat:'professional',example:'The stretch goal is to double revenue in three years.'},
+  {word:'ROI',phonetic:'/ˌɑːr əʊ ˈaɪ/',meaning:'投资回报率',cat:'professional',example:'The marketing campaign delivered a 4x ROI.'},
+  {word:'burn rate',phonetic:'/bɜːn reɪt/',meaning:'资金消耗率',cat:'professional',example:'The startup needs to reduce its burn rate.'},
+  {word:'pivot',phonetic:'/ˈpɪvət/',meaning:'转型',cat:'professional',example:'The company pivoted from B2C to B2B.'},
+  {word:'scalability',phonetic:'/ˌskeɪləˈbɪləti/',meaning:'可扩展性',cat:'professional',example:'Scalability is a key concern for infrastructure.'},
+  {word:'vetting',phonetic:'/ˈvetɪŋ/',meaning:'审查筛选',cat:'professional',example:'Candidates go through rigorous vetting.'},
+  {word:'ramp up',phonetic:'/ræmp ʌp/',meaning:'加速增长',cat:'professional',example:'We need to ramp up production in Q4.'},
+  {word:'streamline',phonetic:'/ˈstriːmlaɪn/',meaning:'精简',cat:'professional',example:'We streamlined the approval process to two steps.'},
+  {word:'best practice',phonetic:'/best ˈpræktɪs/',meaning:'最佳实践',cat:'professional',example:'We documented industry best practices.'},
+  {word:'buy-in',phonetic:'/baɪ ɪn/',meaning:'认可支持',cat:'professional',example:'We need executive buy-in before proceeding.'},
+  {word:'cross-functional',phonetic:'/kr��s ˈfʌŋkʃənl/',meaning:'跨职能的',cat:'professional',example:'This is a cross-functional initiative involving four teams.'},
+  {word:'executive summary',phonetic:'/ɪɡˈzekjətɪv ˈsʌməri/',meaning:'执行摘要',cat:'professional',example:'Start the deck with an executive summary.'},
+  {word:'follow up',phonetic:'/ˈfɒləʊ ʌp/',meaning:'跟进',cat:'professional',example:'I will follow up with the client after the meeting.'},
+  {word:'headcount',phonetic:'/ˈhedkaʊnt/',meaning:'员工编制',cat:'professional',example:'Headcount was reduced by 10%.'},
+  {word:'meeting minutes',phonetic:'/ˈmiːtɪŋ ˈmɪnɪts/',meaning:'会议纪要',cat:'professional',example:'Please distribute minutes by end of day.'},
+  {word:'net promoter score',phonetic:'/net prəˈməʊtə skɔː(r)/',meaning:'净推荐值',cat:'professional',example:'Our NPS improved from 40 to 55.'},
+  {word:'OKR',phonetic:'/ˌəʊ keɪ ˈɑːr/',meaning:'目标与关键成果',cat:'professional',example:'OKRs cascade down to team level.'},
+  {word:'pain point',phonetic:'/peɪn pɔɪnt/',meaning:'痛点',cat:'professional',example:'The survey identified three pain points.'},
+  {word:'proof of concept',phonetic:'/pruːf əv ˈkɒnsept/',meaning:'概念验证',cat:'professional',example:'We built a POC in two weeks.'},
+  {word:'roadmap',phonetic:'/ˈrəʊdmæp/',meaning:'路线图',cat:'professional',example:'The product roadmap for next year is ambitious.'},
+  {word:'scope creep',phonetic:'/skəʊp kriːp/',meaning:'范围蔓延',cat:'professional',example:'We need to manage scope creep.'},
+  {word:'stakeholder map',phonetic:'/ˈsteɪkhəʊldə(r) mæp/',meaning:'相关者图谱',cat:'professional',example:'Build a stakeholder map before engagement.'},
+  {word:'SWOT analysis',phonetic:'/swɒt əˈnæləsɪs/',meaning:'SWOT分析',cat:'professional',example:'The SWOT analysis identified market entry risks.'},
+  {word:'top line',phonetic:'/tɒp laɪn/',meaning:'营业收入',cat:'professional',example:'Top line grew 20% but bottom line shrank.'},
+  {word:'value proposition',phonetic:'/ˈvæljuː ˌprɒpəˈzɪʃn/',meaning:'价值主张',cat:'professional',example:'Our value prop is speed and reliability.'},
+  {word:'workstream',phonetic:'/ˈwɜːkstriːm/',meaning:'工作流',cat:'professional',example:'The regulatory workstream is on track.'},
+  {word:'white paper',phonetic:'/waɪt ˈpeɪpə(r)/',meaning:'白皮书',cat:'professional',example:'The team published a white paper on AI.'},
+  {word:'dashboard',phonetic:'/ˈdæʃbɔːd/',meaning:'仪表盘',cat:'professional',example:'The dashboard tracks real-time KPIs.'},
+  {word:'value chain',phonetic:'/ˈvæljuː tʃeɪn/',meaning:'价值链',cat:'professional',example:'We analyzed the entire value chain.'},
+  {word:'win-win',phonetic:'/wɪn wɪn/',meaning:'双赢',cat:'professional',example:'The partnership is a win-win.'},
+  // ===== 商务分析 =====
+  {word:'back-testing',phonetic:'/bæk ˈtestɪŋ/',meaning:'回测',cat:'academic',example:'Back-testing confirmed the strategy has a Sharpe of 1.2.'},
+  {word:'cohort analysis',phonetic:'/ˈkəʊhɔːt əˈnæləsɪs/',meaning:'同期群分析',cat:'academic',example:'Cohort analysis shows improving retention.'},
+  {word:'hypothesis',phonetic:'/haɪˈpɒθəsɪs/',meaning:'假设',cat:'academic',example:'The hypothesis was tested using regression.'},
+  {word:'empirical',phonetic:'/ɪmˈpɪrɪkl/',meaning:'实证的',cat:'academic',example:'Conclusions are based on empirical evidence.'},
+  {word:'methodology',phonetic:'/ˌmeθəˈdɒlədʒi/',meaning:'方法论',cat:'academic',example:'The methodology section explains our design.'},
+  {word:'triangulation',phonetic:'/traɪˌæŋɡjuˈleɪʃn/',meaning:'三角验证',cat:'academic',example:'We used triangulation to validate results.'},
+  {word:'endogeneity',phonetic:'/ˌendəˈdʒenəti/',meaning:'内生性',cat:'academic',example:'Instrumental variables address endogeneity.'},
+  {word:'heteroskedasticity',phonetic:'/ˌhetərəʊˌskiːdæˈstɪsəti/',meaning:'异方差性',cat:'academic',example:'We used robust standard errors to correct for this.'},
+  // ===== 日常实用 =====
+  {word:'commute',phonetic:'/kəˈmjuːt/',meaning:'通勤',cat:'daily',example:'My commute takes about 40 minutes.'},
+  {word:'appointment',phonetic:'/əˈpɔɪntmənt/',meaning:'预约',cat:'daily',example:'I have a dentist appointment at 3 PM.'},
+  {word:'spontaneous',phonetic:'/spɒnˈteɪniəs/',meaning:'自发的',cat:'daily',example:'We made a spontaneous trip to the beach.'},
+  {word:'mundane',phonetic:'/mʌnˈdeɪn/',meaning:'平凡的',cat:'daily',example:'I spent the morning doing mundane chores.'},
+  {word:'pragmatic',phonetic:'/præɡˈmætɪk/',meaning:'务实的',cat:'daily',example:'We need a pragmatic approach.'},
+  {word:'meticulous',phonetic:'/məˈtɪkjələs/',meaning:'一丝不苟的',cat:'daily',example:'She is meticulous about data accuracy.'},
+  {word:'articulate',phonetic:'/ɑːˈtɪkjuleɪt/',meaning:'表达清晰的',cat:'daily',example:'He articulated the strategy very clearly.'},
+  {word:'elaborate',phonetic:'/ɪˈlæbərət/',meaning:'详细阐述',cat:'daily',example:'Could you elaborate on the third point?'},
+  {word:'proactive',phonetic:'/prəʊˈæktɪv/',meaning:'主动的',cat:'daily',example:'We need a proactive approach.'},
+  {word:'resilient',phonetic:'/rɪˈzɪliənt/',meaning:'有韧性的',cat:'daily',example:'The economy proved more resilient than expected.'},
+];
+
+// 预设对话库
+const SEED_DIALOGS = [
+  // ===== LEVEL 1: 入门 - 面试准备 =====
+  {
+    id:'d1',cat:'finance',level:'B2-C1',scene:'金融实习面试 - 自我介绍',stage:'实习面试',order:1,
+    desc:'硕士申请者参加投行实习面试的开场自我介绍',
+    keywords:['strengths','relevant experience','fit'],
+    body:[
+      {s:'Interviewer',t:'So, tell me a bit about yourself and why you are interested in this internship.'},
+      {s:'You',t:'Sure. I am currently a first-year master student in <em>Finance</em> at Peking University.'},
+      {s:'You',t:'I am interested in this internship because your team focuses on <em>equity research</em>, which is exactly the area I want to build a career in.'},
+      {s:'Interviewer',t:'Good. What do you think is your biggest <em>strength</em> that you bring to the team?'},
+      {s:'You',t:'I would say it is the combination of <em>analytical rigor</em> and communication skills.'}
+    ]
+  },
+  // ===== LEVEL 2: 日常基础 =====
+  {
+    id:'d6',cat:'daily',level:'A2-B1',scene:'咖啡馆点单与闲聊',stage:'日常基础',order:2,
+    desc:'在咖啡馆点单并和服务员简短交流',
+    keywords:['espresso','oat milk','to stay'],
+    body:[
+      {s:'Barista',t:'Hi, what can I get for you?'},
+      {s:'You',t:'A large <em>oat milk</em> latte, please, and a blueberry muffin.'},
+      {s:'Barista',t:'For here or to go?'},
+      {s:'You',t:'To stay. Actually, can I make that an <em>espresso</em> with a side of cold oat milk?'},
+      {s:'Barista',t:'Of course. Anything else?'},
+      {s:'You',t:'No, that is it. How much is it?'},
+      {s:'Barista',t:'That will be 8 dollars 50. You can tap here.'}
+    ]
+  },
+  {
+    id:'d7',cat:'daily',level:'B1',scene:'餐厅预订与点餐',stage:'日常基础',order:3,
+    desc:'电话预订餐厅及到店点餐对话',
+    keywords:['reservation','recommendation','allergy'],
+    body:[
+      {s:'You',t:'Hi, I would like to make a <em>reservation</em> for two at 7 PM this Friday.'},
+      {s:'Host',t:'Sure, may I have the name?'},
+      {s:'You',t:'Under Wang. One of us has a shellfish <em>allergy</em>. Is that easy to accommodate?'},
+      {s:'Host',t:'Absolutely. We will flag it on the ticket. See you Friday.'},
+      {s:'Waiter',t:'Good evening. Are you ready to order, or would you like a <em>recommendation</em>?'},
+      {s:'You',t:'What would you recommend tonight?'},
+      {s:'Waiter',t:'The pan-seared cod is excellent, and it is shellfish-free.'}
+    ]
+  },
+  // ===== LEVEL 3: 旅游出行 =====
+  {
+    id:'d4',cat:'travel',level:'B1-B2',scene:'机场值机与登机',stage:'旅游出行',order:4,
+    desc:'乘客与地勤办理值机和登机手续',
+    keywords:['check in','boarding pass','gate'],
+    body:[
+      {s:'Agent',t:'Good morning. Where are you flying today?'},
+      {s:'You',t:'I am flying to Singapore, flight SQ807. I would like to <em>check in</em> and drop off my luggage.'},
+      {s:'Agent',t:'May I see your <em>passport</em>? Do you prefer aisle or window?'},
+      {s:'You',t:'Window, please, if possible.'},
+      {s:'Agent',t:'Done. Here is your <em>boarding pass</em>. Your gate is B22, boarding starts at 14:10.'},
+      {s:'You',t:'Thank you. How do I get to gate B22?'},
+      {s:'Agent',t:'Take the shuttle to Terminal 2, then follow signs to B gates.'}
+    ]
+  },
+  {
+    id:'d5',cat:'travel',level:'B1',scene:'酒店入住与询问',stage:'旅游出行',order:5,
+    desc:'游客抵达酒店后的入住流程',
+    keywords:['reservation','check-out','amenities'],
+    body:[
+      {s:'You',t:'Hi, I have a <em>reservation</em> under the name Li. Three nights, starting today.'},
+      {s:'Receptionist',t:'Welcome. Let me pull that up. A king room on the 12th floor. May I have a credit card for incidentals?'},
+      {s:'You',t:'Sure. What time is <em>check-out</em>?'},
+      {s:'Receptionist',t:'Check-out is at noon. Breakfast is served from 6:30 to 10.'},
+      {s:'You',t:'Does the hotel have a gym?'},
+      {s:'Receptionist',t:'Yes, the fitness center is on the third floor, open 24 hours. <em>Amenities</em> also include a pool.'}
+    ]
+  },
+  // ===== LEVEL 4: 职场基础 会议/协作 =====
+  {
+    id:'d3',cat:'biz',level:'B2',scene:'团队会议 - 季度业绩复盘',stage:'职场协作',order:6,
+    desc:'项目经理主持的季度业绩复盘会议',
+    keywords:['stakeholder','KPI','alignment'],
+    body:[
+      {s:'PM',t:'Let us start with the Q3 review. Revenue came in at 12.4 million, 8% <em>above target</em>.'},
+      {s:'Sales Lead',t:'The growth was driven mainly by enterprise renewals. Our <em>net retention</em> hit 115%.'},
+      {s:'PM',t:'Strong. But we need to <em>align</em> on the SMB segment, where churn is elevated. What is the plan?'},
+      {s:'Sales Lead',t:'We are piloting a customer success initiative. The key <em>KPI</em> will be time-to-value under 14 days.'},
+      {s:'PM',t:'Let us make sure all <em>stakeholders</em> are on the same page before launch.'}
+    ]
+  },
+  {
+    id:'d8',cat:'biz',level:'B2',scene:'电话会议 - 跨时区协作',stage:'职场协作',order:7,
+    desc:'与海外团队协调项目进度的电话会议',
+    keywords:['time zone','deliverable','follow up'],
+    body:[
+      {s:'You',t:'Hi Sarah, thanks for jumping on at 9 PM your <em>time zone</em>. I know it is late.'},
+      {s:'Sarah',t:'No problem. What is the status on the model?'},
+      {s:'You',t:'The base case is done. The main <em>deliverable</em> still pending is the sensitivity analysis.'},
+      {s:'Sarah',t:'Perfect. Let us <em>follow up</em> on Friday morning my time to review.'},
+      {s:'You',t:'Sounds good. I will also include a one-page summary of the key assumptions.'}
+    ]
+  },
+  // ===== LEVEL 5: 进阶 客户面对 =====
+  {
+    id:'d2',cat:'finance',level:'B2-C1',scene:'客户路演 - 推荐投资组合',stage:'客户与路演',order:8,
+    desc:'分析师向机构客户推荐一个均衡投资组合',
+    keywords:['diversification','risk-adjusted','asset allocation'],
+    body:[
+      {s:'Analyst',t:'Based on your <em>risk profile</em> and three-year horizon, we recommend 60% equities and 40% fixed income.'},
+      {s:'Client',t:'Can you walk me through the equity <em>allocation</em>?'},
+      {s:'Analyst',t:'We suggest 35% US large cap, 15% international developed, and 10% emerging markets for <em>diversification</em>.'},
+      {s:'Client',t:'And how do you manage downside?'},
+      {s:'Analyst',t:'We use a barbell approach. The expected <em>risk-adjusted return</em> is a Sharpe ratio of about 0.8.'}
+    ]
+  },
+  // ===== LEVEL 6: 高阶 金融 =====
+  {
+    id:'d9',cat:'finance',level:'B2-C1',scene:'金融实习面试 - 行为问题',stage:'高阶金融',order:9,
+    desc:'投行面试中关于团队合作和抗压能力的行为问题',
+    keywords:['teamwork','pressure','deal experience'],
+    body:[
+      {s:'Interviewer',t:'Tell me about a time you worked under pressure on a team project.'},
+      {s:'You',t:'During my internship, our team had 48 hours to produce a valuation report for a client meeting. I took the lead on building the DCF model while two teammates handled the comps.'},
+      {s:'Interviewer',t:'How did you handle the pressure?'},
+      {s:'You',t:'I divided the work into clear <em>workstreams</em> and communicated progress every few hours. We delivered on time and the client was impressed.'},
+      {s:'Interviewer',t:'What was the biggest challenge?'},
+      {s:'You',t:'Getting consistent data from different sources. I had to <em>reconcile</em> three sets of financials, but I flagged the discrepancies early and we resolved them as a team.'}
+    ]
+  },
+  {
+    id:'d10',cat:'finance',level:'B2-C1',scene:'财报电话会 - 分析师提问',stage:'高阶金融',order:10,
+    desc:'分析师在季度财报电话会上向CFO提问',
+    keywords:['margin','guidance','outlook'],
+    body:[
+      {s:'Analyst',t:'Congratulations on the quarter. Revenue came in ahead of consensus. Can you break down the margin <em>expansion</em>?'},
+      {s:'CFO',t:'Sure. Operating margin improved 230bps year over year, driven by <em>operational leverage</em> and cost discipline in SG&A.'},
+      {s:'Analyst',t:'And what is your <em>guidance</em> for next quarter? Street is looking for 8% growth.'},
+      {s:'CFO',t:'We expect 7 to 9% organic growth, with continued margin <em>improvement</em>. We will provide more detail on the earnings call.'}
+    ]
+  }
+];
+
+// 资源库（真实官方链接）
+const RESOURCES = {
+  video:[
+    {src:'YouTube',name:'Bloomberg Markets and Finance',desc:'全球财经新闻、市场分析、CEO访谈，24小时直播与点播',url:'https://www.youtube.com/@BloombergMarketsFinance',cat:'finance'},
+    {src:'YouTube',name:'CNBC Television',desc:'美国主流财经电视网，覆盖美股、宏观经济、企业财报',url:'https://www.youtube.com/@CNBCtelevision',cat:'finance'},
+    {src:'YouTube',name:'Financial Times',desc:'英国《金融时报》官方频道，深度财经分析',url:'https://www.youtube.com/@FinancialTimes',cat:'finance'},
+    {src:'YouTube',name:'The Economist',desc:'《经济学人》官方视频，全球政经深度报道',url:'https://www.youtube.com/@TheEconomist',cat:'finance'},
+    {src:'YouTube',name:'BBC Learning English',desc:'BBC官方英语教学频道，分级课程、每日新闻英语',url:'https://www.youtube.com/@BBCLearningEnglish',cat:'learning'},
+    {src:'YouTube',name:'VOA Learning English',desc:'美国之音慢速英语，适合听力入门与跟读',url:'https://www.youtube.com/@VOALearningEnglish',cat:'learning'},
+    {src:'YouTube',name:'TED',desc:'TED Talks官方频道，跨学科演讲，适合高级听力与表达',url:'https://www.youtube.com/@TED',cat:'learning'},
+    {src:'YouTube',name:'BBC News',desc:'BBC新闻官方频道，英式英语标准口音',url:'https://www.youtube.com/@BBCNews',cat:'news'}
+  ],
+  podcast:[
+    {src:'NPR',name:'Planet Money',desc:'NPR王牌经济播客，用故事讲经济学，适合中高级',url:'https://www.npr.org/podcasts/510289/planet-money',cat:'finance'},
+    {src:'WSJ',name:'The Journal',desc:'《华尔街日报》官方播客，每日深度商业故事',url:'https://www.wsj.com/podcasts/the-journal',cat:'finance'},
+    {src:'Bloomberg',name:'Bloomberg Surveillance',desc:'Bloomberg早间播报，市场开盘前的深度分析',url:'https://www.bloomberg.com/audio/podcasts/bloomberg-surveillance/',cat:'finance'},
+    {src:'Bloomberg',name:'Masters in Business',desc:'Bloomberg资深主持人对话金融巨头',url:'https://www.bloomberg.com/audio/podcasts/masters-in-business/',cat:'finance'},
+    {src:'APM',name:'Marketplace',desc:'美国公共媒体财经播客，日常商业解读',url:'https://www.marketplace.org/shows/marketplace/',cat:'finance'},
+    {src:'BBC',name:'6 Minute English',desc:'BBC经典英语学习播客，6分钟一个主题',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english',cat:'learning'},
+    {src:'BBC',name:'The English We Speak',desc:'BBC地道英语口语短语，3分钟一集',url:'https://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak',cat:'learning'},
+    {src:'HBR',name:'HBR IdeaCast',desc:'《哈佛商业评论》官方播客，管理与商业思维',url:'https://hbr.org/podcasts/ideacast',cat:'biz'}
+  ],
+  dict:[
+    {src:'Oxford',name:'Oxford Learner\'s Dictionary',desc:'牛津高阶学习者词典，权威释义与例句',url:'https://www.oxfordlearnersdictionaries.com/',cat:'tool'},
+    {src:'Cambridge',name:'Cambridge Dictionary',desc:'剑桥词典，含英美发音、级别标注',url:'https://dictionary.cambridge.org/',cat:'tool'},
+    {src:'Merriam-Webster',name:'Merriam-Webster',desc:'美国权威词典，含每日一词',url:'https://www.merriam-webster.com/',cat:'tool'},
+    {src:'YouGlish',name:'YouGlish',desc:'在YouTube真实语境中搜索单词用法',url:'https://youglish.com/',cat:'tool'},
+    {src:'DeepL',name:'DeepL Translate',desc:'高质量翻译，辅助理解复杂句',url:'https://www.deepl.com/',cat:'tool'},
+    {src:'Grammarly',name:'Grammarly',desc:'英文写作语法检查，求职邮件必备',url:'https://www.grammarly.com/',cat:'tool'}
+  ],
+  biz:[
+    {src:'HBR',name:'Harvard Business Review',desc:'哈佛商业评论，管理与领导力文章',url:'https://hbr.org/',cat:'biz'},
+    {src:'MIT',name:'MIT Sloan Management Review',desc:'MIT斯隆管理评论，前沿管理研究',url:'https://sloanreview.mit.edu/',cat:'biz'},
+    {src:'Stanford GSB',name:'Stanford GSB Insights',desc:'斯坦福商学院观点与研究',url:'https://www.gsb.stanford.edu/insights',cat:'biz'},
+    {src:'McKinsey',name:'McKinsey Insights',desc:'麦肯锡咨询行业研究报告',url:'https://www.mckinsey.com/insights',cat:'biz'},
+    {src:'BCG',name:'BCG Perspectives',desc:'波士顿咨询集团行业洞察',url:'https://www.bcg.com/insights',cat:'biz'},
+    {src:'Wharton',name:'Wharton Knowledge',desc:'沃顿商学院商业研究内容',url:'https://knowledge.wharton.upenn.edu/',cat:'biz'}
+  ],
+  news:[
+    {src:'Reuters',name:'Reuters',desc:'路透社全球财经新闻，每日更新',url:'https://www.reuters.com/',cat:'news'},
+    {src:'Bloomberg',name:'Bloomberg',desc:'彭博财经新闻与市场数据',url:'https://www.bloomberg.com/',cat:'news'},
+    {src:'FT',name:'Financial Times',desc:'《金融时报》全球财经深度报道',url:'https://www.ft.com/',cat:'news'},
+    {src:'WSJ',name:'The Wall Street Journal',desc:'《华尔街日报》美国财经主流媒体',url:'https://www.wsj.com/',cat:'news'},
+    {src:'The Economist',name:'The Economist',desc:'《经济学人》全球政经周刊',url:'https://www.economist.com/',cat:'news'},
+    {src:'CNBC',name:'CNBC',desc:'CNBC财经新闻与市场直播',url:'https://www.cnbc.com/',cat:'news'}
+  ]
+};
+
+// 推荐池
+const RECOMMEND_POOL = [
+  // ===== 视频（具体节目） =====
+  {type:'video',title:'Bloomberg The Open 美股开盘分析',src:'Bloomberg TV',desc:'每日开盘前市场动态、指数走势、关键财报预览',url:'https://www.bloomberg.com/tv',tag:'finance',level:'B2-C1'},
+  {type:'video',title:'Bloomberg Markets: 亚洲盘早报',src:'Bloomberg TV',desc:'聚焦亚太市场开盘动态，涵盖港股/A股/日股',url:'https://www.bloomberg.com/tv',tag:'finance',level:'B2-C1'},
+  {type:'video',title:'CNBC Squawk Box 美股前瞻',src:'CNBC',desc:'每日盘前交易线索、CEO访谈、板块轮动分析',url:'https://www.cnbc.com/squawk-box/',tag:'finance',level:'B2-C1'},
+  {type:'video',title:'FT 本周财经要闻精选',src:'Financial Times',desc:'FT精选本周全球财经深度报道，英音播报',url:'https://www.youtube.com/@FinancialTimes',tag:'finance',level:'B2-C1'},
+  {type:'video',title:'The Economist 本周全球经济',src:'The Economist',desc:'经济学人每周全球政经要闻视频版',url:'https://www.youtube.com/@TheEconomist',tag:'finance',level:'C1'},
+  {type:'video',title:'BBC News Review: 每日新闻英语',src:'BBC Learning English',desc:'用BBC当日新闻学单词和表达，每周更新5期',url:'https://www.bbc.co.uk/learningenglish/english/features/news-review',tag:'learning',level:'B2'},
+  {type:'video',title:'BBC 6 Minute English 每日一课',src:'BBC Learning English',desc:'6分钟一个主题，含词汇与思考题',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english',tag:'learning',level:'B1-B2'},
+  {type:'video',title:'TED Talks Daily 今日推荐演讲',src:'TED',desc:'TED每日精选演讲，跨学科思维训练',url:'https://www.ted.com/talks',tag:'learning',level:'C1'},
+  {type:'video',title:'VOA As It Is: 慢速英语新闻',src:'VOA Learning English',desc:'美国之音慢速新闻节目，适合跟读',url:'https://learningenglish.voanews.com/programs/as-it-is',tag:'learning',level:'A2-B1'},
+  // ===== 播客（具体节目） =====
+  {type:'podcast',title:'Planet Money 本周经济学故事',src:'NPR',desc:'NPR用故事讲经济学，30分钟听懂一个经济概念',url:'https://www.npr.org/planetmoney',tag:'finance',level:'B2'},
+  {type:'podcast',title:'WSJ The Journal: 每日商业深潜',src:'WSJ',desc:'华尔街日报旗舰播客，每日20分钟商业深度报道',url:'https://www.wsj.com/podcasts/the-journal',tag:'finance',level:'B2'},
+  {type:'podcast',title:'Bloomberg Surveillance 早间市场',src:'Bloomberg',desc:'全球市场开盘前的分析师对话，含利率/汇率/商品',url:'https://www.bloomberg.com/audio/podcasts/bloomberg-surveillance/',tag:'finance',level:'B2-C1'},
+  {type:'podcast',title:'Masters in Business 金融巨头访谈',src:'Bloomberg',desc:'Bloomberg主持人对话华尔街传奇人物',url:'https://www.bloomberg.com/audio/podcasts/masters-in-business/',tag:'finance',level:'C1'},
+  {type:'podcast',title:'Marketplace 今日经济解读',src:'APM',desc:'美���公共媒体日常商业与生活经济解读',url:'https://www.marketplace.org/shows/marketplace/',tag:'finance',level:'B2'},
+  {type:'podcast',title:'HBR IdeaCast 本周管理思维',src:'HBR',desc:'哈佛商业评论每周管理思维精华',url:'https://hbr.org/podcasts/ideacast',tag:'biz',level:'B2-C1'},
+  {type:'podcast',title:'BBC The English We Speak',src:'BBC',desc:'3分钟学一个地道英语口语短语',url:'https://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak',tag:'learning',level:'B1-B2'},
+  // ===== 对话（锚点跳转） =====
+  {type:'dialog',title:'金融实习面试：自我介绍',src:'内置对话',desc:'投行实习面试完整对话，含关键表达与面试技巧',url:'#dialog-d1',tag:'finance',level:'B2-C1'},
+  {type:'dialog',title:'客户路演：推荐投资组合',src:'内置对话',desc:'分析师向机构客户推荐均衡组合，含资产配置术语',url:'#dialog-d2',tag:'finance',level:'B2-C1'},
+  {type:'dialog',title:'团队季度业绩复盘会议',src:'内置对话',desc:'PM主持的KPI复盘会议，含对齐/考核表达',url:'#dialog-d3',tag:'biz',level:'B2'},
+  {type:'dialog',title:'跨时区电话会议协作',src:'内置对话',desc:'与海外团队协调项目进度，含deliverable/follow up',url:'#dialog-d4',tag:'biz',level:'B2'},
+  {type:'dialog',title:'机场值机与登机对话',src:'内置对话',desc:'完整值机流程，含boarding pass/gate表达',url:'#dialog-d5',tag:'travel',level:'B1-B2'},
+  {type:'dialog',title:'酒店入住与询问',src:'内置对话',desc:'酒店入住流程，含reservation/check-out表达',url:'#dialog-d6',tag:'travel',level:'B1'},
+  {type:'dialog',title:'咖啡馆点单与闲聊',src:'内置对话',desc:'日常社交场景，含点单与聊天的自然对话',url:'#dialog-d7',tag:'daily',level:'A2-B1'},
+  {type:'dialog',title:'餐厅预订与点餐',src:'内置对话',desc:'电话预订餐厅及到店点餐，含推荐与过敏说明',url:'#dialog-d8',tag:'daily',level:'B1'}
+];
+
+// ===== 状态层 =====
+let state = {
+  words: DB.load('words', SEED_WORDS),
+  learnedDialogs: DB.load('learnedDialogs', []),
+  favorites: DB.load('favorites', []),
+  log: DB.load('log', []),
+  reviewState: DB.load('reviewState', {idx:0, mastered:[]}),
+  prefs: DB.load('prefs', {cat:['finance','biz'], level:'B2', goal:'15词+1对话'}),
+  dailyWords: DB.load('dailyWords', []),
+  completedDailyWords: DB.load('completedDailyWords', []),
+  dialogPrefs: DB.load('dialogPrefs', {count:2, cat:'all'})
+};
+
+// 数据容错：纠正来自 localStorage 的旧版/损坏数据结构，避免读取时 TypeError 导致整页白屏
+function sanitizeState(){
+  const arr = v => Array.isArray(v) ? v : [];
+  state.words = arr(state.words);
+  state.learnedDialogs = arr(state.learnedDialogs);
+  state.favorites = arr(state.favorites);
+  state.log = arr(state.log);
+  state.completedDailyWords = arr(state.completedDailyWords);
+  if(!state.reviewState || typeof state.reviewState !== 'object') state.reviewState = {idx:0, mastered:[]};
+  state.reviewState.idx = state.reviewState.idx | 0;
+  state.reviewState.mastered = arr(state.reviewState.mastered);
+  if(!state.prefs || typeof state.prefs !== 'object') state.prefs = {};
+  state.prefs.cat = arr(state.prefs.cat);
+  if(!state.prefs.level) state.prefs.level = 'B2';
+  if(!state.prefs.goal) state.prefs.goal = '15词+1对话';
+  if(!state.dialogPrefs || typeof state.dialogPrefs !== 'object') state.dialogPrefs = {count:2, cat:'all'};
+  // dailyWords 结构非法时重置为空，由 ensureDailyWords 按当天重新生成（done 进度由 completedDailyWords 恢复）
+  if(!Array.isArray(state.dailyWords)) state.dailyWords = [];
+  else if(state.dailyWords.length && (!state.dailyWords[0] || !Array.isArray(state.dailyWords[0].words))) state.dailyWords = [];
+}
+
+// 每日单词：若当天尚未生成则基于词库生成 10 个（进度沿用 completedDailyWords）
+function ensureDailyWords(){
+  const today = todayStr();
+  if(state.dailyWords.length && state.dailyWords[0].date === today) return;
+  const daySeed = parseInt(today.replace(/-/g,'')) % Math.max(1, state.words.length);
+  const shuffled = [...state.words].sort((a,b) => {
+    const ha = (daySeed + a.word.charCodeAt(0)) % state.words.length;
+    const hb = (daySeed + b.word.charCodeAt(0)) % state.words.length;
+    return ha - hb;
+  });
+  state.dailyWords = [{
+    date: today,
+    words: shuffled.slice(0,10).map(w => ({
+      word: w.word, meaning: w.meaning, phonetic: w.phonetic,
+      cat: w.cat, example: w.example,
+      done: state.completedDailyWords.includes(today + ':' + w.word)
+    }))
+  }];
+  DB.save('dailyWords', state.dailyWords);
+}
+
+sanitizeState();
+ensureDailyWords();
+
+// ===== 工具 =====
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000)}
+function todayStr(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function nowStr(){const d=new Date();return `${todayStr()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`}
+function addLog(type,content){state.log.unshift({t:nowStr(),type,content});if(state.log.length>500)state.log.length=500;DB.save('log',state.log)}
+
+// ===== 导航 =====
+function navigate(page){
+  $$('.page').forEach(p=>p.classList.remove('active'));
+  $$('.nav-item').forEach(n=>n.classList.remove('active'));
+  $('#page-'+page).classList.add('active');
+  $(`.nav-item[data-page="${page}"]`).classList.add('active');
+  if(page==='dashboard')renderDashboard();
+  if(page==='words')renderWords();
+  if(page==='dialogues')renderDialogs();
+  if(page==='resources')renderResources('');
+  if(page==='recommend')renderRecommend();
+  if(page==='log')renderLog();
+  if(page==='review')renderReview();
+  if(page==='overview')renderOverview();
+}
+$$('.nav-item').forEach(n=>n.onclick=()=>navigate(n.dataset.page));
+
+// ===== 仪表盘 =====
+function renderDashboard(){
+  const h=new Date().getHours();
+  $('#greet').textContent = h<11?'早上好':h<14?'中午好':h<18?'下午好':'晚上好';
+  const d=new Date();
+  const wk=['日','一','二','三','四','五','六'][d.getDay()];
+  $('#today-date').textContent = `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 周${wk}`;
+  $('#stat-words').textContent = state.words.length;
+  $('#stat-dialogs').textContent = state.learnedDialogs.length;
+  // 本周学习天数
+  const days=new Set();state.log.forEach(l=>{const d=l.t.slice(0,10);days.add(d)});
+  $('#stat-days').textContent = days.size;
+  $('#stat-fav').textContent = state.favorites.length;
+
+  // 本周活动
+  const week=[];
+  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const ds=d.toISOString().slice(0,10);const cnt=state.log.filter(l=>l.t.startsWith(ds)).length;week.push({date:ds.slice(5),count:cnt})}
+  $('#weekly-activity').innerHTML = week.map(w=>`<div class="item"><span class="day">${w.date}</span><span>${w.count} 项活动</span></div>`).join('') || '<div class="empty">暂无活动记录</div>';
+
+  // 今日推荐预览
+  const r=getTodayRecommend();
+  const dw = state.dailyWords.length ? state.dailyWords[0].words : [];
+  const dwDone = dw.filter(w => w.done).length;
+  const dwTotal = dw.length;
+  $('#dashboard-rec').innerHTML = '<div class="recommend-item"><div class="thumb">' + (r.type==='video'?'📺':r.type==='podcast'?'🎧':'💬') + '</div><div class="info"><div class="title">' + r.title + '</div><div class="meta">' + r.src + ' · ' + r.level + '</div></div><button class="btn sm" onclick="navigate(\'recommend\')">查看</button></div>' +
+    '<div style="margin-top:10px;padding:10px;background:#f0fdf4;border-radius:6px;font-size:13px"><b>今日单词</b>: ' + dwDone + '/' + dwTotal + ' 已完成 <button class="btn sm ghost" onclick="navigate(\'words\')">去学习 →</button></div>';
+}
+
+// ===== 单词本 =====
+const CATS={finance:{name:'金融',cls:'fin'},professional:{name:'职场专业',cls:'pro'},daily:{name:'日常',cls:'daily'},travel:{name:'旅游',cls:'travel'},academic:{name:'学术',cls:'pro'}};
+let curWordFilter='all',curWordSearch='',wordPage=1;const WORDS_PER_PAGE=20;
+
+function renderWordFilter(){
+  const cats=[{key:'all',name:'全部'}].concat(Object.entries(CATS).map(([k,v])=>({key:k,name:v.name})));
+  $('#word-filter').innerHTML=cats.map(c=>`<span class="filter-chip ${c.key===curWordFilter?'active':''}" onclick="setWordFilter('${c.key}')">${c.name}</span>`).join('');
+}
+function setWordFilter(k){curWordFilter=k;wordPage=1;renderWordFilter();renderWordList(curWordSearch)}
+function showAddWord(){$('#add-word-form').style.display='block';$('#w-word').focus()}
+function hideAddWord(){$('#add-word-form').style.display='none'}
+function saveWord(){
+  const w=$('#w-word').value.trim();if(!w){toast('请输入单词');return}
+  const nw={word:w,phonetic:$('#w-phonetic').value.trim(),meaning:$('#w-meaning').value.trim()||'(无释义)',cat:$('#w-cat').value,example:$('#w-example').value.trim(),note:$('#w-note').value.trim()};
+  if(state.words.some(x=>x.word.toLowerCase()===w.toLowerCase())){toast('单词已存在');return}
+  state.words.push(nw);DB.save('words',state.words);
+  addLog('word','新增单词: '+w);
+  ['w-word','w-phonetic','w-meaning','w-example','w-note'].forEach(id=>$('#'+id).value='');
+  hideAddWord();renderWords();toast('已添加');
+}
+function renderWords(){wordPage=1;renderWordFilter();$('#word-count').textContent=state.words.length;renderWordList('');renderDailyWords()}
+function renderWordList(search){
+  if(search!==curWordSearch)wordPage=1;
+  curWordSearch=search;
+  const list=state.words.filter(function(w){return (curWordFilter==='all'||w.cat===curWordFilter)&&(w.word.toLowerCase().includes(search.toLowerCase())||(w.meaning||'').includes(search))});
+  const totalPages=Math.max(1,Math.ceil(list.length/WORDS_PER_PAGE));
+  if(wordPage>totalPages)wordPage=totalPages;
+  if(!list.length){$('#word-list').innerHTML='<div class="empty">没有匹配的单词，点击右上角添加</div>';return}
+  const paged=list.slice((wordPage-1)*WORDS_PER_PAGE,wordPage*WORDS_PER_PAGE);
+  var html='<table><thead><tr><th>单词</th><th>音标</th><th>释义</th><th>分类</th><th>例句</th><th>操作</th></tr></thead><tbody>'+paged.map(function(w){var sw=w.word.replace(/'/g,"&apos;");return '<tr><td><b>'+w.word+'</b>'+(state.reviewState.mastered.includes(w.word)?' <span class="badge">已掌握</span>':'')+'</td><td style="color:var(--muted)">'+(w.phonetic||'')+'</td><td>'+(w.meaning||'')+'</td><td><span class="tag '+CATS[w.cat].cls+'">'+CATS[w.cat].name+'</span></td><td style="color:var(--muted);max-width:280px">'+(w.example||'')+'</td><td><button class="btn sm outline" onclick="delWord(&#39;'+sw+'&#39;)">删除</button> <button class="btn sm ghost" onclick="markMastered(&#39;'+sw+'&#39;)">'+(state.reviewState.mastered.includes(w.word)?'取消掌握':'标记掌握')+'</button></td></tr>'}).join('')+'</tbody></table>';
+  if(totalPages>1){
+    html=html+'<div style="display:flex;justify-content:center;align-items:center;gap:8px;margin-top:10px;font-size:13px">'+
+      '<button class="btn sm outline" onclick="goWordPage('+(wordPage-1)+')" '+(wordPage<=1?'disabled':'')+'>上一页</button>'+
+      '<span style="color:var(--muted)">第 '+wordPage+' / '+totalPages+' 页</span>'+
+      '<button class="btn sm outline" onclick="goWordPage('+(wordPage+1)+')" '+(wordPage>=totalPages?'disabled':'')+'>下一页</button>'+
+      '</div>';
+  }
+  $('#word-list').innerHTML=html;
+}
+function goWordPage(p){if(p<1)return;wordPage=p;renderWordList(curWordSearch)}
+function renderDailyWords(){
+  ensureDailyWords(); // 确保当天每日单词已生成（含结构容错）
+  const todayWords = state.dailyWords[0].words;
+  const doneCount = todayWords.filter(function(w){return w.done}).length;
+  $('#daily-word-count').textContent = doneCount;
+  $('#daily-word-progress').style.width = (doneCount / todayWords.length * 100) + '%';
+  var catMap = {finance:"fin",professional:"pro",daily:"daily",travel:"travel",academic:"pro"};
+  var catName = {finance:"金融",professional:"职场",daily:"日常",travel:"旅游",academic:"学术"};
+  var rows = "";
+  for(var wi=0;wi<todayWords.length;wi++){
+    var w = todayWords[wi];
+    var checked = w.done ? " checked" : "";
+    var pinyin = w.phonetic ? '<br><span style="color:var(--muted);font-size:11px">'+w.phonetic+'</span>' : "";
+    var tc = catMap[w.cat] || "pro";
+    var tn = catName[w.cat] || w.cat;
+    var sw = w.word.replace(/'/g, function(m){return "&apos;"});
+    rows += '<tr><td><input type="checkbox"'+checked+' onchange="toggleDailyWord(\''+sw+'\')"></td><td><b>'+w.word+'</b>'+pinyin+'</td><td>'+(w.meaning||'')+'</td><td><span class="tag '+tc+'">'+tn+'</span></td><td style="color:var(--muted);max-width:200px;font-size:12px">'+(w.example||'')+'</td></tr>';
+  }
+  $('#daily-words-list').innerHTML = '<table><thead><tr><th style="width:30px">&#10003;</th><th>&#21333;&#35789;</th><th>&#37322;&#20041;</th><th>&#20998;&#31867;</th><th>&#20363;&#21477;</th></tr></thead><tbody>'+rows+'</tbody></table>';
+
+}
+function toggleDailyWord(word){
+  const today = todayStr();
+  const words = state.dailyWords[0].words;
+  const w = words.find(x => x.word === word);
+  if(w){
+    w.done = !w.done;
+    const key = today + ':' + word;
+    if(w.done){
+      if(!state.completedDailyWords.includes(key)) state.completedDailyWords.push(key);
+      addLog('dailyword','完成今日单词: ' + word);
+    } else {
+      state.completedDailyWords = state.completedDailyWords.filter(x => x !== key);
+    }
+    DB.save('dailyWords', state.dailyWords);
+    DB.save('completedDailyWords', state.completedDailyWords);
+    renderDailyWords();
+    renderDashboard();
+  }
+}
+function logDailyWords(){
+  const today = todayStr();
+  if(state.dailyWords.length && state.dailyWords[0].date === today){
+    state.dailyWords[0].words.forEach(w => {
+      if(!w.done){
+        w.done = true;
+        const key = today + ':' + w.word;
+        if(!state.completedDailyWords.includes(key)) state.completedDailyWords.push(key);
+        addLog('dailyword','完成今日单词: ' + w.word);
+      }
+    });
+    DB.save('dailyWords', state.dailyWords);
+    DB.save('completedDailyWords', state.completedDailyWords);
+    renderDailyWords();
+    renderDashboard();
+    toast('今日单词已全部标记完成');
+  }
+}
+function delWord(w){
+  state.words=state.words.filter(x=>x.word!==w);DB.save('words',state.words);
+  addLog('word','删除单词: '+w);
+  renderWords();toast('已删除');
+}
+function markMastered(w){
+  if(state.reviewState.mastered.includes(w))state.reviewState.mastered=state.reviewState.mastered.filter(x=>x!==w);
+  else state.reviewState.mastered.push(w);
+  DB.save('reviewState',state.reviewState);
+  renderWords();
+}
+
+// ===== 对话 =====
+const DCATS={finance:{name:'金融职场',cls:'fin'},biz:{name:'商业会议',cls:'biz'},daily:{name:'日常',cls:'daily'},travel:{name:'旅游',cls:'travel'}};
+let curDialogFilter='all';
+function renderDialogFilter(){
+  const cats=[{key:'all',name:'全部'}].concat(Object.entries(DCATS).map(([k,v])=>({key:k,name:v.name})));
+  $('#dialog-filter').innerHTML=cats.map(c=>`<span class="filter-chip ${c.key===curDialogFilter?'active':''}" onclick="setDialogFilter('${c.key}')">${c.name}</span>`).join('');
+}
+function setDialogFilter(k){curDialogFilter=k;renderDialogFilter();renderDialogs()}
+function renderDialogs(){
+  renderDialogFilter();
+  renderDailyDialogs();
+  var sortedList=SEED_DIALOGS.slice().sort(function(a,b){return (a.order||99)-(b.order||99)});
+  var filtered=sortedList.filter(function(d){return curDialogFilter==='all'||d.cat===curDialogFilter});
+  var stages=['实习面试','日常基础','旅游出行','职场协作','客户与路演','高阶金融'];
+  var stageColors={'实习面试':'#e0f2fe','日常基础':'#fef3c7','旅游出行':'#d1fae5','职场协作':'#ede9fe','客户与路演':'#fce7f3','高阶金融':'#e0e7ff'};
+  var catName={finance:'金融职场',biz:'商业会议',daily:'日常',travel:'旅游'};
+  var catCls={finance:'fin',biz:'biz',daily:'daily',travel:'travel'};
+  var learned=state.learnedDialogs;
+  var html='<div style="margin-bottom:12px;font-size:12px;color:var(--muted)">学习路径: 从面试准备到高阶金融，共 6 个阶段</div>';
+  for(var si=0;si<stages.length;si++){
+    var st=stages[si];
+    var stageD=filtered.filter(function(d){return d.stage===st});
+    if(!stageD.length) continue;
+    html+=('<div class="card" style="padding:14px;margin-bottom:14px;border-left:4px solid '+(stageColors[st]||'#e5e7eb')+'"><div class="card-title" style="font-size:14px;margin-bottom:10px">'+
+      '<span>阶段'+(si+1)+' : '+st+'</span>'+
+      '<span style="font-weight:400;font-size:12px;color:var(--muted)">('+stageD.length+' 段对话)</span></div>');
+    for(var di=0;di<stageD.length;di++){
+      var d=stageD[di];
+      var isLearned=learned.indexOf(d.id)>=0;
+      html+='<div class="dialog-item" id="dialog-'+d.id+'" style="margin-bottom:8px">'+
+        '<div class="dialog-meta">'+
+          '<span class="tag '+(catCls[d.cat]||'pro')+'">'+(catName[d.cat]||d.cat)+'</span>'+
+          '<span>难度: '+d.level+'</span>'+
+          (isLearned?'<span class="badge">已学</span>':'<span class="badge new" style="background:var(--primary)">推荐</span>')+
+          '<span class="title">'+d.scene+'</span></div>'+
+        '<div style="font-size:13px;color:var(--muted);margin-bottom:8px">'+d.desc+'</div>'+
+        '<div class="dialog-body" id="db-'+d.id+'" style="display:none">'+d.body.map(function(l){return '<div class="line"><span class="speaker">'+l.s+':</span>'+l.t+'</div>';}).join('')+'</div>'+
+        '<div style="font-size:12px;color:var(--muted)">关键表达: '+d.keywords.map(function(k){return '<span class="tag pro" style="margin-right:4px">'+k+'</span>';}).join('')+'</div>'+
+        '<div class="dialog-actions">'+
+          '<button class="btn sm outline" onclick="toggleDialogBody(\''+d.id+'\')">展开对话</button>'+
+          '<button class="btn sm '+(isLearned?'outline':'')+'" onclick="toggleLearned(\''+d.id+'\');renderDialogs();renderDailyDialogs();renderReviewDialogs();">'+(isLearned?'取消已学':'标记已学')+'</button>'+
+          '<a class="btn sm ghost" href="#" onclick="copyDialog(\''+d.id+'\');return false">复制对话</a></div></div>';
+    }
+    html+='</div>';
+  }
+  $('#dialog-list').innerHTML=html;
+}
+function toggleDialogBody(id){
+  var el=document.getElementById('db-'+id);
+  if(!el)return;
+  var btn=el.parentNode.querySelector('.dialog-actions button:first-child');
+  if(el.style.display==='none'){el.style.display='block';if(btn)btn.textContent='收起对话'}
+  else{el.style.display='none';if(btn)btn.textContent='展开对话'}
+}
+function toggleLearned(id){
+  // 当标记已学时，刷新每日推荐和复习计数
+  if(!state.learnedDialogs.includes(id)){
+    var dl = SEED_DIALOGS.find(function(x){return x.id===id});
+    if(dl) addLog('dialog','学习对话: '+dl.scene);
+  }
+  if(state.learnedDialogs.includes(id)){
+    state.learnedDialogs=state.learnedDialogs.filter(function(x){return x!==id});
+  }else{
+    state.learnedDialogs.push(id);
+  }
+  DB.save('learnedDialogs',state.learnedDialogs);
+  renderDialogs();
+}
+function copyDialog(id){
+  const d=SEED_DIALOGS.find(x=>x.id===id);
+  const txt=d.scene+'\n\n'+d.body.map(l=>`${l.s}: ${l.t.replace(/<[^>]+>/g,'')}`).join('\n');
+  navigator.clipboard.writeText(txt).then(()=>toast('已复制到剪贴板'));
+}
+
+// ===== 资源 =====
+function renderResources(search){
+  const s=search.toLowerCase();
+  function filter(arr){return arr.filter(r=>!s||r.name.toLowerCase().includes(s)||r.desc.toLowerCase().includes(s))}
+  function cards(arr){return arr.map(r=>`<div class="resource-card"><div class="src">${r.src} · ${r.cat}</div><div class="name">${r.name}</div><div class="desc">${r.desc}</div><a class="link" href="${r.url}" target="_blank" rel="noopener">访问 →</a> <button class="btn sm outline" onclick="toggleFav('${r.name.replace(/'/g,"\\'")}','${r.url}')">${state.favorites.some(f=>f.name===r.name)?'取消收藏':'收藏'}</button></div>`).join('')}
+  $('#res-video').innerHTML=cards(filter(RESOURCES.video));
+  $('#res-podcast').innerHTML=cards(filter(RESOURCES.podcast));
+  $('#res-dict').innerHTML=cards(filter(RESOURCES.dict));
+  $('#res-biz').innerHTML=cards(filter(RESOURCES.biz));
+  $('#res-news').innerHTML=cards(filter(RESOURCES.news));
+}
+function toggleResCat(cat,el){
+  var grid=el.nextElementSibling;
+  if(!grid)return;
+  grid.classList.toggle('res-collapsed');
+  var isCollapsed=grid.classList.contains('res-collapsed');
+  el.textContent=el.textContent.replace(/[ ▸▾]+$/,'')+(isCollapsed?' ▸':' ▾');
+}
+function toggleFav(name,url){
+  if(state.favorites.some(f=>f.name===name))state.favorites=state.favorites.filter(f=>f.name!==name);
+  else{state.favorites.push({name,url});addLog('fav','收藏资源: '+name)}
+  DB.save('favorites',state.favorites);
+  renderResources(curWordSearch);toast(state.favorites.some(f=>f.name===name)?'已收藏':'已取消');
+}
+
+// ===== 推荐 =====
+function getTodayRecommend(){
+  // 基于日期的稳定推荐
+  const seed=parseInt(todayStr().replace(/-/g,''));
+  const prefs=state.prefs.cat;
+  const pool=RECOMMEND_POOL.filter(r=>prefs.includes(r.tag));
+  const p=pool.length?pool:RECOMMEND_POOL;
+  return p[seed%p.length];
+}
+function renderRecommend(){
+  const r=getTodayRecommend();
+  $('#recommend-list').innerHTML=`<div class="recommend-item">
+    <div class="thumb">${r.type==='video'?'📺':r.type==='podcast'?'🎧':'💬'}</div>
+    <div class="info"><div class="title">${r.title}</div><div class="meta">${r.src} · ${r.level} · ${r.tag}</div><div class="meta" style="margin-top:4px">${r.desc}</div></div>
+    <div class="actions">
+      <a class="btn sm" href="${r.url}" target="_blank" rel="noopener" onclick="logRecommend('${r.title.replace(/'/g,"\\'")}')">立即学习</a>
+      <button class="btn sm outline" onclick="skipRecommend()">不感兴趣，换一个</button>
+    </div>
+  </div>`;
+  $('#pref-cat').textContent=state.prefs.cat.join(' / ');
+  $('#pref-level').textContent=state.prefs.level;
+  $('#pref-goal').textContent=state.prefs.goal;
+}
+let skipCount=0;
+function skipRecommend(){
+  skipCount++;
+  const seed=parseInt(todayStr().replace(/-/g,''))+skipCount;
+  const prefs=state.prefs.cat;
+  const pool=RECOMMEND_POOL.filter(r=>prefs.includes(r.tag));
+  const p=pool.length?pool:RECOMMEND_POOL;
+  const r=p[seed%p.length];
+  $('#recommend-list').innerHTML=`<div class="recommend-item">
+    <div class="thumb">${r.type==='video'?'📺':r.type==='podcast'?'🎧':'💬'}</div>
+    <div class="info"><div class="title">${r.title}</div><div class="meta">${r.src} · ${r.level} · ${r.tag}</div><div class="meta" style="margin-top:4px">${r.desc}</div></div>
+    <div class="actions">
+      <a class="btn sm" href="${r.url}" target="_blank" rel="noopener" onclick="logRecommend('${r.title.replace(/'/g,"\\'")}')">立即学习</a>
+      <button class="btn sm outline" onclick="skipRecommend()">再换一个</button>
+    </div>
+  </div>`;
+  toast('已为你换一个');
+}
+
+function handleRecommendClick(event, title, type, url){
+  if(type === 'dialog' && url.startsWith('#dialog-')){
+    event.preventDefault();
+    logRecommend(title, true, url.replace('#',''));
+    return false;
+  }
+  logRecommend(title, false, null);
+  return true;
+}
+function logRecommend(title, isDialog, dialogId){
+  addLog('recommend','学习推荐: '+title);
+  if(isDialog && dialogId){
+    navigate('dialogues');
+    setTimeout(() => {
+      document.getElementById(dialogId)?.scrollIntoView({behavior:'smooth', block:'center'});
+      document.getElementById(dialogId)?.classList.add('highlight-dialog');
+    }, 200);
+  }
+}
+function refreshRecommend(){skipCount=0;renderRecommend();toast('已刷新')}
+function updatePref(){
+  const cats=prompt('输入偏好方向（逗号分隔），可选: finance,biz,daily,travel,learning',state.prefs.cat.join(','));
+  if(cats){state.prefs.cat=cats.split(',').map(s=>s.trim()).filter(Boolean);DB.save('prefs',state.prefs);renderRecommend();toast('已更新偏好')}
+}
+
+// ===== 学习记录 =====
+function renderLog(){
+  var total=state.log.length;
+  $('#log-total').textContent=total;
+  $('#log-words').textContent=state.log.filter(function(l){return l.type==='word'}).length;
+  $('#log-dialogs').textContent=state.log.filter(function(l){return l.type==='dialog'}).length;
+  $('#log-fav').textContent=state.log.filter(function(l){return l.type==='fav'}).length;
+  filterLog();
+}
+
+var logFilterDate = '';
+
+function filterLog(){
+  var dateFilter = document.getElementById('log-date-filter');
+  if(dateFilter) logFilterDate = dateFilter.value;
+  var filtered = state.log;
+  if(logFilterDate){
+    filtered = filtered.filter(function(l){return l.t.startsWith(logFilterDate)});
+  }
+  var infoEl = document.getElementById('log-filter-info');
+  if(infoEl){
+    if(logFilterDate) infoEl.textContent = '显示 ' + logFilterDate + ' 的记录 (' + filtered.length + ' 条)';
+    else infoEl.textContent = '显示全部 (' + filtered.length + ' 条)';
+  }
+  var typeName={word:'单词',dialog:'对话',fav:'收藏',recommend:'推荐',dailyword:'每日单词',review:'复习'};
+  var tagClass={word:'daily',dialog:'fin',fav:'biz',recommend:'pro',dailyword:'daily',review:'pro'};
+  $('#log-table').innerHTML=filtered.map(function(l){
+    return '<tr><td>'+l.t+'</td><td><span class="tag '+(tagClass[l.type]||'pro')+'">'+(typeName[l.type]||l.type)+'</span></td><td>'+l.content+'</td></tr>';
+  }).join('') || '<tr><td colspan="3" class="empty">暂无记录</td></tr>';
+}
+
+function resetLogFilter(){
+  document.getElementById('log-date-filter').value = '';
+  logFilterDate = '';
+  filterLog();
+}
+function clearLog(){if(confirm('确定清空所有学习记录？此操作不可恢复')){state.log=[];DB.save('log',state.log);renderLog();toast('已清空')}}
+
+// ===== 学习概览 (日历) =====
+var overviewMonth = new Date().getMonth();
+var overviewYear = new Date().getFullYear();
+
+function renderOverview(){
+  var m = overviewMonth, y = overviewYear;
+  var months = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  $('#ov-cal-title').textContent = y + '年' + months[m];
+  $('#overview-month-label').textContent = y + ' ' + months[m];
+
+  // 统计本月
+  var prefix = y + '-' + String(m+1).padStart(2,'0');
+  var monthDays = new Set();
+  var monthActs = 0;
+  state.log.forEach(function(l){
+    if(l.t.startsWith(prefix)){monthDays.add(l.t.slice(0,10));monthActs++;}
+  });
+  $('#ov-month-days').textContent = monthDays.size;
+  $('#ov-month-acts').textContent = monthActs;
+
+  // 连续学习天数
+  var streak = 0;
+  var d = new Date();
+  while(true){
+    var ds = d.toISOString().slice(0,10);
+    if(state.log.some(function(l){return l.t.startsWith(ds)})){streak++;d.setDate(d.getDate()-1);}
+    else break;
+  }
+  $('#ov-streak').textContent = streak;
+
+  // 日历网格
+  var firstDay = new Date(y, m, 1).getDay();
+  var daysInMonth = new Date(y, m+1, 0).getDate();
+  var today = new Date();
+  var todayStr = today.toISOString().slice(0,10);
+
+  var weekdays = ['日','一','二','三','四','五','六'];
+  var html = '<table style="width:100%;border-collapse:separate;border-spacing:4px"><thead><tr>';
+  weekdays.forEach(function(wd){html += '<th style="text-align:center;padding:8px;font-size:12px;color:var(--muted);font-weight:500">' + wd + '</th>'});
+  html += '</tr></thead><tbody><tr>';
+  for(var i=0;i<firstDay;i++){html += '<td></td>';}
+  for(var day=1;day<=daysInMonth;day++){
+    var ds = y + '-' + String(m+1).padStart(2,'0') + '-' + String(day).padStart(2,'0');
+    var hasActivity = state.log.some(function(l){return l.t.startsWith(ds)});
+    var isToday = ds === todayStr;
+    var bg = hasActivity ? '#dbeafe' : (isToday ? '#fef3c7' : '#f9fafb');
+    var border = isToday ? '2px solid var(--primary)' : (hasActivity ? '1px solid #93c5fd' : '1px solid var(--border)');
+    var cursor = hasActivity ? 'pointer' : 'default';
+    html += '<td style="text-align:center;padding:8px;background:'+bg+';border:'+border+';border-radius:8px;cursor:'+cursor+';font-weight:'+(isToday?'700':'400')+';font-size:14px" onclick="'+(hasActivity?'showDayDetail(\''+ds+'\')':'')+'">'+day+'</td>';
+    if((firstDay+day)%7===0 && day<daysInMonth){html += '</tr><tr>';}
+  }
+  html += '</tr></tbody></table>';
+  $('#ov-calendar').innerHTML = html;
+}
+
+function showDayDetail(ds){
+  var items = state.log.filter(function(l){return l.t.startsWith(ds)});
+  var weekdays = ['日','一','二','三','四','五','六'];
+  var d = new Date(ds);
+  var label = ds + ' 周' + weekdays[d.getDay()];
+  $('#ov-day-title').textContent = label + ' (' + items.length + ' 项活动)';
+  var typeName = {word:'单词',dialog:'对话',fav:'收藏',recommend:'推荐',dailyword:'每日单词',review:'复习'};
+  $('#ov-day-content').innerHTML = items.length ? 
+    items.map(function(l){return '<div style="padding:6px 0;border-bottom:1px solid #f3f4f6;font-size:13px"><span class="tag '+(l.type==='word'||l.type==='dailyword'?'daily':l.type==='dialog'?'fin':l.type==='fav'?'biz':'pro')+'">'+(typeName[l.type]||l.type)+'</span> '+l.t.slice(11)+' '+l.content+'</div>'}).join('')
+    : '<div class="empty">当日无记录</div>';
+  $('#ov-day-detail').style.display = 'block';
+  setTimeout(function(){$('#ov-day-detail').scrollIntoView({behavior:'smooth',block:'center'})}, 100);
+}
+function overviewPrev(){overviewMonth--;if(overviewMonth<0){overviewMonth=11;overviewYear--;}renderOverview();}
+function overviewNext(){overviewMonth++;if(overviewMonth>11){overviewMonth=0;overviewYear++;}renderOverview();}
+
+// ===== 每日对话推荐 =====
+function renderDailyDialogs(){
+  var count = state.dialogPrefs.count;
+  var cat = state.dialogPrefs.cat;
+  // 设置下拉框
+  if(document.getElementById('dd-count')) document.getElementById('dd-count').value = count;
+  if(document.getElementById('dd-cat')) document.getElementById('dd-cat').value = cat;
+
+  var pool = cat === 'all' ? SEED_DIALOGS : SEED_DIALOGS.filter(function(d){return d.cat===cat});
+  // 基于日期种子选择
+  var seed = parseInt(todayStr().replace(/-/g,''));
+  var dialogs = [];
+  for(var i=0;i<count && i<pool.length;i++){
+    var idx = (seed + i * 7) % pool.length;
+    dialogs.push(pool[idx]);
+  }
+  // 去重
+  var seen = {};
+  dialogs = dialogs.filter(function(d){if(seen[d.id])return false;seen[d.id]=true;return true});
+
+  $('#daily-dialog-count').textContent = dialogs.length;
+  var learned = state.learnedDialogs;
+  var catName = {finance:'金融职场',biz:'商业会议',daily:'日常',travel:'旅游'};
+  var catCls = {finance:'fin',biz:'biz',daily:'daily',travel:'travel'};
+  $('#daily-dialog-list').innerHTML = dialogs.length ? dialogs.map(function(d){
+    var isLearned = learned.indexOf(d.id) >= 0;
+    return '<div class="dialog-item" style="margin-bottom:8px"><div class="dialog-meta"><span class="tag '+catCls[d.cat]+'">'+catName[d.cat]+'</span><span>难度: '+d.level+'</span>'+(isLearned?'<span class="badge">已学</span>':'<span class="badge new">今日推荐</span>')+'<span class="title">'+d.scene+'</span></div><div class="dialog-body" style="max-height:120px">'+d.body.map(function(l){return '<div class="line"><span class="speaker">'+l.s+':</span>'+l.t+'</div>'}).join('')+'</div><div class="dialog-actions"><button class="btn sm '+(isLearned?'outline':'')+'" onclick="toggleLearned(\''+d.id+'\');renderDailyDialogs();renderDialogs();">'+(isLearned?'取消已学':'学完标记')+'</button></div></div>';
+  }).join('') : '<div class="empty">当前分类暂无对话，请调整设置</div>';
+}
+
+function saveDialogPrefs(){
+  state.dialogPrefs.count = parseInt(document.getElementById('dd-count').value);
+  state.dialogPrefs.cat = document.getElementById('dd-cat').value;
+  DB.save('dialogPrefs', state.dialogPrefs);
+  renderDailyDialogs();
+  toast('已更新���置');
+}
+function refreshDailyDialogs(){renderDailyDialogs();toast('已刷新');}
+
+// ===== 对话复习 =====
+function setReviewTab(tab){
+  document.getElementById('review-word-area').style.display = tab==='word' ? 'block' : 'none';
+  document.getElementById('review-dialog-area').style.display = tab==='dialog' ? 'block' : 'none';
+  document.getElementById('rtab-word').className = 'btn outline sm' + (tab==='word'?' active':'');
+  document.getElementById('rtab-dialog').className = 'btn outline sm' + (tab==='dialog'?' active':'');
+  if(tab==='dialog')renderReviewDialogs();
+  if(tab==='word')renderReview();
+}
+function renderReviewDialogs(){
+  var learned = state.learnedDialogs;
+  document.getElementById('rtab-dialog-count').textContent = learned.length;
+  var catName = {finance:'金融职场',biz:'商业会议',daily:'日常',travel:'旅游'};
+  var catCls = {finance:'fin',biz:'biz',daily:'daily',travel:'travel'};
+  if(!learned.length){
+    document.getElementById('review-dialog-list').innerHTML = '<div class="empty">还没有学过的对话，去对话练习页面学习吧</div>';
+    return;
+  }
+  var list = SEED_DIALOGS.filter(function(d){return learned.indexOf(d.id)>=0});
+  document.getElementById('review-dialog-list').innerHTML = list.map(function(d){
+    return '<div class="dialog-item"><div class="dialog-meta"><span class="tag '+catCls[d.cat]+'">'+catName[d.cat]+'</span><span>难度: '+d.level+'</span><span class="badge">已学</span><span class="title">'+d.scene+'</span></div><div style="font-size:13px;color:var(--muted);margin-bottom:8px">'+d.desc+'</div><div class="dialog-body">'+d.body.map(function(l){return '<div class="line"><span class="speaker">'+l.s+':</span>'+l.t+'</div>'}).join('')+'</div><div class="dialog-actions"><button class="btn sm ghost" onclick="toggleLearned(\''+d.id+'\');renderReviewDialogs();renderDialogs();">移出复习</button><a class="btn sm ghost" href="#" onclick="return false">再读一遍</a></div></div>';
+  }).join('');
+}
+
+// ===== 复习 =====
+function renderReview(){
+  const unmastered=state.words.filter(w=>!state.reviewState.mastered.includes(w.word));
+  if(!unmastered.length){$('#review-area').innerHTML='<div class="card"><div class="empty">所有单词已掌握 🎉 点击"标记掌握"可重新复习</div></div>';return}
+  const idx=state.reviewState.idx%unmastered.length;
+  const w=unmastered[idx];
+  $('#review-area').innerHTML=`<div class="card">
+    <div class="card-title">翻转卡片 (第 ${idx+1} / ${unmastered.length} 个，共 ${state.words.length} 词)</div>
+    <div class="flash-card" id="flash-card" onclick="flipCard()">
+      <div class="category"><span class="tag ${CATS[w.cat].cls}">${CATS[w.cat].name}</span></div>
+      <div class="word" id="fc-word">${w.word}</div>
+      <div class="phonetic" id="fc-phonetic">${w.phonetic||''}</div>
+      <div class="meaning" id="fc-meaning" style="display:none">${w.meaning||''}</div>
+      <div class="example" id="fc-example" style="display:none">${w.example||''}</div>
+      <div class="category">点击卡片显示释义</div>
+    </div>
+    <div class="review-bar">
+      <button class="btn ghost" onclick="prevCard()">上一个</button>
+      <button class="btn" onclick="markMasteredCard('${w.word.replace(/'/g,"\\'")}')">已掌握</button>
+      <button class="btn outline" onclick="nextCard()">下一个</button>
+    </div>
+    <div class="progress-bar" style="margin-top:20px"><div class="fill" style="width:${state.reviewState.mastered.length/state.words.length*100}%"></div></div>
+    <div style="text-align:center;color:var(--muted);font-size:12px;margin-top:6px">已掌握 ${state.reviewState.mastered.length} / ${state.words.length}</div>
+  </div>`;
+}
+function flipCard(){
+  const m=$('#fc-meaning'),e=$('#fc-example');
+  if(m.style.display==='none'){m.style.display='block';e.style.display='block';$('#fc-word').style.fontSize='24px'}
+  else{m.style.display='none';e.style.display='none';$('#fc-word').style.fontSize='32px'}
+}
+function nextCard(){state.reviewState.idx++;DB.save('reviewState',state.reviewState);renderReview()}
+function prevCard(){state.reviewState.idx=Math.max(0,state.reviewState.idx-1);DB.save('reviewState',state.reviewState);renderReview()}
+function markMasteredCard(w){
+  state.reviewState.mastered.push(w);DB.save('reviewState',state.reviewState);
+  addLog('review','复习掌握: '+w);
+  nextCard();toast('已标记掌握');
+}
+
+// 初始化
+navigate('dashboard');
+</script>
+</body>
+</html>

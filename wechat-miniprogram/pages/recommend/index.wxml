@@ -1,0 +1,22 @@
+<nav-drawer title="每日推荐" current="recommend">
+  <view class="card">
+    <view class="card-title"><text>🎯 偏好分类</text></view>
+    <view class="filter-row">
+      <text class="chip {{prefsCat === 'all' ? 'on' : ''}}" data-cat="all" bindtap="setCat">全部</text>
+      <text wx:for="{{cats}}" wx:key="key" class="chip {{prefsCat === item.key ? 'on' : ''}}" data-cat="{{item.key}}" bindtap="setCat">{{item.name}}</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title"><text>⭐ 今日推荐</text><button class="btn sm ghost" bindtap="changeBatch">换一批</button></view>
+    <view wx:for="{{list}}" wx:key="url" class="rec-item" data-url="{{item.url}}" bindtap="openLink">
+      <view class="rec-thumb">{{item.icon || '🔗'}}</view>
+      <view class="rec-main">
+        <view class="rec-title">{{item.title}}</view>
+        <view class="rec-meta muted">{{item.type || ''}}</view>
+      </view>
+    </view>
+    <view class="empty" wx:if="{{!list.length}}">暂无推荐</view>
+    <view class="muted tip">点击卡片复制链接，去浏览器打开</view>
+  </view>
+</nav-drawer>

@@ -1,0 +1,28 @@
+<nav-drawer title="对话练习" current="dialogues">
+  <view wx:for="{{stages}}" wx:key="stage" class="stage-block">
+    <view class="stage-head" style="border-left:8rpx solid {{item.color}}">
+      <text class="stage-name">{{item.name}}</text>
+    </view>
+    <view wx:for="{{item.list}}" wx:for-item="d" wx:key="id" class="dialog-item">
+      <view class="dialog-meta">
+        <text class="tag">{{d.catName}}</text>
+        <text class="muted">难度 {{d.level}}</text>
+        <text wx:if="{{d.learned}}" class="badge">已学</text>
+        <text wx:else class="badge-new">推荐</text>
+        <text class="d-scene">{{d.scene}}</text>
+      </view>
+      <view class="d-desc muted">{{d.desc}}</view>
+      <view wx:if="{{expanded === d.id}}" class="d-body">
+        <view wx:for="{{d.body}}" wx:for-item="line" wx:key="_i" class="d-line">
+          <text class="d-speaker">{{line.s}}:</text><text>{{line.t}}</text>
+        </view>
+      </view>
+      <view class="d-keywords muted">关键表达: <text wx:for="{{d.keywords}}" wx:for-item="k" wx:key="*this" class="tag">{{k}}</text></view>
+      <view class="d-actions">
+        <text class="link" data-id="{{d.id}}" bindtap="toggleBody">{{expanded === d.id ? '收起对话' : '展开对话'}}</text>
+        <text class="link" data-id="{{d.id}}" bindtap="toggleLearned">{{d.learned ? '取消已学' : '标记已学'}}</text>
+        <text class="link" data-id="{{d.id}}" bindtap="copyDialog">复制对话</text>
+      </view>
+    </view>
+  </view>
+</nav-drawer>

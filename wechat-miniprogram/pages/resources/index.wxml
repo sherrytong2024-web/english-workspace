@@ -1,0 +1,16 @@
+<nav-drawer title="资源中心" current="resources">
+  <view wx:for="{{cats}}" wx:key="key" class="res-block">
+    <view class="res-head" data-k="{{item.key}}" bindtap="toggleCat">
+      <text>{{item.name}}</text>
+      <text class="res-arrow">{{collapsed[item.key] ? '▸' : '▾'}}</text>
+    </view>
+    <view wx:if="{{!collapsed[item.key]}}" class="grid-3">
+      <view wx:for="{{item.list}}" wx:for-item="r" wx:key="url" class="res-card" data-url="{{r.url}}" bindtap="openLink">
+        <view class="res-name">{{r.title}}</view>
+        <view class="res-desc muted">{{r.desc || r.type || ''}}</view>
+        <view class="res-link">复制链接 ↗</view>
+      </view>
+    </view>
+  </view>
+  <view class="empty" wx:if="{{!cats.length}}">暂无资源</view>
+</nav-drawer>

@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+env/
+
+# 本地数据库（云端用 seed_data.json 重新播种）
+english-backend/data/*.db
+*.sqlite
+*.sqlite3
+
+# 小程序依赖
+wechat-miniprogram/node_modules/
+wechat-miniprogram/miniprogram_npm/
+
+# 系统 / 编辑器
+.DS_Store
+*.log
+.workbuddy/
+
+# 密钥（切勿提交 AppSecret / 数据库密码）
+*.env
+.env

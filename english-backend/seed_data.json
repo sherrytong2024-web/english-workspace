@@ -1,0 +1,1433 @@
+{
+  "words": [
+    {
+      "word": "leverage",
+      "phonetic": "/ˈlevərɪdʒ/",
+      "meaning": "杠杆；撬动",
+      "cat": "finance",
+      "example": "The fund used excessive leverage to amplify returns.",
+      "note": "高频面试词"
+    },
+    {
+      "word": "liquidity",
+      "phonetic": "/lɪˈkwɪdəti/",
+      "meaning": "流动性",
+      "cat": "finance",
+      "example": "Market liquidity dried up during the sell-off."
+    },
+    {
+      "word": "diversification",
+      "phonetic": "/daɪˌvɜːsɪfɪˈkeɪʃn/",
+      "meaning": "分散投资",
+      "cat": "finance",
+      "example": "Diversification reduces portfolio risk."
+    },
+    {
+      "word": "yield curve",
+      "phonetic": "/jiːld kɜːv/",
+      "meaning": "收益率曲线",
+      "cat": "finance",
+      "example": "An inverted yield curve often signals a recession."
+    },
+    {
+      "word": "blue chip",
+      "phonetic": "/bluː tʃɪp/",
+      "meaning": "蓝筹股",
+      "cat": "finance",
+      "example": "Blue chip stocks are favored by conservative investors."
+    },
+    {
+      "word": "hedge",
+      "phonetic": "/hedʒ/",
+      "meaning": "对冲",
+      "cat": "finance",
+      "example": "They hedged currency exposure using forwards."
+    },
+    {
+      "word": "benchmark",
+      "phonetic": "/ˈbentʃmɑːk/",
+      "meaning": "基准",
+      "cat": "finance",
+      "example": "The fund outperformed its benchmark by 2%."
+    },
+    {
+      "word": "derivative",
+      "phonetic": "/dɪˈrɪvətɪv/",
+      "meaning": "衍生品",
+      "cat": "finance",
+      "example": "Options and futures are common derivatives."
+    },
+    {
+      "word": "valuation",
+      "phonetic": "/ˌvæljuˈeɪʃn/",
+      "meaning": "估值",
+      "cat": "finance",
+      "example": "The valuation model assumes 8% revenue growth."
+    },
+    {
+      "word": "volatility",
+      "phonetic": "/ˌvɒləˈtɪləti/",
+      "meaning": "波动率",
+      "cat": "finance",
+      "example": "Implied volatility spiked ahead of the earnings call."
+    },
+    {
+      "word": "asset allocation",
+      "phonetic": "/ˈæset ˌæləˈkeɪʃn/",
+      "meaning": "资产配置",
+      "cat": "finance",
+      "example": "Strategic asset allocation drives long-term returns."
+    },
+    {
+      "word": "capital structure",
+      "phonetic": "/ˈkæpɪtl ˈstrʌktʃə(r)/",
+      "meaning": "资本结构",
+      "cat": "finance",
+      "example": "Optimal capital structure minimizes WACC."
+    },
+    {
+      "word": "underwrite",
+      "phonetic": "/ˌʌndəˈraɪt/",
+      "meaning": "承销",
+      "cat": "finance",
+      "example": "Goldman Sachs underwrote the IPO."
+    },
+    {
+      "word": "due diligence",
+      "phonetic": "/djuː ˈdɪlɪdʒəns/",
+      "meaning": "尽职调查",
+      "cat": "finance",
+      "example": "The acquirer completed due diligence in three weeks."
+    },
+    {
+      "word": "yield",
+      "phonetic": "/jiːld/",
+      "meaning": "收益；收益率",
+      "cat": "finance",
+      "example": "The 10-year yield rose to 4.2%."
+    },
+    {
+      "word": "equity",
+      "phonetic": "/ˈekwəti/",
+      "meaning": "股权；权益",
+      "cat": "finance",
+      "example": "The company raised equity to fund expansion."
+    },
+    {
+      "word": "IPO",
+      "phonetic": "/ˌaɪ piː ˈəʊ/",
+      "meaning": "首次公开募股",
+      "cat": "finance",
+      "example": "The IPO was oversubscribed by 15x."
+    },
+    {
+      "word": "EBITDA",
+      "phonetic": "/ˈiːbɪtdɑː/",
+      "meaning": "息税折旧摊销前利润",
+      "cat": "finance",
+      "example": "EBITDA margin improved to 35%.",
+      "note": "估值模型核心指标"
+    },
+    {
+      "word": "P/E ratio",
+      "phonetic": "/piː iː ˈreɪʃiəʊ/",
+      "meaning": "市盈率",
+      "cat": "finance",
+      "example": "The stock trades at a P/E ratio of 22."
+    },
+    {
+      "word": "arbitrage",
+      "phonetic": "/ˈɑːrbɪtrɑːʒ/",
+      "meaning": "套利",
+      "cat": "finance",
+      "example": "The price difference created an arbitrage opportunity."
+    },
+    {
+      "word": "amortization",
+      "phonetic": "/əˌmɔːtaɪˈzeɪʃn/",
+      "meaning": "摊销",
+      "cat": "finance",
+      "example": "Goodwill amortization is recorded annually."
+    },
+    {
+      "word": "depreciation",
+      "phonetic": "/dɪˌpriːʃiˈeɪʃn/",
+      "meaning": "折旧",
+      "cat": "finance",
+      "example": "Depreciation reduces the book value of assets."
+    },
+    {
+      "word": "dividend",
+      "phonetic": "/ˈdɪvɪdend/",
+      "meaning": "股息",
+      "cat": "finance",
+      "example": "The company pays a quarterly dividend of 50 cents."
+    },
+    {
+      "word": "fiscal year",
+      "phonetic": "/ˈfɪskl jɪə(r)/",
+      "meaning": "财年",
+      "cat": "finance",
+      "example": "Fiscal year 2025 revenue exceeded guidance."
+    },
+    {
+      "word": "goodwill",
+      "phonetic": "/ɡʊdˈwɪl/",
+      "meaning": "商誉",
+      "cat": "finance",
+      "example": "The acquisition created goodwill of 200 million."
+    },
+    {
+      "word": "impairment",
+      "phonetic": "/ɪmˈpeəmənt/",
+      "meaning": "减值",
+      "cat": "finance",
+      "example": "The company took a goodwill impairment charge."
+    },
+    {
+      "word": "interest coverage",
+      "phonetic": "/ˈɪntrəst ˈkʌvərɪdʒ/",
+      "meaning": "利息覆盖倍数",
+      "cat": "finance",
+      "example": "Interest coverage of 5x is considered healthy."
+    },
+    {
+      "word": "leverage ratio",
+      "phonetic": "/ˈlevərɪdʒ ˈreɪʃiəʊ/",
+      "meaning": "杠杆率",
+      "cat": "finance",
+      "example": "The bank reduced its leverage ratio to 10:1."
+    },
+    {
+      "word": "margin call",
+      "phonetic": "/ˈmɑːdʒɪn kɔːl/",
+      "meaning": "追加保证金",
+      "cat": "finance",
+      "example": "The client faced a margin call when the stock dropped."
+    },
+    {
+      "word": "mark to market",
+      "phonetic": "/mɑːk tə ˈmɑːkɪt/",
+      "meaning": "市值计价",
+      "cat": "finance",
+      "example": "The portfolio is marked to market daily."
+    },
+    {
+      "word": "Monte Carlo",
+      "phonetic": "/ˈmɒnteɪ ˈkɑːrləʊ/",
+      "meaning": "蒙特卡洛模拟",
+      "cat": "finance",
+      "example": "A Monte Carlo simulation estimated the range of outcomes."
+    },
+    {
+      "word": "net present value",
+      "phonetic": "/net ˈpreznt ˈvæljuː/",
+      "meaning": "净现值",
+      "cat": "finance",
+      "example": "The NPV of the project is 3.2 million."
+    },
+    {
+      "word": "IRR",
+      "phonetic": "/ˌaɪ ɑːr ˈɑːr/",
+      "meaning": "内部收益率",
+      "cat": "finance",
+      "example": "The internal rate of return exceeds the hurdle rate."
+    },
+    {
+      "word": "overweight",
+      "phonetic": "/ˌəʊvəˈweɪt/",
+      "meaning": "超配",
+      "cat": "finance",
+      "example": "We maintain an overweight rating on the sector."
+    },
+    {
+      "word": "underweight",
+      "phonetic": "/ˌʌndəˈweɪt/",
+      "meaning": "低配",
+      "cat": "finance",
+      "example": "The fund is underweight in energy stocks."
+    },
+    {
+      "word": "par value",
+      "phonetic": "/pɑːr ˈvæljuː/",
+      "meaning": "面值",
+      "cat": "finance",
+      "example": "The bond was issued at par value."
+    },
+    {
+      "word": "premium",
+      "phonetic": "/ˈpriːmiəm/",
+      "meaning": "溢价",
+      "cat": "finance",
+      "example": "The stock trades at a premium to its peers."
+    },
+    {
+      "word": "recession",
+      "phonetic": "/rɪˈseʃn/",
+      "meaning": "衰退",
+      "cat": "finance",
+      "example": "The economy entered a technical recession."
+    },
+    {
+      "word": "refinance",
+      "phonetic": "/ˌriːˈfaɪnæns/",
+      "meaning": "再融资",
+      "cat": "finance",
+      "example": "The company refinanced its debt at a lower rate."
+    },
+    {
+      "word": "risk premium",
+      "phonetic": "/rɪsk ˈpriːmiəm/",
+      "meaning": "风险溢价",
+      "cat": "finance",
+      "example": "Equity risk premium has widened amid uncertainty."
+    },
+    {
+      "word": "securitization",
+      "phonetic": "/sɪˌkjʊ��rɪtaɪˈzeɪʃn/",
+      "meaning": "证券化",
+      "cat": "finance",
+      "example": "Mortgage securitization fueled the housing boom."
+    },
+    {
+      "word": "capital markets",
+      "phonetic": "/ˈkæpɪtl ˈmɑːkɪts/",
+      "meaning": "资本市场",
+      "cat": "finance",
+      "example": "The firm is a leader in capital markets advisory."
+    },
+    {
+      "word": "private equity",
+      "phonetic": "/ˈpraɪvət ˈekwəti/",
+      "meaning": "私募股权",
+      "cat": "finance",
+      "example": "Private equity firms are sitting on record dry powder."
+    },
+    {
+      "word": "sovereign wealth fund",
+      "phonetic": "/ˈsɒvrɪn welθ fʌnd/",
+      "meaning": "主权财富基金",
+      "cat": "finance",
+      "example": "The sovereign wealth fund increased its allocation to tech."
+    },
+    {
+      "word": "carry trade",
+      "phonetic": "/ˈkæri treɪd/",
+      "meaning": "套息交易",
+      "cat": "finance",
+      "example": "The yen carry trade unwound sharply."
+    },
+    {
+      "word": "credit default swap",
+      "phonetic": "/ˈkredɪt dɪˈfɔːlt swɒp/",
+      "meaning": "信用违约互换",
+      "cat": "finance",
+      "example": "CDS spreads widened on the banking sector."
+    },
+    {
+      "word": "GICS",
+      "phonetic": "/dʒɪks/",
+      "meaning": "全球行业分类",
+      "cat": "finance",
+      "example": "The stock is classified under GICS sector Technology."
+    },
+    {
+      "word": "ESG",
+      "phonetic": "/iː es dʒiː/",
+      "meaning": "环境、社会与治理",
+      "cat": "finance",
+      "example": "ESG factors are increasingly integrated."
+    },
+    {
+      "word": "earnings call",
+      "phonetic": "/ˈɜːnɪŋz kɔːl/",
+      "meaning": "业绩电话会",
+      "cat": "finance",
+      "example": "The CEO addressed margin concerns on the earnings call."
+    },
+    {
+      "word": "guidance",
+      "phonetic": "/ˈɡaɪdns/",
+      "meaning": "业绩指引",
+      "cat": "finance",
+      "example": "The company raised its full-year guidance."
+    },
+    {
+      "word": "counterparty risk",
+      "phonetic": "/ˈkaʊntəpɑːti rɪsk/",
+      "meaning": "交易对手风险",
+      "cat": "finance",
+      "example": "Counterparty risk increased during the credit crisis."
+    },
+    {
+      "word": "moral hazard",
+      "phonetic": "/ˈmɒrəl ˈhæzəd/",
+      "meaning": "道德风险",
+      "cat": "finance",
+      "example": "The bailout created a moral hazard for large banks."
+    },
+    {
+      "word": "adverse selection",
+      "phonetic": "/ˈædvɜːs sɪˈlekʃn/",
+      "meaning": "逆向选择",
+      "cat": "finance",
+      "example": "Adverse selection occurs when information is asymmetric."
+    },
+    {
+      "word": "stakeholder",
+      "phonetic": "/ˈsteɪkhəʊldə(r)/",
+      "meaning": "利益相关者",
+      "cat": "professional",
+      "example": "We must align with all key stakeholders."
+    },
+    {
+      "word": "synergy",
+      "phonetic": "/ˈsɪnədʒi/",
+      "meaning": "协同效应",
+      "cat": "professional",
+      "example": "The merger created significant cost synergies."
+    },
+    {
+      "word": "KPI",
+      "phonetic": "/ˌkeɪ piː ˈaɪ/",
+      "meaning": "关键绩效指标",
+      "cat": "professional",
+      "example": "Revenue growth is our primary KPI this quarter."
+    },
+    {
+      "word": "deliverable",
+      "phonetic": "/dɪˈlɪvərəbl/",
+      "meaning": "交付物",
+      "cat": "professional",
+      "example": "The final deliverable is due next Friday."
+    },
+    {
+      "word": "alignment",
+      "phonetic": "/əˈlaɪnmənt/",
+      "meaning": "对齐",
+      "cat": "professional",
+      "example": "Ensure alignment across teams before launch."
+    },
+    {
+      "word": "benchmarking",
+      "phonetic": "/ˈbentʃmɑːkɪŋ/",
+      "meaning": "对标分析",
+      "cat": "professional",
+      "example": "We benchmarked our process against industry leaders."
+    },
+    {
+      "word": "onboarding",
+      "phonetic": "/ˈɒnbɔːdɪŋ/",
+      "meaning": "入职；上手",
+      "cat": "professional",
+      "example": "The onboarding process takes two weeks."
+    },
+    {
+      "word": "escalate",
+      "phonetic": "/ˈeskəleɪt/",
+      "meaning": "升级问题",
+      "cat": "professional",
+      "example": "We should escalate this to the VP."
+    },
+    {
+      "word": "bandwidth",
+      "phonetic": "/ˈbændwɪdθ/",
+      "meaning": "精力；容量",
+      "cat": "professional",
+      "example": "I do not have the bandwidth for another project."
+    },
+    {
+      "word": "circle back",
+      "phonetic": "/ˈsɜːkl bæk/",
+      "meaning": "回头再讨论",
+      "cat": "professional",
+      "example": "Let me circle back with you after I check the data."
+    },
+    {
+      "word": "touch base",
+      "phonetic": "/tʌtʃ beɪs/",
+      "meaning": "沟通对接",
+      "cat": "professional",
+      "example": "Let us touch base before the end of the week."
+    },
+    {
+      "word": "action item",
+      "phonetic": "/ˈækʃn ˈaɪtəm/",
+      "meaning": "待办事项",
+      "cat": "professional",
+      "example": "The action items from the meeting are in the minutes."
+    },
+    {
+      "word": "run rate",
+      "phonetic": "/rʌn reɪt/",
+      "meaning": "年化速率",
+      "cat": "professional",
+      "example": "Based on Q1, our run rate revenue is 50 million."
+    },
+    {
+      "word": "deep dive",
+      "phonetic": "/diːp daɪv/",
+      "meaning": "深入分析",
+      "cat": "professional",
+      "example": "We need to do a deep dive into the cost structure."
+    },
+    {
+      "word": "low hanging fruit",
+      "phonetic": "/ləʊ ˈhæŋɪŋ fruːt/",
+      "meaning": "易实现目标",
+      "cat": "professional",
+      "example": "We should pick the low hanging fruit first."
+    },
+    {
+      "word": "pipeline",
+      "phonetic": "/ˈpaɪplaɪn/",
+      "meaning": "项目储备",
+      "cat": "professional",
+      "example": "The sales pipeline is strong for Q3."
+    },
+    {
+      "word": "stretch goal",
+      "phonetic": "/stretʃ ɡəʊl/",
+      "meaning": "挑战目标",
+      "cat": "professional",
+      "example": "The stretch goal is to double revenue in three years."
+    },
+    {
+      "word": "ROI",
+      "phonetic": "/ˌɑːr əʊ ˈaɪ/",
+      "meaning": "投资回报率",
+      "cat": "professional",
+      "example": "The marketing campaign delivered a 4x ROI."
+    },
+    {
+      "word": "burn rate",
+      "phonetic": "/bɜːn reɪt/",
+      "meaning": "资金消耗率",
+      "cat": "professional",
+      "example": "The startup needs to reduce its burn rate."
+    },
+    {
+      "word": "pivot",
+      "phonetic": "/ˈpɪvət/",
+      "meaning": "转型",
+      "cat": "professional",
+      "example": "The company pivoted from B2C to B2B."
+    },
+    {
+      "word": "scalability",
+      "phonetic": "/ˌskeɪləˈbɪləti/",
+      "meaning": "可扩展性",
+      "cat": "professional",
+      "example": "Scalability is a key concern for infrastructure."
+    },
+    {
+      "word": "vetting",
+      "phonetic": "/ˈvetɪŋ/",
+      "meaning": "审查筛选",
+      "cat": "professional",
+      "example": "Candidates go through rigorous vetting."
+    },
+    {
+      "word": "ramp up",
+      "phonetic": "/ræmp ʌp/",
+      "meaning": "加速增长",
+      "cat": "professional",
+      "example": "We need to ramp up production in Q4."
+    },
+    {
+      "word": "streamline",
+      "phonetic": "/ˈstriːmlaɪn/",
+      "meaning": "精简",
+      "cat": "professional",
+      "example": "We streamlined the approval process to two steps."
+    },
+    {
+      "word": "best practice",
+      "phonetic": "/best ˈpræktɪs/",
+      "meaning": "最佳实践",
+      "cat": "professional",
+      "example": "We documented industry best practices."
+    },
+    {
+      "word": "buy-in",
+      "phonetic": "/baɪ ɪn/",
+      "meaning": "认可支持",
+      "cat": "professional",
+      "example": "We need executive buy-in before proceeding."
+    },
+    {
+      "word": "cross-functional",
+      "phonetic": "/kr��s ˈfʌŋkʃənl/",
+      "meaning": "跨职能的",
+      "cat": "professional",
+      "example": "This is a cross-functional initiative involving four teams."
+    },
+    {
+      "word": "executive summary",
+      "phonetic": "/ɪɡˈzekjətɪv ˈsʌməri/",
+      "meaning": "执行摘要",
+      "cat": "professional",
+      "example": "Start the deck with an executive summary."
+    },
+    {
+      "word": "follow up",
+      "phonetic": "/ˈfɒləʊ ʌp/",
+      "meaning": "跟进",
+      "cat": "professional",
+      "example": "I will follow up with the client after the meeting."
+    },
+    {
+      "word": "headcount",
+      "phonetic": "/ˈhedkaʊnt/",
+      "meaning": "员工编制",
+      "cat": "professional",
+      "example": "Headcount was reduced by 10%."
+    },
+    {
+      "word": "meeting minutes",
+      "phonetic": "/ˈmiːtɪŋ ˈmɪnɪts/",
+      "meaning": "会议纪要",
+      "cat": "professional",
+      "example": "Please distribute minutes by end of day."
+    },
+    {
+      "word": "net promoter score",
+      "phonetic": "/net prəˈməʊtə skɔː(r)/",
+      "meaning": "净推荐值",
+      "cat": "professional",
+      "example": "Our NPS improved from 40 to 55."
+    },
+    {
+      "word": "OKR",
+      "phonetic": "/ˌəʊ keɪ ˈɑːr/",
+      "meaning": "目标与关键成果",
+      "cat": "professional",
+      "example": "OKRs cascade down to team level."
+    },
+    {
+      "word": "pain point",
+      "phonetic": "/peɪn pɔɪnt/",
+      "meaning": "痛点",
+      "cat": "professional",
+      "example": "The survey identified three pain points."
+    },
+    {
+      "word": "proof of concept",
+      "phonetic": "/pruːf əv ˈkɒnsept/",
+      "meaning": "概念验证",
+      "cat": "professional",
+      "example": "We built a POC in two weeks."
+    },
+    {
+      "word": "roadmap",
+      "phonetic": "/ˈrəʊdmæp/",
+      "meaning": "路线图",
+      "cat": "professional",
+      "example": "The product roadmap for next year is ambitious."
+    },
+    {
+      "word": "scope creep",
+      "phonetic": "/skəʊp kriːp/",
+      "meaning": "范围蔓延",
+      "cat": "professional",
+      "example": "We need to manage scope creep."
+    },
+    {
+      "word": "stakeholder map",
+      "phonetic": "/ˈsteɪkhəʊldə(r) mæp/",
+      "meaning": "相关者图谱",
+      "cat": "professional",
+      "example": "Build a stakeholder map before engagement."
+    },
+    {
+      "word": "SWOT analysis",
+      "phonetic": "/swɒt əˈnæləsɪs/",
+      "meaning": "SWOT分析",
+      "cat": "professional",
+      "example": "The SWOT analysis identified market entry risks."
+    },
+    {
+      "word": "top line",
+      "phonetic": "/tɒp laɪn/",
+      "meaning": "营业收入",
+      "cat": "professional",
+      "example": "Top line grew 20% but bottom line shrank."
+    },
+    {
+      "word": "value proposition",
+      "phonetic": "/ˈvæljuː ˌprɒpəˈzɪʃn/",
+      "meaning": "价值主张",
+      "cat": "professional",
+      "example": "Our value prop is speed and reliability."
+    },
+    {
+      "word": "workstream",
+      "phonetic": "/ˈwɜːkstriːm/",
+      "meaning": "工作流",
+      "cat": "professional",
+      "example": "The regulatory workstream is on track."
+    },
+    {
+      "word": "white paper",
+      "phonetic": "/waɪt ˈpeɪpə(r)/",
+      "meaning": "白皮书",
+      "cat": "professional",
+      "example": "The team published a white paper on AI."
+    },
+    {
+      "word": "dashboard",
+      "phonetic": "/ˈdæʃbɔːd/",
+      "meaning": "仪表盘",
+      "cat": "professional",
+      "example": "The dashboard tracks real-time KPIs."
+    },
+    {
+      "word": "value chain",
+      "phonetic": "/ˈvæljuː tʃeɪn/",
+      "meaning": "价值链",
+      "cat": "professional",
+      "example": "We analyzed the entire value chain."
+    },
+    {
+      "word": "win-win",
+      "phonetic": "/wɪn wɪn/",
+      "meaning": "双赢",
+      "cat": "professional",
+      "example": "The partnership is a win-win."
+    },
+    {
+      "word": "back-testing",
+      "phonetic": "/bæk ˈtestɪŋ/",
+      "meaning": "回测",
+      "cat": "academic",
+      "example": "Back-testing confirmed the strategy has a Sharpe of 1.2."
+    },
+    {
+      "word": "cohort analysis",
+      "phonetic": "/ˈkəʊhɔːt əˈnæləsɪs/",
+      "meaning": "同期群分析",
+      "cat": "academic",
+      "example": "Cohort analysis shows improving retention."
+    },
+    {
+      "word": "hypothesis",
+      "phonetic": "/haɪˈpɒθəsɪs/",
+      "meaning": "假设",
+      "cat": "academic",
+      "example": "The hypothesis was tested using regression."
+    },
+    {
+      "word": "empirical",
+      "phonetic": "/ɪmˈpɪrɪkl/",
+      "meaning": "实证的",
+      "cat": "academic",
+      "example": "Conclusions are based on empirical evidence."
+    },
+    {
+      "word": "methodology",
+      "phonetic": "/ˌmeθəˈdɒlədʒi/",
+      "meaning": "方法论",
+      "cat": "academic",
+      "example": "The methodology section explains our design."
+    },
+    {
+      "word": "triangulation",
+      "phonetic": "/traɪˌæŋɡjuˈleɪʃn/",
+      "meaning": "三角验证",
+      "cat": "academic",
+      "example": "We used triangulation to validate results."
+    },
+    {
+      "word": "endogeneity",
+      "phonetic": "/ˌendəˈdʒenəti/",
+      "meaning": "内生性",
+      "cat": "academic",
+      "example": "Instrumental variables address endogeneity."
+    },
+    {
+      "word": "heteroskedasticity",
+      "phonetic": "/ˌhetərəʊˌskiːdæˈstɪsəti/",
+      "meaning": "异方差性",
+      "cat": "academic",
+      "example": "We used robust standard errors to correct for this."
+    },
+    {
+      "word": "commute",
+      "phonetic": "/kəˈmjuːt/",
+      "meaning": "通勤",
+      "cat": "daily",
+      "example": "My commute takes about 40 minutes."
+    },
+    {
+      "word": "appointment",
+      "phonetic": "/əˈpɔɪntmənt/",
+      "meaning": "预约",
+      "cat": "daily",
+      "example": "I have a dentist appointment at 3 PM."
+    },
+    {
+      "word": "spontaneous",
+      "phonetic": "/spɒnˈteɪniəs/",
+      "meaning": "自发的",
+      "cat": "daily",
+      "example": "We made a spontaneous trip to the beach."
+    },
+    {
+      "word": "mundane",
+      "phonetic": "/mʌnˈdeɪn/",
+      "meaning": "平凡的",
+      "cat": "daily",
+      "example": "I spent the morning doing mundane chores."
+    },
+    {
+      "word": "pragmatic",
+      "phonetic": "/præɡˈmætɪk/",
+      "meaning": "务实的",
+      "cat": "daily",
+      "example": "We need a pragmatic approach."
+    },
+    {
+      "word": "meticulous",
+      "phonetic": "/məˈtɪkjələs/",
+      "meaning": "一丝不苟的",
+      "cat": "daily",
+      "example": "She is meticulous about data accuracy."
+    },
+    {
+      "word": "articulate",
+      "phonetic": "/ɑːˈtɪkjuleɪt/",
+      "meaning": "表达清晰的",
+      "cat": "daily",
+      "example": "He articulated the strategy very clearly."
+    },
+    {
+      "word": "elaborate",
+      "phonetic": "/ɪˈlæbərət/",
+      "meaning": "详细阐述",
+      "cat": "daily",
+      "example": "Could you elaborate on the third point?"
+    },
+    {
+      "word": "proactive",
+      "phonetic": "/prəʊˈæktɪv/",
+      "meaning": "主动的",
+      "cat": "daily",
+      "example": "We need a proactive approach."
+    },
+    {
+      "word": "resilient",
+      "phonetic": "/rɪˈzɪliənt/",
+      "meaning": "有韧性的",
+      "cat": "daily",
+      "example": "The economy proved more resilient than expected."
+    }
+  ],
+  "dialogues": [
+    {
+      "id": "d1",
+      "cat": "finance",
+      "level": "B2-C1",
+      "scene": "金融实习面试 - 自我介绍",
+      "stage": "实习面试",
+      "order": 1,
+      "desc": "硕士申请者参加投行实习面试的开场自我介绍",
+      "keywords": [
+        "strengths",
+        "relevant experience",
+        "fit"
+      ],
+      "body": [
+        {
+          "s": "Interviewer",
+          "t": "So, tell me a bit about yourself and why you are interested in this internship."
+        },
+        {
+          "s": "You",
+          "t": "Sure. I am currently a first-year master student in <em>Finance</em> at Peking University."
+        },
+        {
+          "s": "You",
+          "t": "I am interested in this internship because your team focuses on <em>equity research</em>, which is exactly the area I want to build a career in."
+        },
+        {
+          "s": "Interviewer",
+          "t": "Good. What do you think is your biggest <em>strength</em> that you bring to the team?"
+        },
+        {
+          "s": "You",
+          "t": "I would say it is the combination of <em>analytical rigor</em> and communication skills."
+        }
+      ]
+    },
+    {
+      "id": "d6",
+      "cat": "daily",
+      "level": "A2-B1",
+      "scene": "咖啡馆点单与闲聊",
+      "stage": "日常基础",
+      "order": 2,
+      "desc": "在咖啡馆点单并和服务员简短交流",
+      "keywords": [
+        "espresso",
+        "oat milk",
+        "to stay"
+      ],
+      "body": [
+        {
+          "s": "Barista",
+          "t": "Hi, what can I get for you?"
+        },
+        {
+          "s": "You",
+          "t": "A large <em>oat milk</em> latte, please, and a blueberry muffin."
+        },
+        {
+          "s": "Barista",
+          "t": "For here or to go?"
+        },
+        {
+          "s": "You",
+          "t": "To stay. Actually, can I make that an <em>espresso</em> with a side of cold oat milk?"
+        },
+        {
+          "s": "Barista",
+          "t": "Of course. Anything else?"
+        },
+        {
+          "s": "You",
+          "t": "No, that is it. How much is it?"
+        },
+        {
+          "s": "Barista",
+          "t": "That will be 8 dollars 50. You can tap here."
+        }
+      ]
+    },
+    {
+      "id": "d7",
+      "cat": "daily",
+      "level": "B1",
+      "scene": "餐厅预订与点餐",
+      "stage": "日常基础",
+      "order": 3,
+      "desc": "电话预订餐厅及到店点餐对话",
+      "keywords": [
+        "reservation",
+        "recommendation",
+        "allergy"
+      ],
+      "body": [
+        {
+          "s": "You",
+          "t": "Hi, I would like to make a <em>reservation</em> for two at 7 PM this Friday."
+        },
+        {
+          "s": "Host",
+          "t": "Sure, may I have the name?"
+        },
+        {
+          "s": "You",
+          "t": "Under Wang. One of us has a shellfish <em>allergy</em>. Is that easy to accommodate?"
+        },
+        {
+          "s": "Host",
+          "t": "Absolutely. We will flag it on the ticket. See you Friday."
+        },
+        {
+          "s": "Waiter",
+          "t": "Good evening. Are you ready to order, or would you like a <em>recommendation</em>?"
+        },
+        {
+          "s": "You",
+          "t": "What would you recommend tonight?"
+        },
+        {
+          "s": "Waiter",
+          "t": "The pan-seared cod is excellent, and it is shellfish-free."
+        }
+      ]
+    },
+    {
+      "id": "d4",
+      "cat": "travel",
+      "level": "B1-B2",
+      "scene": "机场值机与登机",
+      "stage": "旅游出行",
+      "order": 4,
+      "desc": "乘客与地勤办理值机和登机手续",
+      "keywords": [
+        "check in",
+        "boarding pass",
+        "gate"
+      ],
+      "body": [
+        {
+          "s": "Agent",
+          "t": "Good morning. Where are you flying today?"
+        },
+        {
+          "s": "You",
+          "t": "I am flying to Singapore, flight SQ807. I would like to <em>check in</em> and drop off my luggage."
+        },
+        {
+          "s": "Agent",
+          "t": "May I see your <em>passport</em>? Do you prefer aisle or window?"
+        },
+        {
+          "s": "You",
+          "t": "Window, please, if possible."
+        },
+        {
+          "s": "Agent",
+          "t": "Done. Here is your <em>boarding pass</em>. Your gate is B22, boarding starts at 14:10."
+        },
+        {
+          "s": "You",
+          "t": "Thank you. How do I get to gate B22?"
+        },
+        {
+          "s": "Agent",
+          "t": "Take the shuttle to Terminal 2, then follow signs to B gates."
+        }
+      ]
+    },
+    {
+      "id": "d5",
+      "cat": "travel",
+      "level": "B1",
+      "scene": "酒店入住与询问",
+      "stage": "旅游出行",
+      "order": 5,
+      "desc": "游客抵达酒店后的入住流程",
+      "keywords": [
+        "reservation",
+        "check-out",
+        "amenities"
+      ],
+      "body": [
+        {
+          "s": "You",
+          "t": "Hi, I have a <em>reservation</em> under the name Li. Three nights, starting today."
+        },
+        {
+          "s": "Receptionist",
+          "t": "Welcome. Let me pull that up. A king room on the 12th floor. May I have a credit card for incidentals?"
+        },
+        {
+          "s": "You",
+          "t": "Sure. What time is <em>check-out</em>?"
+        },
+        {
+          "s": "Receptionist",
+          "t": "Check-out is at noon. Breakfast is served from 6:30 to 10."
+        },
+        {
+          "s": "You",
+          "t": "Does the hotel have a gym?"
+        },
+        {
+          "s": "Receptionist",
+          "t": "Yes, the fitness center is on the third floor, open 24 hours. <em>Amenities</em> also include a pool."
+        }
+      ]
+    },
+    {
+      "id": "d3",
+      "cat": "biz",
+      "level": "B2",
+      "scene": "团队会议 - 季度业绩复盘",
+      "stage": "职场协作",
+      "order": 6,
+      "desc": "项目经理主持的季度业绩复盘会议",
+      "keywords": [
+        "stakeholder",
+        "KPI",
+        "alignment"
+      ],
+      "body": [
+        {
+          "s": "PM",
+          "t": "Let us start with the Q3 review. Revenue came in at 12.4 million, 8% <em>above target</em>."
+        },
+        {
+          "s": "Sales Lead",
+          "t": "The growth was driven mainly by enterprise renewals. Our <em>net retention</em> hit 115%."
+        },
+        {
+          "s": "PM",
+          "t": "Strong. But we need to <em>align</em> on the SMB segment, where churn is elevated. What is the plan?"
+        },
+        {
+          "s": "Sales Lead",
+          "t": "We are piloting a customer success initiative. The key <em>KPI</em> will be time-to-value under 14 days."
+        },
+        {
+          "s": "PM",
+          "t": "Let us make sure all <em>stakeholders</em> are on the same page before launch."
+        }
+      ]
+    },
+    {
+      "id": "d8",
+      "cat": "biz",
+      "level": "B2",
+      "scene": "电话会议 - 跨时区协作",
+      "stage": "职场协作",
+      "order": 7,
+      "desc": "与海外团队协调项目进度的电话会议",
+      "keywords": [
+        "time zone",
+        "deliverable",
+        "follow up"
+      ],
+      "body": [
+        {
+          "s": "You",
+          "t": "Hi Sarah, thanks for jumping on at 9 PM your <em>time zone</em>. I know it is late."
+        },
+        {
+          "s": "Sarah",
+          "t": "No problem. What is the status on the model?"
+        },
+        {
+          "s": "You",
+          "t": "The base case is done. The main <em>deliverable</em> still pending is the sensitivity analysis."
+        },
+        {
+          "s": "Sarah",
+          "t": "Perfect. Let us <em>follow up</em> on Friday morning my time to review."
+        },
+        {
+          "s": "You",
+          "t": "Sounds good. I will also include a one-page summary of the key assumptions."
+        }
+      ]
+    },
+    {
+      "id": "d2",
+      "cat": "finance",
+      "level": "B2-C1",
+      "scene": "客户路演 - 推荐投资组合",
+      "stage": "客户与路演",
+      "order": 8,
+      "desc": "分析师向机构客户推荐一个均衡投资组合",
+      "keywords": [
+        "diversification",
+        "risk-adjusted",
+        "asset allocation"
+      ],
+      "body": [
+        {
+          "s": "Analyst",
+          "t": "Based on your <em>risk profile</em> and three-year horizon, we recommend 60% equities and 40% fixed income."
+        },
+        {
+          "s": "Client",
+          "t": "Can you walk me through the equity <em>allocation</em>?"
+        },
+        {
+          "s": "Analyst",
+          "t": "We suggest 35% US large cap, 15% international developed, and 10% emerging markets for <em>diversification</em>."
+        },
+        {
+          "s": "Client",
+          "t": "And how do you manage downside?"
+        },
+        {
+          "s": "Analyst",
+          "t": "We use a barbell approach. The expected <em>risk-adjusted return</em> is a Sharpe ratio of about 0.8."
+        }
+      ]
+    },
+    {
+      "id": "d9",
+      "cat": "finance",
+      "level": "B2-C1",
+      "scene": "金融实习面试 - 行为问题",
+      "stage": "高阶金融",
+      "order": 9,
+      "desc": "投行面试中关于团队合作和抗压能力的行为问题",
+      "keywords": [
+        "teamwork",
+        "pressure",
+        "deal experience"
+      ],
+      "body": [
+        {
+          "s": "Interviewer",
+          "t": "Tell me about a time you worked under pressure on a team project."
+        },
+        {
+          "s": "You",
+          "t": "During my internship, our team had 48 hours to produce a valuation report for a client meeting. I took the lead on building the DCF model while two teammates handled the comps."
+        },
+        {
+          "s": "Interviewer",
+          "t": "How did you handle the pressure?"
+        },
+        {
+          "s": "You",
+          "t": "I divided the work into clear <em>workstreams</em> and communicated progress every few hours. We delivered on time and the client was impressed."
+        },
+        {
+          "s": "Interviewer",
+          "t": "What was the biggest challenge?"
+        },
+        {
+          "s": "You",
+          "t": "Getting consistent data from different sources. I had to <em>reconcile</em> three sets of financials, but I flagged the discrepancies early and we resolved them as a team."
+        }
+      ]
+    },
+    {
+      "id": "d10",
+      "cat": "finance",
+      "level": "B2-C1",
+      "scene": "财报电话会 - 分析师提问",
+      "stage": "高阶金融",
+      "order": 10,
+      "desc": "分析师在季度财报电话会上向CFO提问",
+      "keywords": [
+        "margin",
+        "guidance",
+        "outlook"
+      ],
+      "body": [
+        {
+          "s": "Analyst",
+          "t": "Congratulations on the quarter. Revenue came in ahead of consensus. Can you break down the margin <em>expansion</em>?"
+        },
+        {
+          "s": "CFO",
+          "t": "Sure. Operating margin improved 230bps year over year, driven by <em>operational leverage</em> and cost discipline in SG&A."
+        },
+        {
+          "s": "Analyst",
+          "t": "And what is your <em>guidance</em> for next quarter? Street is looking for 8% growth."
+        },
+        {
+          "s": "CFO",
+          "t": "We expect 7 to 9% organic growth, with continued margin <em>improvement</em>. We will provide more detail on the earnings call."
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "type": "video",
+      "title": "Bloomberg The Open 美股开盘分析",
+      "src": "Bloomberg TV",
+      "desc": "每日开盘前市场动态、指数走势、关键财报预览",
+      "url": "https://www.bloomberg.com/tv",
+      "tag": "finance",
+      "level": "B2-C1"
+    },
+    {
+      "type": "video",
+      "title": "Bloomberg Markets: 亚洲盘早报",
+      "src": "Bloomberg TV",
+      "desc": "聚焦亚太市场开盘动态，涵盖港股/A股/日股",
+      "url": "https://www.bloomberg.com/tv",
+      "tag": "finance",
+      "level": "B2-C1"
+    },
+    {
+      "type": "video",
+      "title": "CNBC Squawk Box 美股前瞻",
+      "src": "CNBC",
+      "desc": "每日盘前交易线索、CEO访谈、板块轮动分析",
+      "url": "https://www.cnbc.com/squawk-box/",
+      "tag": "finance",
+      "level": "B2-C1"
+    },
+    {
+      "type": "video",
+      "title": "FT 本周财经要闻精选",
+      "src": "Financial Times",
+      "desc": "FT精选本周全球财经深度报道，英音播报",
+      "url": "https://www.youtube.com/@FinancialTimes",
+      "tag": "finance",
+      "level": "B2-C1"
+    },
+    {
+      "type": "video",
+      "title": "The Economist 本周全球经济",
+      "src": "The Economist",
+      "desc": "经济学人每周全球政经要闻视频版",
+      "url": "https://www.youtube.com/@TheEconomist",
+      "tag": "finance",
+      "level": "C1"
+    },
+    {
+      "type": "video",
+      "title": "BBC News Review: 每日新闻英语",
+      "src": "BBC Learning English",
+      "desc": "用BBC当日新闻学单词和表达，每周更新5期",
+      "url": "https://www.bbc.co.uk/learningenglish/english/features/news-review",
+      "tag": "learning",
+      "level": "B2"
+    },
+    {
+      "type": "video",
+      "title": "BBC 6 Minute English 每日一课",
+      "src": "BBC Learning English",
+      "desc": "6分钟一个主题，含词汇与思考题",
+      "url": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english",
+      "tag": "learning",
+      "level": "B1-B2"
+    },
+    {
+      "type": "video",
+      "title": "TED Talks Daily 今日推荐演讲",
+      "src": "TED",
+      "desc": "TED每日精选演讲，跨学科思维训练",
+      "url": "https://www.ted.com/talks",
+      "tag": "learning",
+      "level": "C1"
+    },
+    {
+      "type": "video",
+      "title": "VOA As It Is: 慢速英语新闻",
+      "src": "VOA Learning English",
+      "desc": "美国之音慢速新闻节目，适合跟读",
+      "url": "https://learningenglish.voanews.com/programs/as-it-is",
+      "tag": "learning",
+      "level": "A2-B1"
+    },
+    {
+      "type": "podcast",
+      "title": "Planet Money 本周经济学故事",
+      "src": "NPR",
+      "desc": "NPR用故事讲经济学，30分钟听懂一个经济概念",
+      "url": "https://www.npr.org/planetmoney",
+      "tag": "finance",
+      "level": "B2"
+    },
+    {
+      "type": "podcast",
+      "title": "WSJ The Journal: 每日商业深潜",
+      "src": "WSJ",
+      "desc": "华尔街日报旗舰播客，每日20分钟商业深度报道",
+      "url": "https://www.wsj.com/podcasts/the-journal",
+      "tag": "finance",
+      "level": "B2"
+    },
+    {
+      "type": "podcast",
+      "title": "Bloomberg Surveillance 早间市场",
+      "src": "Bloomberg",
+      "desc": "全球市场开盘前的分析师对话，含利率/汇率/商品",
+      "url": "https://www.bloomberg.com/audio/podcasts/bloomberg-surveillance/",
+      "tag": "finance",
+      "level": "B2-C1"
+    },
+    {
+      "type": "podcast",
+      "title": "Masters in Business 金融巨头访谈",
+      "src": "Bloomberg",
+      "desc": "Bloomberg主持人对话华尔街传奇人物",
+      "url": "https://www.bloomberg.com/audio/podcasts/masters-in-business/",
+      "tag": "finance",
+      "level": "C1"
+    },
+    {
+      "type": "podcast",
+      "title": "Marketplace 今日经济解读",
+      "src": "APM",
+      "desc": "美���公共媒体日常商业与生活经济解读",
+      "url": "https://www.marketplace.org/shows/marketplace/",
+      "tag": "finance",
+      "level": "B2"
+    },
+    {
+      "type": "podcast",
+      "title": "HBR IdeaCast 本周管理思维",
+      "src": "HBR",
+      "desc": "哈佛商业评论每周管理思维精华",
+      "url": "https://hbr.org/podcasts/ideacast",
+      "tag": "biz",
+      "level": "B2-C1"
+    },
+    {
+      "type": "podcast",
+      "title": "BBC The English We Speak",
+      "src": "BBC",
+      "desc": "3分钟学一个地道英语口语短语",
+      "url": "https://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak",
+      "tag": "learning",
+      "level": "B1-B2"
+    },
+    {
+      "type": "dialog",
+      "title": "金融实习面试：自我介绍",
+      "src": "内置对话",
+      "desc": "投行实习面试完整对话，含关键表达与面试技巧",
+      "url": "#dialog-d1",
+      "tag": "finance",
+      "level": "B2-C1"
+    },
+    {
+      "type": "dialog",
+      "title": "客户路演：推荐投资组合",
+      "src": "内置对话",
+      "desc": "分析师向机构客户推荐均衡组合，含资产配置术语",
+      "url": "#dialog-d2",
+      "tag": "finance",
+      "level": "B2-C1"
+    },
+    {
+      "type": "dialog",
+      "title": "团队季度业绩复盘会议",
+      "src": "内置对话",
+      "desc": "PM主持的KPI复盘会议，含对齐/考核表达",
+      "url": "#dialog-d3",
+      "tag": "biz",
+      "level": "B2"
+    },
+    {
+      "type": "dialog",
+      "title": "跨时区电话会议协作",
+      "src": "内置对话",
+      "desc": "与海外团队协调项目进度，含deliverable/follow up",
+      "url": "#dialog-d4",
+      "tag": "biz",
+      "level": "B2"
+    },
+    {
+      "type": "dialog",
+      "title": "机场值机与登机对话",
+      "src": "内置对话",
+      "desc": "完整值机流程，含boarding pass/gate表达",
+      "url": "#dialog-d5",
+      "tag": "travel",
+      "level": "B1-B2"
+    },
+    {
+      "type": "dialog",
+      "title": "酒店入住与询问",
+      "src": "内置对话",
+      "desc": "酒店入住流程，含reservation/check-out表达",
+      "url": "#dialog-d6",
+      "tag": "travel",
+      "level": "B1"
+    },
+    {
+      "type": "dialog",
+      "title": "咖啡馆点单与闲聊",
+      "src": "内置对话",
+      "desc": "日常社交场景，含点单与聊天的自然对话",
+      "url": "#dialog-d7",
+      "tag": "daily",
+      "level": "A2-B1"
+    },
+    {
+      "type": "dialog",
+      "title": "餐厅预订与点餐",
+      "src": "内置对话",
+      "desc": "电话预订餐厅及到店点餐，含推荐与过敏说明",
+      "url": "#dialog-d8",
+      "tag": "daily",
+      "level": "B1"
+    }
+  ]
+}

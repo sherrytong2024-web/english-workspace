@@ -1,0 +1,18 @@
+<nav-drawer title="学习记录" current="log">
+  <view class="card">
+    <view class="card-title"><text>📅 按日期筛选</text></view>
+    <picker mode="date" value="{{filterDate}}" bindchange="onDateChange">
+      <view class="picker">{{filterDate || '点击选择日期'}}</view>
+    </picker>
+    <button class="btn sm outline" bindtap="resetFilter">显示全部</button>
+  </view>
+
+  <view class="card">
+    <view class="card-title"><text>📝 活动历史 ({{list.length}})</text></view>
+    <view wx:for="{{list}}" wx:key="t" class="log-item">
+      <text class="log-time muted">{{item.t}}</text>
+      <text class="log-text">{{item.text}}</text>
+    </view>
+    <view class="empty" wx:if="{{!list.length}}">暂无记录</view>
+  </view>
+</nav-drawer>

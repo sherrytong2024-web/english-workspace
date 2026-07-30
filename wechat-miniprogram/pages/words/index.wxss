@@ -1,0 +1,20 @@
+.dw-item { display: flex; align-items: center; padding: 12rpx 0; border-bottom: 1rpx solid #f1f5f9; }
+.dw-check { width: 38rpx; height: 38rpx; border-radius: 50%; border: 2rpx solid #cbd5e1; color: #fff; text-align: center; line-height: 38rpx; margin-right: 14rpx; flex-shrink: 0; }
+.dw-check.on { background: #3b82f6; border-color: #3b82f6; }
+.dw-main { display: flex; flex-direction: column; }
+.dw-word { font-weight: 600; font-size: 28rpx; }
+.dw-meaning { font-size: 22rpx; }
+.filter-row { display: flex; flex-wrap: wrap; gap: 12rpx; margin-bottom: 16rpx; }
+.chip { padding: 8rpx 22rpx; border-radius: 30rpx; background: #e2e8f0; color: #475569; font-size: 24rpx; }
+.chip.on { background: #3b82f6; color: #fff; }
+.search-input, .form-input { background: #f8fafc; border: 1rpx solid #e2e8f0; border-radius: 10rpx; padding: 16rpx; font-size: 26rpx; margin-bottom: 14rpx; }
+.word-row { padding: 18rpx 0; border-bottom: 1rpx solid #f1f5f9; }
+.wr-top { display: flex; align-items: center; gap: 10rpx; }
+.wr-word { font-weight: 600; font-size: 30rpx; }
+.wr-phon { font-size: 22rpx; }
+.wr-mean { font-size: 26rpx; margin: 4rpx 0; }
+.wr-cat { margin: 6rpx 0; }
+.wr-ex { font-size: 22rpx; }
+.wr-act { margin-top: 8rpx; }
+.link { color: #3b82f6; font-size: 24rpx; margin-right: 24rpx; }
+.pager { display: flex; justify-content: center; align-items: center; gap: 16rpx; margin-top: 16rpx; font-size: 24rpx; }

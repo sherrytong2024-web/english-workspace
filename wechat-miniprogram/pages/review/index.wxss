@@ -1,0 +1,17 @@
+.tab-row { display: flex; gap: 0; }
+.tab { flex: 1; text-align: center; padding: 18rpx 0; font-size: 28rpx; color: #64748b; background: #f1f5f9; border-radius: 10rpx; margin: 0 6rpx; }
+.tab.on { background: #3b82f6; color: #fff; font-weight: 600; }
+.dialog-item { background: #f8fafc; border-radius: 12rpx; padding: 18rpx; margin-bottom: 12rpx; }
+.d-scene { font-weight: 600; font-size: 28rpx; }
+.d-body { background: #fff; border-radius: 10rpx; padding: 16rpx; margin: 10rpx 0; }
+.d-line { font-size: 25rpx; margin: 6rpx 0; }
+.d-speaker { font-weight: 600; color: #3b82f6; margin-right: 8rpx; }
+.d-keywords { font-size: 22rpx; margin: 8rpx 0; }
+.d-actions { display: flex; gap: 24rpx; margin-top: 8rpx; }
+.word-row { padding: 16rpx 0; border-bottom: 1rpx solid #f1f5f9; }
+.wr-top { display: flex; align-items: center; gap: 10rpx; }
+.wr-word { font-weight: 600; font-size: 30rpx; }
+.wr-phon { font-size: 22rpx; }
+.wr-mean { font-size: 26rpx; margin: 4rpx 0; }
+.wr-act { margin-top: 6rpx; }
+.link { color: #3b82f6; font-size: 24rpx; }

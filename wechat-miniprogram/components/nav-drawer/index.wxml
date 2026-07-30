@@ -1,0 +1,28 @@
+<view class="nav-root">
+  <view class="topbar" style="padding-top:{{statusBarHeight}}px">
+    <view class="topbar-inner" style="height:88rpx">
+      <view class="menu-btn" bindtap="toggleDrawer">☰</view>
+      <view class="topbar-title">{{title}}</view>
+      <view class="topbar-spacer"></view>
+    </view>
+  </view>
+
+  <view wx:if="{{drawerOpen}}" class="drawer-mask" bindtap="closeDrawer"></view>
+
+  <view class="drawer {{drawerOpen ? 'open' : ''}}" style="padding-top:{{statusBarHeight}}px">
+    <view class="drawer-header">
+      <text class="drawer-logo">EN Workspace</text>
+      <view class="drawer-close" bindtap="closeDrawer">✕</view>
+    </view>
+    <view class="drawer-list">
+      <view wx:for="{{pages}}" wx:key="key" class="drawer-item {{item.key === current ? 'active' : ''}}" data-key="{{item.key}}" bindtap="goPage">
+        <text class="di-icon">{{item.icon}}</text>
+        <text class="di-label">{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="content" style="padding-top:{{statusBarHeight + 44}}px">
+    <slot></slot>
+  </view>
+</view>

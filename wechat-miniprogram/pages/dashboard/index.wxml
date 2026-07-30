@@ -1,0 +1,45 @@
+<nav-drawer title="仪表盘" current="dashboard">
+  <view class="card">
+    <view class="card-title"><text>📅 今日单词</text><text class="muted">{{doneCount}}/{{dailyTotal}}</text></view>
+    <view wx:if="{{dailyWords.length}}">
+      <view wx:for="{{dailyWords}}" wx:key="word" class="dw-item" data-word="{{item.word}}" bindtap="toggleDailyWord">
+        <text class="dw-check {{item.done ? 'on' : ''}}">{{item.done ? '✓' : ''}}</text>
+        <view class="dw-main">
+          <text class="dw-word">{{item.word}}</text>
+          <text class="dw-meaning muted">{{item.meaning}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="empty" wx:else>暂无</view>
+    <button class="btn" bindtap="logDailyWords">学完标记</button>
+    <view class="progress-bar" style="margin-top:12rpx"><view class="fill" style="width:{{dailyTotal ? doneCount * 100 / dailyTotal : 0}}%"></view></view>
+  </view>
+
+  <view class="grid-2">
+    <view class="card stat"><view class="stat-num">{{total}}</view><view class="muted">总单词</view></view>
+    <view class="card stat"><view class="stat-num">{{mastered}}</view><view class="muted">已掌握</view></view>
+    <view class="card stat"><view class="stat-num">{{learnedDialogs}}</view><view class="muted">已学对话</view></view>
+    <view class="card stat"><view class="stat-num">{{logCount}}</view><view class="muted">学习记录</view></view>
+  </view>
+
+  <view class="card">
+    <view class="card-title"><text>⭐ 今日推荐</text></view>
+    <view wx:for="{{recommend}}" wx:key="url" class="rec-item" data-url="{{item.url}}" bindtap="openRecommend">
+      <view class="rec-thumb">{{item.icon || '🔗'}}</view>
+      <view class="rec-main">
+        <view class="rec-title">{{item.title}}</view>
+        <view class="rec-meta muted">{{item.type || ''}}</view>
+      </view>
+    </view>
+    <view class="empty" wx:if="{{!recommend.length}}">暂无推荐</view>
+  </view>
+
+  <view class="card">
+    <view class="card-title"><text>📝 最近活动</text></view>
+    <view wx:for="{{recent}}" wx:key="t" class="log-item">
+      <text class="log-time muted">{{item.t}}</text>
+      <text class="log-text">{{item.text}}</text>
+    </view>
+    <view class="empty" wx:if="{{!recent.length}}">暂无活动</view>
+  </view>
+</nav-drawer>

@@ -1,0 +1,27 @@
+<nav-drawer title="学习概览" current="overview">
+  <view class="card">
+    <view class="cal-head">
+      <text class="cal-nav" bindtap="prevMonth">‹</text>
+      <text class="cal-title">{{year}}年{{month}}月</text>
+      <text class="cal-nav" bindtap="nextMonth">›</text>
+    </view>
+    <view class="cal-week">
+      <text wx:for="{{weekNames}}" wx:key="*this" class="cal-cell cal-w">{{item}}</text>
+    </view>
+    <view class="cal-grid">
+      <view wx:for="{{days}}" wx:key="ds" class="cal-cell {{item.empty ? 'empty' : ''}} {{selected === item.ds ? 'sel' : ''}}" data-ds="{{item.ds}}" bindtap="showDay">
+        <text class="cal-day" wx:if="{{!item.empty}}">{{item.day}}</text>
+        <text class="cal-dot" wx:if="{{item.count > 0}}">{{item.count}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card" wx:if="{{selected}}">
+    <view class="card-title"><text>📅 {{selected}} 活动 ({{detail.length}})</text></view>
+    <view wx:for="{{detail}}" wx:key="t" class="log-item">
+      <text class="log-time muted">{{item.t}}</text>
+      <text class="log-text">{{item.text}}</text>
+    </view>
+    <view class="empty" wx:if="{{!detail.length}}">当天无活动</view>
+  </view>
+</nav-drawer>

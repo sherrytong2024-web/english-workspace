@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英语工作台 · 管理后台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#3b82f6;--danger:#ef4444;--border:#e5e7eb;--muted:#6b7280;--bg:#f9fafb;--card:#fff}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:#1f2937}
+.app{max-width:1200px;margin:0 auto;padding:20px}
+header{border-bottom:2px solid var(--border);padding-bottom:16px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+h1{font-size:22px}
+.tabs{display:flex;gap:4px;margin-bottom:20px}
+.tab{padding:8px 20px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;font-size:14px;transition:.15s}
+.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.toolbar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+input,select{font-size:13px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;outline:none}
+input:focus,select:focus{border-color:var(--primary)}
+.btn{padding:6px 14px;border-radius:6px;font-size:13px;cursor:pointer;border:1px solid var(--border);background:var(--card);transition:.15s}
+.btn:hover{opacity:.85}
+.btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn.danger{background:var(--danger);color:#fff;border-color:var(--danger)}
+.btn.sm{padding:3px 10px;font-size:12px}
+table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+th{background:#f3f4f6;padding:10px;text-align:left;font-weight:600;font-size:12px;color:var(--muted)}
+td{padding:8px 10px;border-top:1px solid var(--border);max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag{padding:2px 8px;border-radius:4px;font-size:11px;background:#dbeafe;color:#1d4ed8}
+.fin{background:#fce7f3;color:#be185d}
+.biz{background:#d1fae5;color:#065f46}
+.daily{background:#e0e7ff;color:#3730a3}
+.analysis{background:#fef3c7;color:#92400e}
+.modal-mask{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;z-index:100}
+.modal{background:var(--card);border-radius:12px;padding:24px;min-width:400px;max-width:600px;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.modal h2{margin-bottom:16px;font-size:18px}
+.form-row{margin-bottom:12px}
+.form-row label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+.form-row input,.form-row textarea,.form-row select{width:100%;padding:8px 10px;resize:vertical}
+.form-row textarea{min-height:60px;font-family:monospace;font-size:12px}
+.form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+.empty{text-align:center;padding:40px;color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <h1>英语工作台管理后台</h1>
+  <span style="color:var(--muted);font-size:13px" id="api-status">连接中...</span>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('words')">单词 (117)</button>
+  <button class="tab" onclick="switchTab('dialogues')">对话 (10)</button>
+  <button class="tab" onclick="switchTab('resources')">资源 (24)</button>
+  <button class="tab" onclick="switchTab('logs')">学习记录</button>
+</div>
+
+<!-- 单词工具栏 -->
+<div class="toolbar" id="tb-words">
+  <input placeholder="搜索单词/释义" id="w-search" oninput="loadWords()" style="width:200px">
+  <select id="w-cat" onchange="loadWords()">
+    <option value="">全部分类</option>
+    <option value="finance">金融</option>
+    <option value="biz">职场商务</option>
+    <option value="daily">日常</option>
+    <option value="analysis">分析</option>
+  </select>
+  <button class="btn primary" onclick="openWordModal()">+ 添加单词</button>
+</div>
+
+<!-- 对话工具栏 -->
+<div class="toolbar" id="tb-dialogues" style="display:none">
+  <select id="d-cat" onchange="loadDialogues()">
+    <option value="">全部分类</option>
+    <option value="finance">金融</option>
+    <option value="biz">职场商务</option>
+    <option value="daily">日常</option>
+  </select>
+  <button class="btn primary" onclick="openDialogueModal()">+ 添加对话</button>
+</div>
+
+<!-- 资源工具栏 -->
+<div class="toolbar" id="tb-resources" style="display:none">
+  <input placeholder="搜索资源" id="r-search" oninput="loadResources()" style="width:200px">
+  <select id="r-cat" onchange="loadResources()">
+    <option value="">全部分类</option>
+  </select>
+  <button class="btn primary" onclick="openResourceModal()">+ 添加资源</button>
+</div>
+
+<!-- 记录工具栏 -->
+<div class="toolbar" id="tb-logs" style="display:none">
+  <input type="date" id="l-date" onchange="loadLogs()">
+  <select id="l-type" onchange="loadLogs()">
+    <option value="">全部类型</option>
+    <option value="word">单词</option>
+    <option value="dialogue">对话</option>
+    <option value="resource">资源</option>
+    <option value="review">复习</option>
+  </select>
+</div>
+
+<!-- 内容区域 -->
+<div id="content"><div class="empty">加载中...</div></div>
+</div>
+
+<!-- 弹窗容器 -->
+<div id="modal-container"></div>
+
+<script>
+const API = '';
+let curTab = 'words';
+
+async function api(path, opts={}) {
+  try {
+    const res = await fetch(API + path, opts);
+    if (!res.ok) {
+      const txt = await res.text();
+      throw new Error(txt.slice(0,300));
+    }
+    return res.json();
+  } catch(e) {
+    alert('API 错误: ' + e.message);
+    throw e;
+  }
+}
+
+async function checkStatus() {
+  try {
+    const s = await api('/api/stats');
+    $('#api-status').textContent = `API 正常 | ${s.words}词 ${s.dialogues}对话 ${s.resources}资源 ${s.logs}记录`;
+  } catch(e) {
+    $('#api-status').textContent = 'API 离线';
+  }
+}
+
+function $(sel) { return document.querySelector(sel); }
+function $$(sel) { return document.querySelectorAll(sel); }
+
+// ============ 导航 ============
+function switchTab(tab) {
+  curTab = tab;
+  $$('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.tab:nth-child(${['words','dialogues','resources','logs'].indexOf(tab)+1})`)?.classList.add('active');
+  ['tb-words','tb-dialogues','tb-resources','tb-logs'].forEach(id => $(`#${id}`).style.display = 'none');
+  $(`#tb-${tab}`).style.display = 'flex';
+  if (tab === 'words') loadWords();
+  else if (tab === 'dialogues') loadDialogues();
+  else if (tab === 'resources') loadResources();
+  else if (tab === 'logs') loadLogs();
+}
+
+// ============ 单词 ============
+async function loadWords() {
+  const search = $('#w-search')?.value || '';
+  const cat = $('#w-cat')?.value || '';
+  const params = new URLSearchParams({size:500});
+  if (search) params.set('search', search);
+  if (cat) params.set('cat', cat);
+  const words = await api(`/api/words?${params}`);
+  if (!words.length) { $('#content').innerHTML = '<div class="empty">暂无匹配的单词</div>'; return; }
+  $('#content').innerHTML = `<table>
+    <thead><tr><th>ID</th><th>单词</th><th>音标</th><th>释义</th><th>分类</th><th>例句</th><th>操作</th></tr></thead>
+    <tbody>${words.map(w => `<tr>
+      <td>${w.id}</td><td><b>${w.word}</b></td><td style="color:var(--muted)">${w.phonetic||''}</td>
+      <td>${w.meaning||''}</td><td><span class="tag ${w.cat}">${w.cat}</span></td>
+      <td style="color:var(--muted)">${w.example||''}</td>
+      <td>
+        <button class="btn sm" onclick="openWordModal(${w.id})">编辑</button>
+        <button class="btn sm danger" onclick="deleteWord(${w.id},'${w.word}')">删</button>
+      </td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+async function openWordModal(id) {
+  let w = { word:'', phonetic:'', meaning:'', cat:'finance', example:'' };
+  if (id) {
+    const res = await api('/api/words?size=500');
+    w = res.find(x => x.id === id) || w;
+  }
+  $('#modal-container').innerHTML = `<div class="modal-mask" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <h2>${id ? '编辑' : '添加'}单词</h2>
+      <div class="form-row"><label>单词</label><input id="f-word" value="${esc(w.word)}"></div>
+      <div class="form-row"><label>音标</label><input id="f-phonetic" value="${esc(w.phonetic)}"></div>
+      <div class="form-row"><label>释义</label><input id="f-meaning" value="${esc(w.meaning)}"></div>
+      <div class="form-row"><label>分类</label><select id="f-cat">${['finance','biz','daily','analysis'].map(c=>`<option ${c===w.cat?'selected':''}>${c}</option>`).join('')}</select></div>
+      <div class="form-row"><label>例句</label><input id="f-example" value="${esc(w.example)}"></div>
+      <div class="form-actions">
+        <button class="btn" onclick="closeModal()">取消</button>
+        <button class="btn primary" onclick="saveWord(${id})">保存</button>
+      </div>
+    </div></div>`;
+}
+
+async function saveWord(id) {
+  const body = {
+    word: $('#f-word').value.trim(),
+    phonetic: $('#f-phonetic').value.trim(),
+    meaning: $('#f-meaning').value.trim(),
+    cat: $('#f-cat').value,
+    example: $('#f-example').value.trim()
+  };
+  if (!body.word) { alert('单词不能为空'); return; }
+  if (id) await api(`/api/words/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+  else await api('/api/words', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+  closeModal();
+  loadWords();
+  checkStatus();
+}
+
+async function deleteWord(id, word) {
+  if (!confirm(`确定删除单词 "${word}"?`)) return;
+  await api(`/api/words/${id}`, { method:'DELETE' });
+  loadWords();
+  checkStatus();
+}
+
+// ============ 对话 ============
+async function loadDialogues() {
+  const cat = $('#d-cat')?.value || '';
+  const params = cat ? `?cat=${cat}` : '';
+  const dialogues = await api('/api/dialogues' + params);
+  if (!dialogues.length) { $('#content').innerHTML = '<div class="empty">暂无对话</div>'; return; }
+  $('#content').innerHTML = `<table>
+    <thead><tr><th>ID</th><th>场景</th><th>描述</th><th>分类</th><th>级别</th><th>阶段</th><th>关键词</th><th>操作</th></tr></thead>
+    <tbody>${dialogues.map(d => `<tr>
+      <td>${d.id}</td><td><b>${d.scene}</b></td><td style="color:var(--muted)">${d.desc||''}</td>
+      <td><span class="tag ${d.cat}">${d.cat}</span></td><td>${d.level}</td>
+      <td><span class="tag analysis">${d.stage}</span></td>
+      <td style="color:var(--muted)">${(d.keywords||[]).join(', ')}</td>
+      <td>
+        <button class="btn sm" onclick="openDialogueModal('${d.id}')">编辑</button>
+        <button class="btn sm danger" onclick="deleteDialogue('${d.id}','${d.scene}')">删</button>
+      </td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+async function openDialogueModal(id) {
+  let d = { id:'d'+Date.now(), scene:'', desc:'', body:[], keywords:[], cat:'biz', level:'B1', stage:'', stage_order:1 };
+  if (id) {
+    const res = await api('/api/dialogues');
+    d = res.find(x => x.id === id) || d;
+  }
+  const bodyStr = JSON.stringify(d.body||[], null, 2);
+  const kwStr = JSON.stringify(d.keywords||[]);
+  $('#modal-container').innerHTML = `<div class="modal-mask" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <h2>${id ? '编辑' : '添加'}对话</h2>
+      <div class="form-row"><label>ID</label><input id="f-did" value="${esc(d.id)}" ${id?'readonly':''}></div>
+      <div class="form-row"><label>场景名称</label><input id="f-scene" value="${esc(d.scene)}"></div>
+      <div class="form-row"><label>描述</label><input id="f-desc" value="${esc(d.desc)}"></div>
+      <div class="form-row"><label>对话内容 (JSON数组 [{s:"角色",t:"台词"}])</label><textarea id="f-body" rows="6">${esc(bodyStr)}</textarea></div>
+      <div class="form-row"><label>关键词 (JSON数组)</label><input id="f-keywords" value="${esc(kwStr)}"></div>
+      <div class="form-row"><label>分类</label><select id="f-dcat">${['finance','biz','daily'].map(c=>`<option ${c===d.cat?'selected':''}>${c}</option>`).join('')}</select></div>
+      <div class="form-row"><label>级别</label><select id="f-level">${['A2','B1','B2','B2-C1','C1','C2'].map(l=>`<option ${l===d.level?'selected':''}>${l}</option>`).join('')}</select></div>
+      <div class="form-row"><label>阶段</label><input id="f-stage" value="${esc(d.stage)}"></div>
+      <div class="form-row"><label>阶段内排序</label><input id="f-sorder" value="${d.stage_order}" type="number"></div>
+      <div class="form-actions">
+        <button class="btn" onclick="closeModal()">取消</button>
+        <button class="btn primary" onclick="saveDialogue('${esc(id||'')}')">保存</button>
+      </div>
+    </div></div>`;
+}
+
+async function saveDialogue(origId) {
+  try {
+    const body = {
+      id: $('#f-did').value.trim(),
+      scene: $('#f-scene').value.trim(),
+      desc: $('#f-desc').value.trim(),
+      body: JSON.parse($('#f-body').value),
+      keywords: JSON.parse($('#f-keywords').value),
+      cat: $('#f-dcat').value,
+      level: $('#f-level').value,
+      stage: $('#f-stage').value.trim(),
+      stage_order: parseInt($('#f-sorder').value) || 1
+    };
+    if (!body.id || !body.scene) { alert('ID和场景名不能为空'); return; }
+    if (origId) await api(`/api/dialogues/${encodeURIComponent(origId)}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    else await api('/api/dialogues', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    closeModal();
+    loadDialogues();
+    checkStatus();
+  } catch(e) { alert('保存失败,请检查JSON格式: ' + e.message); }
+}
+
+async function deleteDialogue(id, scene) {
+  if (!confirm(`确定删除对话 "${scene}"?`)) return;
+  await api(`/api/dialogues/${encodeURIComponent(id)}`, { method:'DELETE' });
+  loadDialogues();
+  checkStatus();
+}
+
+// ============ 资源 ============
+async function loadResources() {
+  const search = $('#r-search')?.value || '';
+  const cat = $('#r-cat')?.value || '';
+  const params = new URLSearchParams();
+  if (search) params.set('search', search);
+  if (cat) params.set('cat', cat);
+  const res = await api(`/api/resources?${params}`);
+  if (!res.length) { $('#content').innerHTML = '<div class="empty">暂无资源</div>'; return; }
+  // update cat filter
+  const cats = [...new Set(res.map(r=>r.cat))];
+  $('#r-cat').innerHTML = '<option value="">全部分类</option>' + cats.map(c=>`<option ${c===cat?'selected':''}>${c}</option>`).join('');
+  $('#content').innerHTML = `<table>
+    <thead><tr><th>ID</th><th>名称</th><th>描述</th><th>URL</th><th>分类</th><th>来源</th><th>操作</th></tr></thead>
+    <tbody>${res.map(r => `<tr>
+      <td>${r.id}</td><td><b>${r.name}</b></td><td style="color:var(--muted)">${r.desc||''}</td>
+      <td style="color:var(--primary);max-width:200px">${r.url}</td>
+      <td><span class="tag biz">${r.cat}</span></td><td>${r.src}</td>
+      <td>
+        <button class="btn sm" onclick="openResourceModal(${r.id})">编辑</button>
+        <button class="btn sm danger" onclick="deleteResource(${r.id},'${esc(r.name)}')">删</button>
+      </td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+async function openResourceModal(id) {
+  let r = { name:'', desc:'', url:'', cat:'video', src:'official', icon:'📺' };
+  if (id) {
+    const res = await api('/api/resources');
+    r = res.find(x => x.id === id) || r;
+  }
+  $('#modal-container').innerHTML = `<div class="modal-mask" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <h2>${id ? '编辑' : '添加'}资源</h2>
+      <div class="form-row"><label>名称</label><input id="f-rname" value="${esc(r.name)}"></div>
+      <div class="form-row"><label>描述</label><input id="f-rdesc" value="${esc(r.desc)}"></div>
+      <div class="form-row"><label>URL</label><input id="f-rurl" value="${esc(r.url)}"></div>
+      <div class="form-row"><label>分类</label><input id="f-rcat" value="${esc(r.cat)}"></div>
+      <div class="form-row"><label>来源</label><input id="f-rsrc" value="${esc(r.src)}"></div>
+      <div class="form-row"><label>图标</label><input id="f-ricon" value="${esc(r.icon)}"></div>
+      <div class="form-actions">
+        <button class="btn" onclick="closeModal()">取消</button>
+        <button class="btn primary" onclick="saveResource(${id})">保存</button>
+      </div>
+    </div></div>`;
+}
+
+async function saveResource(id) {
+  const body = {
+    name: $('#f-rname').value.trim(),
+    desc: $('#f-rdesc').value.trim(),
+    url: $('#f-rurl').value.trim(),
+    cat: $('#f-rcat').value.trim(),
+    src: $('#f-rsrc').value.trim(),
+    icon: $('#f-ricon').value.trim()
+  };
+  if (!body.name || !body.url) { alert('名称和URL不能为空'); return; }
+  if (id) await api(`/api/resources/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+  else await api('/api/resources', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+  closeModal();
+  loadResources();
+  checkStatus();
+}
+
+async function deleteResource(id, name) {
+  if (!confirm(`确定删除资源 "${name}"?`)) return;
+  await api(`/api/resources/${id}`, { method:'DELETE' });
+  loadResources();
+  checkStatus();
+}
+
+// ============ 学习记录 ============
+async function loadLogs() {
+  const date = $('#l-date')?.value || '';
+  const dtype = $('#l-type')?.value || '';
+  const params = new URLSearchParams({limit:500});
+  if (date) params.set('date', date);
+  if (dtype) params.set('dtype', dtype);
+  const logs = await api(`/api/logs?${params}`);
+  if (!logs.length) { $('#content').innerHTML = '<div class="empty">暂无学习记录</div>'; return; }
+  $('#content').innerHTML = `<table>
+    <thead><tr><th>时间</th><th>日期</th><th>用户</th><th>类型</th><th>详情</th></tr></thead>
+    <tbody>${logs.map(l => `<tr>
+      <td style="color:var(--muted);font-size:12px">${l.created_at||''}</td>
+      <td>${l.date}</td><td>${l.user_id}</td>
+      <td><span class="tag">${l.dtype}</span></td>
+      <td style="color:var(--muted)">${l.detail}</td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+function closeModal() { $('#modal-container').innerHTML = ''; }
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+// init
+checkStatus();
+loadWords();
+</script>
+</body>
+</html>
