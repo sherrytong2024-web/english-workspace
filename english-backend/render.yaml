@@ -1,14 +1,13 @@
 services:
   - type: web
     name: english-workspace
-    runtime: python
+    runtime: docker
     plan: free
     rootDir: english-backend
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /api/stats
     envVars:
       - key: DATABASE_URL
         sync: false
       # 说明：DATABASE_URL 留空则使用本地 SQLite（云端重启会清空）。
       # 要持久化，请在 Render 后台填 Neon 免费 Postgres 的连接串。
+      # 用 Docker runtime 自锁 Python 3.12，避免 pydantic-core 编译。

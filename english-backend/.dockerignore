@@ -1,0 +1,13 @@
+# 不需要的文件和目录，避免污染镜像
+data/
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+.venv/
+node_modules/
+*.log
+.env
+.env.*
+admin/data/
+admin/*.db
