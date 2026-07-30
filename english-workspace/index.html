@@ -201,7 +201,8 @@ tr:hover td{background:#f9fafb}
     <section id="page-words" class="page">
       <div class="page-header">
         <div><h2>单词本</h2><div class="sub">分类管理 · 复习 · 自动记录学习历史</div></div>
-        <div style="display:flex;gap:8px">
+        <div style="display:flex;gap:8px;align-items:center">
+          <select id="word-source-sel" onchange="onWordSourceChange(this.value)" style="width:160px;padding:6px 8px;font-size:12px"></select>
           <button class="btn ghost" onclick="navigate('review')">开始复习</button>
           <button class="btn" onclick="showAddWord()">+ 添加单词</button>
         </div>
@@ -257,7 +258,10 @@ tr:hover td{background:#f9fafb}
     <!-- 对话练习 -->
     <section id="page-dialogues" class="page">
       <div class="page-header">
-        <div><h2>对话练习</h2><div class="sub">分场景完整对话 · ��日推荐 · 已学对话自动进入复习</div></div>
+        <div><h2>对话练习</h2><div class="sub">分场景完整对话 · 每日推荐 · 已学对话自动进入复习</div></div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <select id="dlg-source-sel" onchange="onDlgSourceChange(this.value)" style="width:160px;padding:6px 8px;font-size:12px"></select>
+        </div>
       </div>
 
       <div class="card" id="daily-dialog-card">
@@ -884,6 +888,65 @@ function todayStr(){const d=new Date();return `${d.getFullYear()}-${String(d.get
 function nowStr(){const d=new Date();return `${todayStr()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`}
 function addLog(type,content){state.log.unshift({t:nowStr(),type,content});if(state.log.length>500)state.log.length=500;DB.save('log',state.log)}
 
+// ===== 词源 / 对话源选择 =====
+var _activeWordSource = DB.load('activeWordSource', 'builtin');
+var _activeDlgSource = DB.load('activeDlgSource', 'builtin');
+var _allSources = null;
+
+async function loadSources(){
+  if(_allSources) return _allSources;
+  try{ _allSources = await API.get('/api/sources'); }catch(e){ _allSources = {word_sources:[],dialogue_sources:[],active:{word:'builtin',dialogue:'builtin'}}; }
+  return _allSources;
+}
+
+function populateWordSourceSelect(sources){
+  var sel = document.getElementById('word-source-sel');
+  if(!sel) return;
+  sel.innerHTML = sources.map(function(s){
+    return '<option value="'+s.id+'"' + (s.id===_activeWordSource?' selected':'') + '>' + s.name + '</option>';
+  }).join('');
+}
+
+function populateDlgSourceSelect(sources){
+  var sel = document.getElementById('dlg-source-sel');
+  if(!sel) return;
+  sel.innerHTML = sources.map(function(s){
+    return '<option value="'+s.id+'"' + (s.id===_activeDlgSource?' selected':'') + '>' + s.name + '</option>';
+  }).join('');
+}
+
+async function initSourceSelects(){
+  var src = await loadSources();
+  populateWordSourceSelect(src.word_sources||[]);
+  populateDlgSourceSelect(src.dialogue_sources||[]);
+}
+
+function onWordSourceChange(val){
+  _activeWordSource = val;
+  DB.save('activeWordSource', val);
+  toast('词源已切换为: ' + (document.getElementById('word-source-sel').selectedOptions[0].textContent || val));
+  if(val !== 'builtin'){
+    $('#daily-words-card').style.display='none';
+    $('#word-list').innerHTML = '<div class="empty">该词源数据加载中...（当前仅内置词库可用）</div>';
+  } else {
+    $('#daily-words-card').style.display='';
+    renderWords();
+  }
+}
+
+function onDlgSourceChange(val){
+  _activeDlgSource = val;
+  DB.save('activeDlgSource', val);
+  toast('对话源已切换为: ' + (document.getElementById('dlg-source-sel').selectedOptions[0].textContent || val));
+  if(val !== 'builtin'){
+    document.getElementById('daily-dialog-card').style.display='none';
+    document.getElementById('dialog-list').innerHTML = '<div class="empty">该对话源数据加载中...（当前仅内置对话库可用）</div>';
+  } else {
+    document.getElementById('daily-dialog-card').style.display='';
+    renderDialogs();
+  }
+}
+
 // ===== 导航 =====
 function navigate(page){
   $$('.page').forEach(p=>p.classList.remove('active'));
@@ -951,7 +1014,7 @@ function saveWord(){
   ['w-word','w-phonetic','w-meaning','w-example','w-note'].forEach(id=>$('#'+id).value='');
   hideAddWord();renderWords();toast('已添加');
 }
-function renderWords(){wordPage=1;renderWordFilter();$('#word-count').textContent=state.words.length;renderWordList('');renderDailyWords()}
+function renderWords(){initSourceSelects();wordPage=1;renderWordFilter();$('#word-count').textContent=state.words.length;renderWordList('');renderDailyWords()}
 function renderWordList(search){
   if(search!==curWordSearch)wordPage=1;
   curWordSearch=search;
@@ -1083,6 +1146,7 @@ function renderDialogFilter(){
 }
 function setDialogFilter(k){curDialogFilter=k;renderDialogFilter();renderDialogs()}
 function renderDialogs(){
+  initSourceSelects();
   renderDialogFilter();
   renderDailyDialogs();
   var sortedList=SEED_DIALOGS.slice().sort(function(a,b){return (a.order||99)-(b.order||99)});
