@@ -130,6 +130,7 @@ class ProgressUpdate(BaseModel):
     mastered_words: Optional[List[str]] = None
     completed_daily_words: Optional[List[str]] = None
     learned_dialogues: Optional[List[str]] = None
+    favorites: Optional[List[Any]] = None
     prefs: Optional[dict] = None
     daily_words_data: Optional[List[Any]] = None
     dialog_prefs: Optional[dict] = None
@@ -140,6 +141,7 @@ class ProgressOut(BaseModel):
     mastered_words: Any = []
     completed_daily_words: Any = []
     learned_dialogues: Any = []
+    favorites: Any = []
     prefs: Any = {}
     daily_words_data: Any = []
     dialog_prefs: Any = {}

@@ -65,6 +65,7 @@ class UserProgress(Base):
     mastered_words = Column(JSON, default=list)
     completed_daily_words = Column(JSON, default=list)
     learned_dialogues = Column(JSON, default=list)
+    favorites = Column(JSON, default=list)
     prefs = Column(JSON, default=dict)
     daily_words_data = Column(JSON, default=list)
     dialog_prefs = Column(JSON, default=dict)

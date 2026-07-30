@@ -399,11 +399,83 @@ tr:hover td{background:#f9fafb}
 <div id="toast" class="toast"></div>
 
 <script>
-// ===== 数据层 =====
-const DB = {
-  load(k,def){try{const v=localStorage.getItem('enws_'+k);return v?JSON.parse(v):def}catch(e){return def}},
-  save(k,v){localStorage.setItem('enws_'+k,JSON.stringify(v))}
+// ===== 数据层（云端 + 本地双写）=====
+const USER_ID = 'default';  // 单机用户标识；如需多端分用户可改为随机 UUID 并持久化到 localStorage
+const API = {
+  _base: '',  // 同源部署（含 Render）用相对路径，无需硬编码域名
+  async req(method, path, body){
+    const opt = { method, headers: { 'Content-Type': 'application/json' } };
+    if(body !== undefined) opt.body = JSON.stringify(body);
+    const r = await fetch(this._base + path, opt);
+    if(!r.ok) throw new Error(method + ' ' + path + ' -> ' + r.status);
+    const ct = r.headers.get('content-type') || '';
+    return ct.includes('application/json') ? r.json() : null;
+  },
+  get(p){ return this.req('GET', p); },
+  post(p,b){ return this.req('POST', p, b); },
+  put(p,b){ return this.req('PUT', p, b); },
+  del(p){ return this.req('DELETE', p); }
 };
+
+const DB = {
+  load(k,def){ try{ const v=localStorage.getItem('enws_'+k); return v?JSON.parse(v):def; }catch(e){ return def; } },
+  save(k,v){ try{ localStorage.setItem('enws_'+k, JSON.stringify(v)); }catch(e){} syncProgress(k, v); }
+};
+
+// 本地状态 -> 后端（best-effort，失败静默不影响本地使用）
+function syncProgress(k, v){
+  const map = {
+    reviewState: { mastered_words: (v && v.mastered) || [] },
+    completedDailyWords: { completed_daily_words: v },
+    learnedDialogs: { learned_dialogues: v },
+    favorites: { favorites: v },
+    prefs: { prefs: v },
+    dailyWords: { daily_words_data: v },
+    dialogPrefs: { dialog_prefs: v }
+  };
+  if(map[k]) API.put('/api/progress/' + USER_ID, map[k]).catch(e => console.warn('sync fail', k, e));
+  else if(k === 'log') syncLogs(v);
+}
+
+// 学习记录增量同步到 /api/logs
+async function syncLogs(logs){
+  const last = parseInt(localStorage.getItem('enws_logsync') || '0', 10);
+  const items = logs || [];
+  const news = items.slice(0, Math.max(0, items.length - last));
+  for(const it of news){
+    try{ await API.post('/api/logs', { user_id: USER_ID, date: (it.t || '').slice(0,10), dtype: it.type, detail: it.content }); }
+    catch(e){ console.warn('log sync fail', e); }
+  }
+  localStorage.setItem('enws_logsync', String(items.length));
+}
+
+// 启动后从后端拉取，覆盖本地 state（best-effort，失败则用本地数据）
+async function bootstrap(){
+  try{
+    const words = await API.get('/api/words?size=2000');
+    if(Array.isArray(words) && words.length){
+      const localExtra = (DB.load('words', []) || []).filter(lw => !words.some(bw => bw.word === lw.word));
+      state.words = words.concat(localExtra);
+    }
+    const prog = await API.get('/api/progress/' + USER_ID);
+    if(prog){
+      if(Array.isArray(prog.mastered_words)) state.reviewState.mastered = prog.mastered_words;
+      if(Array.isArray(prog.completed_daily_words)) state.completedDailyWords = prog.completed_daily_words;
+      if(Array.isArray(prog.learned_dialogues)) state.learnedDialogs = prog.learnedDialogues;
+      if(Array.isArray(prog.favorites)) state.favorites = prog.favorites;
+      if(prog.prefs && typeof prog.prefs === 'object') state.prefs = Object.assign(state.prefs, prog.prefs);
+      if(Array.isArray(prog.daily_words_data)) state.dailyWords = prog.daily_words_data;
+      if(prog.dialog_prefs && typeof prog.dialog_prefs === 'object') state.dialogPrefs = Object.assign(state.dialogPrefs, prog.dialog_prefs);
+    }
+    ensureDailyWords();
+    const active = document.querySelector('.page.active');
+    if(active) navigate(active.id.replace('page-', ''));
+    else navigate('dashboard');
+    toast('已从云端同步数据');
+  }catch(e){
+    console.warn('云端同步失败，使用本地数据', e);
+  }
+}
 
 // 预设单词包
 const SEED_WORDS = [
@@ -873,6 +945,8 @@ function saveWord(){
   const nw={word:w,phonetic:$('#w-phonetic').value.trim(),meaning:$('#w-meaning').value.trim()||'(无释义)',cat:$('#w-cat').value,example:$('#w-example').value.trim(),note:$('#w-note').value.trim()};
   if(state.words.some(x=>x.word.toLowerCase()===w.toLowerCase())){toast('单词已存在');return}
   state.words.push(nw);DB.save('words',state.words);
+  // best-effort 同步到云端单词库（失败不影响本地）
+  API.post('/api/words', nw).catch(e=>console.warn('add word sync fail', e));
   addLog('word','新增单词: '+w);
   ['w-word','w-phonetic','w-meaning','w-example','w-note'].forEach(id=>$('#'+id).value='');
   hideAddWord();renderWords();toast('已添加');
@@ -1345,6 +1419,7 @@ function markMasteredCard(w){
 
 // 初始化
 navigate('dashboard');
+bootstrap();  // 异步从云端拉取数据覆盖本地，不阻塞首屏
 </script>
 </body>
 </html>

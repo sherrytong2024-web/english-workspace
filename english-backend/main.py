@@ -54,7 +54,7 @@ def list_words(
     cat: Optional[str] = Query(None),
     search: Optional[str] = Query(None),
     page: int = Query(1, ge=1),
-    size: int = Query(100, ge=1, le=500),
+    size: int = Query(100, ge=1, le=5000),
     db: Session = Depends(get_db),
 ):
     q = db.query(Word)
