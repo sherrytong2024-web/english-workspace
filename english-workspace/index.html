@@ -888,6 +888,8 @@ function ensureDailyWords(){
 sanitizeState();
 ensureDailyWords();
 
+function cleanScene(s){ return (s||'').replace(/^NO\.\d+\s*/,''); }
+
 // ===== 工具 =====
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
@@ -1163,9 +1165,6 @@ function renderDialogs(){
   renderDailyDialogs();
   var sortedList=state.allDialogues.slice().sort(function(a,b){return (a.order||99)-(b.order||99)});
   var filtered=sortedList.filter(function(d){return curDialogFilter==='all'||d.cat===curDialogFilter});
-  // 场景名去 NO.nnn 前缀
-  function cleanScene(s){ return (s||'').replace(/^NO\.\d+\s*/,''); }
-
   // 从数据中提取阶段（去重、去空、按 stage_order 排序）
   var stageMap = {};
   filtered.forEach(function(d){
