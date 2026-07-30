@@ -1163,19 +1163,31 @@ function renderDialogs(){
   renderDailyDialogs();
   var sortedList=state.allDialogues.slice().sort(function(a,b){return (a.order||99)-(b.order||99)});
   var filtered=sortedList.filter(function(d){return curDialogFilter==='all'||d.cat===curDialogFilter});
-  var stages=['实习面试','日常基础','旅游出行','职场协作','客户与路演','高阶金融'];
-  var stageColors={'实习面试':'#e0f2fe','日常基础':'#fef3c7','旅游出行':'#d1fae5','职场协作':'#ede9fe','客户与路演':'#fce7f3','高阶金融':'#e0e7ff'};
-  var catName={finance:'金融职场',biz:'商业会议',daily:'日常',travel:'旅游'};
+  // 场景名去 NO.nnn 前缀
+  function cleanScene(s){ return (s||'').replace(/^NO\.\d+\s*/,''); }
+
+  // 从数据中提取阶段（去重、去空、按 stage_order 排序）
+  var stageMap = {};
+  filtered.forEach(function(d){
+    var st = d.stage||'其他';
+    if(!stageMap[st]) stageMap[st] = {name:st, dialogues:[], minOrder:9999};
+    stageMap[st].dialogues.push(d);
+    if((d.order||99) < stageMap[st].minOrder) stageMap[st].minOrder = d.order||99;
+  });
+  var dynamicStages = Object.values(stageMap).sort(function(a,b){return a.minOrder-b.minOrder});
+
+  var stageColors = ['#e0f2fe','#fef3c7','#d1fae5','#ede9fe','#fce7f3','#e0e7ff','#ffedd5','#dcfce7','#f3e8ff','#fce4ec'];
+  var catName={finance:'金融职场',biz:'商业场景',daily:'日常',travel:'旅游'};
   var catCls={finance:'fin',biz:'biz',daily:'daily',travel:'travel'};
   var learned=state.learnedDialogs;
-  var html='<div style="margin-bottom:12px;font-size:12px;color:var(--muted)">学习路径: 从面试准备到高阶金融，共 6 个阶段</div>';
-  for(var si=0;si<stages.length;si++){
-    var st=stages[si];
-    var stageD=filtered.filter(function(d){return d.stage===st});
-    if(!stageD.length) continue;
-    html+=('<div class="card" style="padding:14px;margin-bottom:14px;border-left:4px solid '+(stageColors[st]||'#e5e7eb')+'"><div class="card-title" style="font-size:14px;margin-bottom:10px">'+
-      '<span>阶段'+(si+1)+' : '+st+'</span>'+
-      '<span style="font-weight:400;font-size:12px;color:var(--muted)">('+stageD.length+' 段对话)</span></div>');
+  var html='<div style="margin-bottom:12px;font-size:12px;color:var(--muted)">全部对话 · ' + dynamicStages.length + ' 个场景 · ' + filtered.length + ' 段</div>';
+  for(var si=0;si<dynamicStages.length;si++){
+    var stg = dynamicStages[si];
+    var stageD = stg.dialogues;
+    var sc = stageColors[si % stageColors.length];
+    html+=('<div class="card" style="padding:14px;margin-bottom:14px;border-left:4px solid '+sc+'"><div class="card-title" style="font-size:14px;margin-bottom:10px">'+
+      '<span>'+(si+1)+'. '+stg.name+'</span>'+
+      '<span style="font-weight:400;font-size:12px;color:var(--muted)">('+stageD.length+' 段)</span></div>');
     for(var di=0;di<stageD.length;di++){
       var d=stageD[di];
       var isLearned=learned.indexOf(d.id)>=0;
@@ -1183,8 +1195,8 @@ function renderDialogs(){
         '<div class="dialog-meta">'+
           '<span class="tag '+(catCls[d.cat]||'pro')+'">'+(catName[d.cat]||d.cat)+'</span>'+
           '<span>难度: '+d.level+'</span>'+
-          (isLearned?'<span class="badge">已学</span>':'<span class="badge new" style="background:var(--primary)">推荐</span>')+
-          '<span class="title">'+d.scene+'</span></div>'+
+          (isLearned?'<span class="badge">已学</span>':'<span class="badge new" style="background:var(--primary)">待学</span>')+
+          '<span class="title">'+cleanScene(d.scene)+'</span></div>'+
         '<div style="font-size:13px;color:var(--muted);margin-bottom:8px">'+d.desc+'</div>'+
         '<div class="dialog-body" id="db-'+d.id+'" style="display:none">'+d.body.map(function(l){return '<div class="line"><span class="speaker">'+l.s+':</span>'+l.t+'</div>';}).join('')+'</div>'+
         '<div style="font-size:12px;color:var(--muted)">关键表达: '+d.keywords.map(function(k){return '<span class="tag pro" style="margin-right:4px">'+k+'</span>';}).join('')+'</div>'+
@@ -1467,7 +1479,7 @@ function renderDailyDialogs(){
   var catCls = {finance:'fin',biz:'biz',daily:'daily',travel:'travel'};
   $('#daily-dialog-list').innerHTML = dialogs.length ? dialogs.map(function(d){
     var isLearned = learned.indexOf(d.id) >= 0;
-    return '<div class="dialog-item" style="margin-bottom:8px"><div class="dialog-meta"><span class="tag '+catCls[d.cat]+'">'+catName[d.cat]+'</span><span>难度: '+d.level+'</span>'+(isLearned?'<span class="badge">已学</span>':'<span class="badge new">今日推荐</span>')+'<span class="title">'+d.scene+'</span></div><div class="dialog-body" style="max-height:120px">'+d.body.map(function(l){return '<div class="line"><span class="speaker">'+l.s+':</span>'+l.t+'</div>'}).join('')+'</div><div class="dialog-actions"><button class="btn sm '+(isLearned?'outline':'')+'" onclick="toggleLearned(\''+d.id+'\');renderDailyDialogs();renderDialogs();">'+(isLearned?'取消已学':'学完标记')+'</button></div></div>';
+    return '<div class="dialog-item" style="margin-bottom:8px"><div class="dialog-meta"><span class="tag '+catCls[d.cat]+'">'+catName[d.cat]+'</span><span>难度: '+d.level+'</span>'+(isLearned?'<span class="badge">已学</span>':'<span class="badge new">今日推荐</span>')+'<span class="title">'+cleanScene(d.scene)+'</span></div><div class="dialog-body" style="max-height:120px">'+d.body.map(function(l){return '<div class="line"><span class="speaker">'+l.s+':</span>'+l.t+'</div>'}).join('')+'</div><div class="dialog-actions"><button class="btn sm '+(isLearned?'outline':'')+'" onclick="toggleLearned(\''+d.id+'\');renderDailyDialogs();renderDialogs();">'+(isLearned?'取消已学':'学完标记')+'</button></div></div>';
   }).join('') : '<div class="empty">当前分类暂无对话，请调整设置</div>';
 }
 
@@ -1500,7 +1512,7 @@ function renderReviewDialogs(){
   }
   var list = state.allDialogues.filter(function(d){return learned.indexOf(d.id)>=0});
   document.getElementById('review-dialog-list').innerHTML = list.map(function(d){
-    return '<div class="dialog-item"><div class="dialog-meta"><span class="tag '+catCls[d.cat]+'">'+catName[d.cat]+'</span><span>难度: '+d.level+'</span><span class="badge">已学</span><span class="title">'+d.scene+'</span></div><div style="font-size:13px;color:var(--muted);margin-bottom:8px">'+d.desc+'</div><div class="dialog-body">'+d.body.map(function(l){return '<div class="line"><span class="speaker">'+l.s+':</span>'+l.t+'</div>'}).join('')+'</div><div class="dialog-actions"><button class="btn sm ghost" onclick="toggleLearned(\''+d.id+'\');renderReviewDialogs();renderDialogs();">移出复习</button><a class="btn sm ghost" href="#" onclick="return false">再读一遍</a></div></div>';
+    return '<div class="dialog-item"><div class="dialog-meta"><span class="tag '+catCls[d.cat]+'">'+catName[d.cat]+'</span><span>难度: '+d.level+'</span><span class="badge">已学</span><span class="title">'+cleanScene(d.scene)+'</span></div><div style="font-size:13px;color:var(--muted);margin-bottom:8px">'+d.desc+'</div><div class="dialog-body">'+d.body.map(function(l){return '<div class="line"><span class="speaker">'+l.s+':</span>'+l.t+'</div>'}).join('')+'</div><div class="dialog-actions"><button class="btn sm ghost" onclick="toggleLearned(\''+d.id+'\');renderReviewDialogs();renderDialogs();">移出复习</button><a class="btn sm ghost" href="#" onclick="return false">再读一遍</a></div></div>';
   }).join('');
 }
 
