@@ -530,7 +530,7 @@ const SEED_WORDS = [
   {word:'recession',phonetic:'/rɪˈseʃn/',meaning:'衰退',cat:'finance',example:'The economy entered a technical recession.'},
   {word:'refinance',phonetic:'/ˌriːˈfaɪnæns/',meaning:'再融资',cat:'finance',example:'The company refinanced its debt at a lower rate.'},
   {word:'risk premium',phonetic:'/rɪsk ˈpriːmiəm/',meaning:'风险溢价',cat:'finance',example:'Equity risk premium has widened amid uncertainty.'},
-  {word:'securitization',phonetic:'/sɪˌkjʊ��rɪtaɪˈzeɪʃn/',meaning:'证券化',cat:'finance',example:'Mortgage securitization fueled the housing boom.'},
+  {word:'securitization',phonetic:'/sɪˌkjʊərɪtaɪˈzeɪʃn/',meaning:'证券化',cat:'finance',example:'Mortgage securitization fueled the housing boom.'},
   {word:'capital markets',phonetic:'/ˈkæpɪtl ˈmɑːkɪts/',meaning:'资本市场',cat:'finance',example:'The firm is a leader in capital markets advisory.'},
   {word:'private equity',phonetic:'/ˈpraɪvət ˈekwəti/',meaning:'私募股权',cat:'finance',example:'Private equity firms are sitting on record dry powder.'},
   {word:'sovereign wealth fund',phonetic:'/ˈsɒvrɪn welθ fʌnd/',meaning:'主权财富基金',cat:'finance',example:'The sovereign wealth fund increased its allocation to tech.'},
@@ -570,7 +570,7 @@ const SEED_WORDS = [
   {word:'streamline',phonetic:'/ˈstriːmlaɪn/',meaning:'精简',cat:'professional',example:'We streamlined the approval process to two steps.'},
   {word:'best practice',phonetic:'/best ˈpræktɪs/',meaning:'最佳实践',cat:'professional',example:'We documented industry best practices.'},
   {word:'buy-in',phonetic:'/baɪ ɪn/',meaning:'认可支持',cat:'professional',example:'We need executive buy-in before proceeding.'},
-  {word:'cross-functional',phonetic:'/kr��s ˈfʌŋkʃənl/',meaning:'跨职能的',cat:'professional',example:'This is a cross-functional initiative involving four teams.'},
+  {word:'cross-functional',phonetic:'/krɒs ˈfʌŋkʃənl/',meaning:'跨职能的',cat:'professional',example:'This is a cross-functional initiative involving four teams.'},
   {word:'executive summary',phonetic:'/ɪɡˈzekjətɪv ˈsʌməri/',meaning:'执行摘要',cat:'professional',example:'Start the deck with an executive summary.'},
   {word:'follow up',phonetic:'/ˈfɒləʊ ʌp/',meaning:'跟进',cat:'professional',example:'I will follow up with the client after the meeting.'},
   {word:'headcount',phonetic:'/ˈhedkaʊnt/',meaning:'员工编制',cat:'professional',example:'Headcount was reduced by 10%.'},
@@ -814,7 +814,7 @@ const RECOMMEND_POOL = [
   {type:'podcast',title:'WSJ The Journal: 每日商业深潜',src:'WSJ',desc:'华尔街日报旗舰播客，每日20分钟商业深度报道',url:'https://www.wsj.com/podcasts/the-journal',tag:'finance',level:'B2'},
   {type:'podcast',title:'Bloomberg Surveillance 早间市场',src:'Bloomberg',desc:'全球市场开盘前的分析师对话，含利率/汇率/商品',url:'https://www.bloomberg.com/audio/podcasts/bloomberg-surveillance/',tag:'finance',level:'B2-C1'},
   {type:'podcast',title:'Masters in Business 金融巨头访谈',src:'Bloomberg',desc:'Bloomberg主持人对话华尔街传奇人物',url:'https://www.bloomberg.com/audio/podcasts/masters-in-business/',tag:'finance',level:'C1'},
-  {type:'podcast',title:'Marketplace 今日经济解读',src:'APM',desc:'美���公共媒体日常商业与生活经济解读',url:'https://www.marketplace.org/shows/marketplace/',tag:'finance',level:'B2'},
+  {type:'podcast',title:'Marketplace 今日经济解读',src:'APM',desc:'美国公共媒体日常商业与生活经济解读',url:'https://www.marketplace.org/shows/marketplace/',tag:'finance',level:'B2'},
   {type:'podcast',title:'HBR IdeaCast 本周管理思维',src:'HBR',desc:'哈佛商业评论每周管理思维精华',url:'https://hbr.org/podcasts/ideacast',tag:'biz',level:'B2-C1'},
   {type:'podcast',title:'BBC The English We Speak',src:'BBC',desc:'3分钟学一个地道英语口语短语',url:'https://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak',tag:'learning',level:'B1-B2'},
   // ===== 对话（锚点跳转） =====
@@ -1072,7 +1072,7 @@ function renderDailyWords(){
     }
   }
   var moreBtn = doneCount===total ? '<div style="text-align:center;margin-top:10px"><button class="btn" onclick="addMoreDailyWords()">+ 再学 10 个</button></div>' : '';
-  $('#daily-words-list').innerHTML = '<table style="margin-bottom:8px"><thead><tr><th style="width:30px">&#10003;</th><th>单词</th><th>释义</th><th>分���</th><th>例句</th></tr></thead><tbody>'+rows+'</tbody></table>' + moreBtn;
+  $('#daily-words-list').innerHTML = '<table style="margin-bottom:8px"><thead><tr><th style="width:30px">&#10003;</th><th>单词</th><th>释义</th><th>分类</th><th>例句</th></tr></thead><tbody>'+rows+'</tbody></table>' + moreBtn;
 }
 
 function addMoreDailyWords(){
@@ -1291,7 +1291,7 @@ function renderSongs(songs){
     var liked = fb.like.indexOf(s.id) >= 0;
     var disliked = fb.dislike.indexOf(s.id) >= 0;
     var img = s.artwork_url ? '<img src="' + esc(s.artwork_url) + '" class="song-art" alt="">' : '<div class="song-art-placeholder">🎵</div>';
-    var play = s.preview_url ? '<audio controls class="song-play"><source src="' + esc(s.preview_url) + '"></audio>' : '<div class="song-no-preview">��预览</div>';
+    var play = s.preview_url ? '<audio controls class="song-play"><source src="' + esc(s.preview_url) + '"></audio>' : '<div class="song-no-preview">无预览</div>';
     return '<div class="card song-card' + (liked?' liked':'') + (disliked?' disliked':'') + '">' +
       img +
       '<div class="name" style="font-size:14px;margin-top:8px">' + esc(s.title||'') + '</div>' +
@@ -1477,7 +1477,7 @@ function saveDialogPrefs(){
   state.dialogPrefs.cat = document.getElementById('dd-cat').value;
   DB.save('dialogPrefs', state.dialogPrefs);
   renderDailyDialogs();
-  toast('已更新���置');
+  toast('已更新设置');
 }
 function refreshDailyDialogs(){renderDailyDialogs();toast('已刷新');}
 
