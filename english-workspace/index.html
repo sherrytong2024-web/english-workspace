@@ -464,6 +464,10 @@ async function bootstrap(){
       const localExtra = (DB.load('words', []) || []).filter(lw => !words.some(bw => bw.word === lw.word));
       state.words = words.concat(localExtra);
     }
+    const dialogues = await API.get('/api/dialogues?size=2000');
+    if(Array.isArray(dialogues) && dialogues.length){
+      state.allDialogues = dialogues.map(function(d){d.order=d.stage_order||d.order||99;return d});
+    }
     const prog = await API.get('/api/progress/' + USER_ID);
     if(prog){
       if(Array.isArray(prog.mastered_words)) state.reviewState.mastered = prog.mastered_words;
@@ -827,6 +831,7 @@ const RECOMMEND_POOL = [
 
 // ===== 状态层 =====
 let state = {
+  allDialogues: [],
   words: DB.load('words', SEED_WORDS),
   learnedDialogs: DB.load('learnedDialogs', []),
   favorites: DB.load('favorites', []),
@@ -1156,7 +1161,7 @@ function renderDialogs(){
   initSourceSelects();
   renderDialogFilter();
   renderDailyDialogs();
-  var sortedList=SEED_DIALOGS.slice().sort(function(a,b){return (a.order||99)-(b.order||99)});
+  var sortedList=state.allDialogues.slice().sort(function(a,b){return (a.order||99)-(b.order||99)});
   var filtered=sortedList.filter(function(d){return curDialogFilter==='all'||d.cat===curDialogFilter});
   var stages=['实习面试','日常基础','旅游出行','职场协作','客户与路演','高阶金融'];
   var stageColors={'实习面试':'#e0f2fe','日常基础':'#fef3c7','旅游出行':'#d1fae5','职场协作':'#ede9fe','客户与路演':'#fce7f3','高阶金融':'#e0e7ff'};
@@ -1202,7 +1207,7 @@ function toggleDialogBody(id){
 function toggleLearned(id){
   // 当标记已学时，刷新每日推荐和复习计数
   if(!state.learnedDialogs.includes(id)){
-    var dl = SEED_DIALOGS.find(function(x){return x.id===id});
+    var dl = state.allDialogues.find(function(x){return x.id===id});
     if(dl) addLog('dialog','学习对话: '+dl.scene);
   }
   if(state.learnedDialogs.includes(id)){
@@ -1214,7 +1219,7 @@ function toggleLearned(id){
   renderDialogs();
 }
 function copyDialog(id){
-  const d=SEED_DIALOGS.find(x=>x.id===id);
+  const d=state.allDialogues.find(x=>x.id===id);
   const txt=d.scene+'\n\n'+d.body.map(l=>`${l.s}: ${l.t.replace(/<[^>]+>/g,'')}`).join('\n');
   navigator.clipboard.writeText(txt).then(()=>toast('已复制到剪贴板'));
 }
@@ -1444,7 +1449,7 @@ function renderDailyDialogs(){
   if(document.getElementById('dd-count')) document.getElementById('dd-count').value = count;
   if(document.getElementById('dd-cat')) document.getElementById('dd-cat').value = cat;
 
-  var pool = cat === 'all' ? SEED_DIALOGS : SEED_DIALOGS.filter(function(d){return d.cat===cat});
+  var pool = cat === 'all' ? state.allDialogues : state.allDialogues.filter(function(d){return d.cat===cat});
   // 基于日期种子选择
   var seed = parseInt(todayStr().replace(/-/g,''));
   var dialogs = [];
@@ -1493,7 +1498,7 @@ function renderReviewDialogs(){
     document.getElementById('review-dialog-list').innerHTML = '<div class="empty">还没有学过的对话，去对话练习页面学习吧</div>';
     return;
   }
-  var list = SEED_DIALOGS.filter(function(d){return learned.indexOf(d.id)>=0});
+  var list = state.allDialogues.filter(function(d){return learned.indexOf(d.id)>=0});
   document.getElementById('review-dialog-list').innerHTML = list.map(function(d){
     return '<div class="dialog-item"><div class="dialog-meta"><span class="tag '+catCls[d.cat]+'">'+catName[d.cat]+'</span><span>难度: '+d.level+'</span><span class="badge">已学</span><span class="title">'+d.scene+'</span></div><div style="font-size:13px;color:var(--muted);margin-bottom:8px">'+d.desc+'</div><div class="dialog-body">'+d.body.map(function(l){return '<div class="line"><span class="speaker">'+l.s+':</span>'+l.t+'</div>'}).join('')+'</div><div class="dialog-actions"><button class="btn sm ghost" onclick="toggleLearned(\''+d.id+'\');renderReviewDialogs();renderDialogs();">移出复习</button><a class="btn sm ghost" href="#" onclick="return false">再读一遍</a></div></div>';
   }).join('');
