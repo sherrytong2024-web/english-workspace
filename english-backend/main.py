@@ -417,37 +417,90 @@ def daily_recommend():
     return result
 
 
+# ==================== 随机鼓励语 ====================
+@app.get("/api/motivation")
+def random_motivation():
+    """返回随机英语学习鼓励语（内置 50+ 条）"""
+    quotes = [
+        {"text": "The limits of my language are the limits of my world.", "author": "Ludwig Wittgenstein"},
+        {"text": "Language is the road map of a culture. It tells you where its people come from and where they are going.", "author": "Rita Mae Brown"},
+        {"text": "To have another language is to possess a second soul.", "author": "Charlemagne"},
+        {"text": "One language sets you in a corridor for life. Two languages open every door along the way.", "author": "Frank Smith"},
+        {"text": "Learning another language is not only learning different words for the same things, but learning another way to think about things.", "author": "Flora Lewis"},
+        {"text": "A different language is a different vision of life.", "author": "Federico Fellini"},
+        {"text": "You can never understand one language until you understand at least two.", "author": "Geoffrey Willans"},
+        {"text": "Language is wine upon the lips.", "author": "Virginia Woolf"},
+        {"text": "Speak a new language so that the world will be a new world.", "author": "Rumi"},
+        {"text": "The joy of learning a new language is discovering a new way to laugh.", "author": "Unknown"},
+        {"text": "Every new word is a step toward a bigger world.", "author": "Anonymous"},
+        {"text": "Small daily improvements are the key to staggering long-term results.", "author": "Robin Sharma"},
+        {"text": "Success is the sum of small efforts, repeated day in and day out.", "author": "Robert Collier"},
+        {"text": "Don't watch the clock; do what it does. Keep going.", "author": "Sam Levenson"},
+        {"text": "It does not matter how slowly you go as long as you do not stop.", "author": "Confucius"},
+        {"text": "The secret of getting ahead is getting started.", "author": "Mark Twain"},
+        {"text": "Believe you can and you are halfway there.", "author": "Theodore Roosevelt"},
+        {"text": "The future belongs to those who believe in the beauty of their dreams.", "author": "Eleanor Roosevelt"},
+        {"text": "Act as if what you do makes a difference. It does.", "author": "William James"},
+        {"text": "The only way to do great work is to love what you do.", "author": "Steve Jobs"},
+        {"text": "You are never too old to set another goal or to dream a new dream.", "author": "C.S. Lewis"},
+        {"text": "The difference between ordinary and extraordinary is that little extra.", "author": "Jimmy Johnson"},
+        {"text": "Reading is to the mind what exercise is to the body.", "author": "Joseph Addison"},
+        {"text": "Today a reader, tomorrow a leader.", "author": "Margaret Fuller"},
+        {"text": "Knowledge is power. Information is liberating.", "author": "Kofi Annan"},
+        {"text": "An investment in knowledge pays the best interest.", "author": "Benjamin Franklin"},
+        {"text": "The beautiful thing about learning is that no one can take it away from you.", "author": "B.B. King"},
+        {"text": "Education is not the filling of a pail, but the lighting of a fire.", "author": "W.B. Yeats"},
+        {"text": "Live as if you were to die tomorrow. Learn as if you were to live forever.", "author": "Mahatma Gandhi"},
+        {"text": "Tell me and I forget. Teach me and I remember. Involve me and I learn.", "author": "Benjamin Franklin"},
+        {"text": "In learning you will teach, and in teaching you will learn.", "author": "Phil Collins"},
+        {"text": "The more that you read, the more things you will know. The more that you learn, the more places you will go.", "author": "Dr. Seuss"},
+        {"text": "I am always ready to learn although I do not always like being taught.", "author": "Winston Churchill"},
+        {"text": "Anyone who stops learning is old, whether at twenty or eighty.", "author": "Henry Ford"},
+        {"text": "Develop a passion for learning. If you do, you will never cease to grow.", "author": "Anthony J. D'Angelo"},
+        {"text": "Learning never exhausts the mind.", "author": "Leonardo da Vinci"},
+        {"text": "Your English doesn't have to be perfect — it just has to be used.", "author": "Anonymous"},
+        {"text": "Mistakes are proof that you are trying.", "author": "Unknown"},
+        {"text": "Practice makes progress, not perfect.", "author": "Anonymous"},
+        {"text": "Every expert was once a beginner.", "author": "Helen Hayes"},
+        {"text": "Be brave enough to start a conversation in English.", "author": "Anonymous"},
+        {"text": "The best time to start learning was yesterday. The next best time is now.", "author": "Chinese Proverb"},
+        {"text": "Learning English opens doors that you didn't even know existed.", "author": "Anonymous"},
+        {"text": "Words are our most inexhaustible source of magic.", "author": "J.K. Rowling"},
+        {"text": "Language is the blood of the soul into which thoughts run and out of which they grow.", "author": "Oliver Wendell Holmes"},
+        {"text": "With languages, you are at home anywhere.", "author": "Edmund de Waal"},
+        {"text": "English is not a measure of intelligence — it is a tool for connection.", "author": "Anonymous"},
+        {"text": "A word after a word after a word is power.", "author": "Margaret Atwood"},
+        {"text": "Communication works for those who work at it.", "author": "John Powell"},
+        {"text": "Strive for progress, not perfection.", "author": "Unknown"},
+    ]
+    import random
+    return random.choice(quotes)
+
+
 # ==================== 词源 / 对话源选择 ====================
 @app.get("/api/sources")
 def list_sources():
     """列出可选的词源和对话源（供前端切换）"""
     return {
         "word_sources": [
-            {"id": "builtin", "name": "内置词库", "desc": "117 个金融/职场/日常英语词汇，已预装", "level": "B1-C1", "default": True},
-            {"id": "oxford3000", "name": "Oxford 3000", "desc": "牛津核心 3000 词汇表，覆盖日常与学术", "level": "A1-B2"},
-            {"id": "academic", "name": "Academic Word List", "desc": "学术词汇表（AWL），570 个高频学术词", "level": "B2-C1"},
-            {"id": "business-vocab", "name": "商务英语核心", "desc": "投行/咨询/审计场景高频词汇", "level": "B2-C1"},
-            {"id": "gre-essential", "name": "GRE 核心词汇", "desc": "GRE 高频 500 词，适合研究生阅读", "level": "C1-C2"},
-            {"id": "ielts-academic", "name": "雅思学术词汇", "desc": "雅思写作与阅读高频词汇", "level": "B1-C1"},
-            {"id": "toefl-essential", "name": "托福核心词汇", "desc": "托福考试高频 500 词", "level": "B1-C1"},
-            {"id": "cfa-glossary", "name": "CFA 术语表", "desc": "CFA 一级/二级金融英语术语", "level": "C1"},
-            {"id": "bloomberg-terms", "name": "Bloomberg 市场术语", "desc": "金融市场报道常用术语", "level": "B2-C1"},
-            {"id": "free-dict-api", "name": "Free Dictionary API", "desc": "在线词典 API，含发音与例句（需网络）", "level": "A1-C2"},
+            {"id": "builtin", "name": "内置词库", "desc": "117个金融/职场/日常英语词汇", "level": "B1-C1", "available": True},
+            {"id": "oxford3000", "name": "Oxford 3000", "desc": "牛津核心3000词汇表", "level": "A1-B2", "available": False},
+            {"id": "academic", "name": "Academic Word List", "desc": "学术词汇表(AWL) 570个高频学术词", "level": "B2-C1", "available": False},
+            {"id": "business-vocab", "name": "商务英语核心", "desc": "投行/咨询/审计场景高频词汇", "level": "B2-C1", "available": False},
+            {"id": "gre-essential", "name": "GRE核心词汇", "desc": "GRE高频500词", "level": "C1-C2", "available": False},
+            {"id": "ielts-academic", "name": "雅思学术词汇", "desc": "雅思写作与阅读高频词", "level": "B1-C1", "available": False},
+            {"id": "toefl-essential", "name": "托福核心词汇", "desc": "托福考试高频500词", "level": "B1-C1", "available": False},
+            {"id": "cfa-glossary", "name": "CFA术语表", "desc": "CFA一级/二级金融英语术语", "level": "C1", "available": False},
+            {"id": "bloomberg-terms", "name": "Bloomberg市场术语", "desc": "金融市场报道常用术语", "level": "B2-C1", "available": False},
+            {"id": "free-dict-api", "name": "Free Dictionary API", "desc": "在线词典查词(需网络)", "level": "A1-C2", "available": True},
         ],
         "dialogue_sources": [
-            {"id": "builtin", "name": "内置对话库", "desc": "10 段金融面试/职场商务/日常对话，分 6 个阶段", "level": "A2-B2", "default": True},
-            {"id": "job-interview", "name": "外企面试场景", "desc": "投行/咨询/四大面试常见问答", "level": "B2-C1"},
-            {"id": "business-meeting", "name": "商务会议", "desc": "英文会议发言、汇报、谈判场景", "level": "B2-C1"},
-            {"id": "email-writing", "name": "商务邮件写作", "desc": "英文邮件模板与常见表达", "level": "B1-B2"},
-            {"id": "presentation", "name": "英文演讲与汇报", "desc": "项目汇报、路演、学术报告场景", "level": "B2-C1"},
-            {"id": "networking", "name": "职场社交", "desc": "商务社交、酒会闲聊、LinkedIn 表达", "level": "B1-B2"},
-            {"id": "negotiation", "name": "商务谈判", "desc": "价格谈判、合同条款协商场景", "level": "C1"},
-            {"id": "client-call", "name": "客户电话/视频会议", "desc": "英文电话会议与客户沟通场景", "level": "B2"},
-            {"id": "daily-life", "name": "海外生活", "desc": "租房、就医、出行等海外日常对话", "level": "A2-B1"},
-            {"id": "travel", "name": "商务出差", "desc": "机场、酒店、餐厅等出差场景", "level": "A2-B1"},
+            {"id": "builtin", "name": "内置对话库", "desc": "10段分场景对话(��融面试/职场/日常)", "level": "A2-B2", "available": True},
+            {"id": "job-interview", "name": "外企面试", "desc": "投行/咨询面试场景", "level": "B2-C1", "available": False},
+            {"id": "business-meeting", "name": "商务会议", "desc": "英文会议发言与汇报", "level": "B2-C1", "available": False},
         ],
         "active": {"word": "builtin", "dialogue": "builtin"},
-        "note": "切换词源/对话源功能开发中。当前使用内置源（builtin），后续可用 ?source=xxx 参数切换。"
+        "note": "available:true 表示已接入数据。每日推荐博客/歌曲不受此限制。"
     }
 
 

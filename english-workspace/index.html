@@ -383,8 +383,11 @@ tr:hover td{background:#f9fafb}
         </div>
       </div>
       <div class="grid-3" style="margin-bottom:20px">
-        <div class="stat-box"><div class="label">本月学习天数</div><div class="value" id="ov-month-days">0</div></div>
-        <div class="stat-box"><div class="label">本月学习活动</div><div class="value" id="ov-month-acts">0</div></div>
+        <div class="stat-box" style="grid-column: span 2" id="ov-motivation-box">
+          <div class="label">今日一句</div>
+          <div style="font-size:15px;line-height:1.6;color:var(--text);font-style:italic" id="ov-motivation-text">加载中...</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:6px" id="ov-motivation-author"></div>
+        </div>
         <div class="stat-box"><div class="label">连续学习</div><div class="value" id="ov-streak">0</div><div class="delta">天</div></div>
       </div>
       <div class="card">
@@ -1369,15 +1372,13 @@ function renderOverview(){
   $('#ov-cal-title').textContent = y + '年' + months[m];
   $('#overview-month-label').textContent = y + ' ' + months[m];
 
-  // 统计本月
-  var prefix = y + '-' + String(m+1).padStart(2,'0');
-  var monthDays = new Set();
-  var monthActs = 0;
-  state.log.forEach(function(l){
-    if(l.t.startsWith(prefix)){monthDays.add(l.t.slice(0,10));monthActs++;}
-  });
-  $('#ov-month-days').textContent = monthDays.size;
-  $('#ov-month-acts').textContent = monthActs;
+  // 鼓励语（首次或无缓存时从后端获取）
+  if(!window._motivation){
+    API.get('/api/motivation').then(function(q){ window._motivation=q; $('#ov-motivation-text').textContent=q.text||''; $('#ov-motivation-author').textContent = q.author ? '— ' + q.author : ''; }).catch(function(){});
+  } else {
+    $('#ov-motivation-text').textContent = window._motivation.text||'';
+    $('#ov-motivation-author').textContent = window._motivation.author ? '— ' + window._motivation.author : '';
+  }
 
   // 连续学习天数
   var streak = 0;
@@ -1429,6 +1430,7 @@ function showDayDetail(ds){
 }
 function overviewPrev(){overviewMonth--;if(overviewMonth<0){overviewMonth=11;overviewYear--;}renderOverview();}
 function overviewNext(){overviewMonth++;if(overviewMonth>11){overviewMonth=0;overviewYear++;}renderOverview();}
+function refreshMotivation(){window._motivation=null;renderOverview();toast('已换一句')}
 
 // ===== 每日对话推荐 =====
 function renderDailyDialogs(){
