@@ -321,7 +321,11 @@ def admin_page():
 
 
 # ==================== 同源托管前端（必须放在所有 /api 路由之后） ====================
-FRONTEND_DIR = os.path.join(os.path.dirname(__file__), "..", "english-workspace")
+# Docker 镜像里前端在 /app/frontend/，本地开发时回退到 ../english-workspace
+_backend_dir = os.path.dirname(os.path.abspath(__file__))
+_docker_frontend = os.path.join(_backend_dir, "..", "frontend")
+_local_frontend = os.path.join(_backend_dir, "..", "english-workspace")
+FRONTEND_DIR = _docker_frontend if os.path.isdir(_docker_frontend) else _local_frontend
 
 
 @app.get("/{full_path:path}")
