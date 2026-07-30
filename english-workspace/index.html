@@ -1185,7 +1185,7 @@ function renderDialogs(){
           '<span class="tag '+(catCls[d.cat]||'pro')+'">'+(catName[d.cat]||d.cat)+'</span>'+
           '<span>难度: '+d.level+'</span>'+
           (isLearned?'<span class="badge">已学</span>':'<span class="badge new" style="background:var(--primary)">待学</span>')+
-          '<span class="title">'+cleanScene(d.scene)+'</span></div>'+
+          '<span class="title">'+d.scene+'</span></div>'+
         '<div style="font-size:13px;color:var(--muted);margin-bottom:8px">'+d.desc+'</div>'+
         '<div class="dialog-body" id="db-'+d.id+'" style="display:none">'+d.body.map(function(l){return '<div class="line"><span class="speaker">'+l.s+':</span>'+l.t+'</div>';}).join('')+'</div>'+
         '<div style="font-size:12px;color:var(--muted)">关键表达: '+d.keywords.map(function(k){return '<span class="tag pro" style="margin-right:4px">'+k+'</span>';}).join('')+'</div>'+
@@ -1468,7 +1468,7 @@ function renderDailyDialogs(){
   var catCls = {finance:'fin',biz:'biz',daily:'daily',travel:'travel'};
   $('#daily-dialog-list').innerHTML = dialogs.length ? dialogs.map(function(d){
     var isLearned = learned.indexOf(d.id) >= 0;
-    return '<div class="dialog-item" style="margin-bottom:8px"><div class="dialog-meta"><span class="tag '+catCls[d.cat]+'">'+catName[d.cat]+'</span><span>难度: '+d.level+'</span>'+(isLearned?'<span class="badge">已学</span>':'<span class="badge new">今日推荐</span>')+'<span class="title">'+cleanScene(d.scene)+'</span></div><div class="dialog-body" style="max-height:120px">'+d.body.map(function(l){return '<div class="line"><span class="speaker">'+l.s+':</span>'+l.t+'</div>'}).join('')+'</div><div class="dialog-actions"><button class="btn sm '+(isLearned?'outline':'')+'" onclick="toggleLearned(\''+d.id+'\');renderDailyDialogs();renderDialogs();">'+(isLearned?'取消已学':'学完标记')+'</button></div></div>';
+    return '<div class="dialog-item" style="margin-bottom:8px"><div class="dialog-meta"><span class="tag '+catCls[d.cat]+'">'+catName[d.cat]+'</span><span>难度: '+d.level+'</span>'+(isLearned?'<span class="badge">已学</span>':'<span class="badge new">今日推荐</span>')+'<span class="title">'+d.scene+'</span></div><div class="dialog-body" style="max-height:120px">'+d.body.map(function(l){return '<div class="line"><span class="speaker">'+l.s+':</span>'+l.t+'</div>'}).join('')+'</div><div class="dialog-actions"><button class="btn sm '+(isLearned?'outline':'')+'" onclick="toggleLearned(\''+d.id+'\');renderDailyDialogs();renderDialogs();">'+(isLearned?'取消已学':'学完标记')+'</button></div></div>';
   }).join('') : '<div class="empty">当前分类暂无对话，请调整设置</div>';
 }
 
@@ -1501,7 +1501,7 @@ function renderReviewDialogs(){
   }
   var list = state.allDialogues.filter(function(d){return learned.indexOf(d.id)>=0});
   document.getElementById('review-dialog-list').innerHTML = list.map(function(d){
-    return '<div class="dialog-item"><div class="dialog-meta"><span class="tag '+catCls[d.cat]+'">'+catName[d.cat]+'</span><span>难度: '+d.level+'</span><span class="badge">已学</span><span class="title">'+cleanScene(d.scene)+'</span></div><div style="font-size:13px;color:var(--muted);margin-bottom:8px">'+d.desc+'</div><div class="dialog-body">'+d.body.map(function(l){return '<div class="line"><span class="speaker">'+l.s+':</span>'+l.t+'</div>'}).join('')+'</div><div class="dialog-actions"><button class="btn sm ghost" onclick="toggleLearned(\''+d.id+'\');renderReviewDialogs();renderDialogs();">移出复习</button><a class="btn sm ghost" href="#" onclick="return false">再读一遍</a></div></div>';
+    return '<div class="dialog-item"><div class="dialog-meta"><span class="tag '+catCls[d.cat]+'">'+catName[d.cat]+'</span><span>难度: '+d.level+'</span><span class="badge">已学</span><span class="title">'+d.scene+'</span></div><div style="font-size:13px;color:var(--muted);margin-bottom:8px">'+d.desc+'</div><div class="dialog-body">'+d.body.map(function(l){return '<div class="line"><span class="speaker">'+l.s+':</span>'+l.t+'</div>'}).join('')+'</div><div class="dialog-actions"><button class="btn sm ghost" onclick="toggleLearned(\''+d.id+'\');renderReviewDialogs();renderDialogs();">移出复习</button><a class="btn sm ghost" href="#" onclick="return false">再读一遍</a></div></div>';
   }).join('');
 }
 
