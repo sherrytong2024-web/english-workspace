@@ -1052,7 +1052,6 @@ function renderDailyWords(){
   const allWords = state.dailyWords.flatMap(g => g.words);
   const doneCount = allWords.filter(w => w.done).length;
   const total = allWords.length;
-  $('#daily-word-count').textContent = doneCount + '/' + total;
   $('#daily-word-progress').style.width = (total ? doneCount/total*100 : 0) + '%';
 
   var catMap = {finance:"fin",professional:"pro",daily:"daily",travel:"travel",academic:"pro"};
