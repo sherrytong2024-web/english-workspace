@@ -3,11 +3,12 @@ services:
     name: english-workspace
     runtime: docker
     plan: free
-    rootDir: english-backend
+    rootDir: .
+    dockerfilePath: ./Dockerfile
     healthCheckPath: /api/stats
     envVars:
       - key: DATABASE_URL
         sync: false
       # 说明：DATABASE_URL 留空则使用本地 SQLite（云端重启会清空）。
       # 要持久化，请在 Render 后台填 Neon 免费 Postgres 的连接串。
-      # 用 Docker runtime 自锁 Python 3.12，避免 pydantic-core 编译。
+      # Docker runtime 自锁 Python 3.12，避开 pydantic-core 在 3.14 缺失 wheel。
