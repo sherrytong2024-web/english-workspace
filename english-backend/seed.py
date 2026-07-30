@@ -171,8 +171,8 @@ def run_seed():
             return
         print(f"[seed] words={len(data.get('words',[]))} dialogues={len(data.get('dialogues',[]))} resources={len(data.get('resources',[]))}")
         seed_words(db, data.get("words", []))
-        seed_dialogues(db, data.get("dialogues", []))
         seed_resources(db, data.get("resources", []))
+        # 对话不再自动播种（从 PDF 导入/管理后台添加）
         print("[seed] done")
     finally:
         db.close()
