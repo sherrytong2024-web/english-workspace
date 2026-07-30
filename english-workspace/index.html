@@ -470,7 +470,7 @@ async function bootstrap(){
     }
     const prog = await API.get('/api/progress/' + USER_ID);
     if(prog){
-      if(Array.isArray(prog.mastered_words)) state.reviewState.mastered = prog.mastered_words;
+      state.reviewState.mastered = Array.isArray(prog.mastered_words) ? prog.mastered_words : (state.reviewState.mastered || []);
       if(Array.isArray(prog.completed_daily_words)) state.completedDailyWords = prog.completed_daily_words;
       if(Array.isArray(prog.learned_dialogues)) state.learnedDialogs = prog.learnedDialogues;
       if(Array.isArray(prog.favorites)) state.favorites = prog.favorites;
@@ -847,7 +847,7 @@ let state = {
 function sanitizeState(){
   const arr = v => Array.isArray(v) ? v : [];
   state.words = arr(state.words);
-  state.learnedDialogs = arr(state.learnedDialogs);
+  state.learnedDialogs = Array.isArray(state.learnedDialogs) ? state.learnedDialogs : [];
   state.favorites = arr(state.favorites);
   state.log = arr(state.log);
   state.completedDailyWords = arr(state.completedDailyWords);
@@ -1179,7 +1179,7 @@ function renderDialogs(){
   var stageColors = ['#e0f2fe','#fef3c7','#d1fae5','#ede9fe','#fce7f3','#e0e7ff','#ffedd5','#dcfce7','#f3e8ff','#fce4ec'];
   var catName={finance:'金融职场',biz:'商业场景',daily:'日常',travel:'旅游'};
   var catCls={finance:'fin',biz:'biz',daily:'daily',travel:'travel'};
-  var learned=state.learnedDialogs;
+  var learned = state.learnedDialogs || [];
   var html='<div style="margin-bottom:12px;font-size:12px;color:var(--muted)">全部对话 · ' + dynamicStages.length + ' 个场景 · ' + filtered.length + ' 段</div>';
   for(var si=0;si<dynamicStages.length;si++){
     var stg = dynamicStages[si];
@@ -1474,7 +1474,7 @@ function renderDailyDialogs(){
   dialogs = dialogs.filter(function(d){if(seen[d.id])return false;seen[d.id]=true;return true});
 
   $('#daily-dialog-count').textContent = dialogs.length;
-  var learned = state.learnedDialogs;
+  var learned = state.learnedDialogs || [];
   var catName = {finance:'金融职场',biz:'商业会议',daily:'日常',travel:'旅游'};
   var catCls = {finance:'fin',biz:'biz',daily:'daily',travel:'travel'};
   $('#daily-dialog-list').innerHTML = dialogs.length ? dialogs.map(function(d){
@@ -1502,7 +1502,7 @@ function setReviewTab(tab){
   if(tab==='word')renderReview();
 }
 function renderReviewDialogs(){
-  var learned = state.learnedDialogs;
+  var learned = state.learnedDialogs || [];
   document.getElementById('rtab-dialog-count').textContent = learned.length;
   var catName = {finance:'金融职场',biz:'商业会议',daily:'日常',travel:'旅游'};
   var catCls = {finance:'fin',biz:'biz',daily:'daily',travel:'travel'};
