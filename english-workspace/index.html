@@ -1431,8 +1431,13 @@ function renderReviewDialogs(){
 
 // ===== 复习 =====
 function renderReview(){
-  const unmastered=state.words.filter(w=>!state.reviewState.mastered.includes(w.word));
-  if(!unmastered.length){$('#review-area').innerHTML='<div class="card"><div class="empty">所有单词已掌握 🎉 点击"标记掌握"可重新复习</div></div>';return}
+  // 只复习用户实际完成过的每日单词
+  const completedWords = [...new Set(state.completedDailyWords.map(k => {
+    const i = k.indexOf(':');
+    return i >= 0 ? k.slice(i+1) : k;
+  }))];
+  const unmastered = state.words.filter(w => completedWords.includes(w.word) && !state.reviewState.mastered.includes(w.word));
+  if(!unmastered.length){$('#review-area').innerHTML='<div class="card"><div class="empty">暂无待复习的单词。先去单词本完成一些每日单词吧</div></div>';return}
   const idx=state.reviewState.idx%unmastered.length;
   const w=unmastered[idx];
   $('#review-area').innerHTML=`<div class="card">
@@ -1450,8 +1455,8 @@ function renderReview(){
       <button class="btn" onclick="markMasteredCard('${w.word.replace(/'/g,"\\'")}')">已掌握</button>
       <button class="btn outline" onclick="nextCard()">下一个</button>
     </div>
-    <div class="progress-bar" style="margin-top:20px"><div class="fill" style="width:${state.reviewState.mastered.length/state.words.length*100}%"></div></div>
-    <div style="text-align:center;color:var(--muted);font-size:12px;margin-top:6px">已掌握 ${state.reviewState.mastered.length} / ${state.words.length}</div>
+    <div class="progress-bar" style="margin-top:20px"><div class="fill" style="width:${state.reviewState.mastered.length/Math.max(1,state.reviewState.mastered.length+completedWords.length)*100}%"></div></div>
+    <div style="text-align:center;color:var(--muted);font-size:12px;margin-top:6px">已掌握 ${state.reviewState.mastered.length} / ${completedWords.length} 个已学单词</div>
   </div>`;
 }
 function flipCard(){

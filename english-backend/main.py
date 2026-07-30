@@ -314,12 +314,21 @@ def stats(db: Session = Depends(get_db)):
 # ==================== 每日推荐（RSS 博客 + iTunes 歌曲） ====================
 _daily_cache = {}
 
-# 英文学习 RSS 源列表
+# 英文学习 + 商业财经 RSS 源列表
 RSS_SOURCES = [
+    # 英语学习
     {"name": "BBC Learning English", "url": "https://feeds.bbci.co.uk/learningenglish/rss.xml"},
     {"name": "VOA Learning English", "url": "https://learningenglish.voanews.com/api/zq$omekviwquq"},
     {"name": "Breaking News English", "url": "https://feeds.feedburner.com/breakingnewsenglish"},
     {"name": "EnglishClub", "url": "https://www.englishclub.com/feed/"},
+    # 商业财经
+    {"name": "BBC Business", "url": "https://feeds.bbci.co.uk/news/business/rss.xml"},
+    {"name": "NPR Business", "url": "https://feeds.npr.org/1006/rss.xml"},
+    {"name": "Marketplace", "url": "https://www.marketplace.org/feed/"},
+    {"name": "Investopedia", "url": "https://www.investopedia.com/feedbuilder/feed/getfeed?feedName=rss_headline"},
+    # 科技/创新（英语）
+    {"name": "BBC Technology", "url": "https://feeds.bbci.co.uk/news/technology/rss.xml"},
+    {"name": "NPR Technology", "url": "https://feeds.npr.org/1019/rss.xml"},
 ]
 
 # iTunes 搜索关键词池（每次随机选 2 个组合）
@@ -406,6 +415,40 @@ def daily_recommend():
     _daily_cache.clear()
     _daily_cache[today] = result
     return result
+
+
+# ==================== 词源 / 对话源选择 ====================
+@app.get("/api/sources")
+def list_sources():
+    """列出可选的词源和对话源（供前端切换）"""
+    return {
+        "word_sources": [
+            {"id": "builtin", "name": "内置词库", "desc": "117 个金融/职场/日常英语词汇，已预装", "level": "B1-C1", "default": True},
+            {"id": "oxford3000", "name": "Oxford 3000", "desc": "牛津核心 3000 词汇表，覆盖日常与学术", "level": "A1-B2"},
+            {"id": "academic", "name": "Academic Word List", "desc": "学术词汇表（AWL），570 个高频学术词", "level": "B2-C1"},
+            {"id": "business-vocab", "name": "商务英语核心", "desc": "投行/咨询/审计场景高频词汇", "level": "B2-C1"},
+            {"id": "gre-essential", "name": "GRE 核心词汇", "desc": "GRE 高频 500 词，适合研究生阅读", "level": "C1-C2"},
+            {"id": "ielts-academic", "name": "雅思学术词汇", "desc": "雅思写作与阅读高频词汇", "level": "B1-C1"},
+            {"id": "toefl-essential", "name": "托福核心词汇", "desc": "托福考试高频 500 词", "level": "B1-C1"},
+            {"id": "cfa-glossary", "name": "CFA 术语表", "desc": "CFA 一级/二级金融英语术语", "level": "C1"},
+            {"id": "bloomberg-terms", "name": "Bloomberg 市场术语", "desc": "金融市场报道常用术语", "level": "B2-C1"},
+            {"id": "free-dict-api", "name": "Free Dictionary API", "desc": "在线词典 API，含发音与例句（需网络）", "level": "A1-C2"},
+        ],
+        "dialogue_sources": [
+            {"id": "builtin", "name": "内置对话库", "desc": "10 段金融面试/职场商务/日常对话，分 6 个阶段", "level": "A2-B2", "default": True},
+            {"id": "job-interview", "name": "外企面试场景", "desc": "投行/咨询/四大面试常见问答", "level": "B2-C1"},
+            {"id": "business-meeting", "name": "商务会议", "desc": "英文会议发言、汇报、谈判场景", "level": "B2-C1"},
+            {"id": "email-writing", "name": "商务邮件写作", "desc": "英文邮件模板与常见表达", "level": "B1-B2"},
+            {"id": "presentation", "name": "英文演讲与汇报", "desc": "项目汇报、路演、学术报告场景", "level": "B2-C1"},
+            {"id": "networking", "name": "职场社交", "desc": "商务社交、酒会闲聊、LinkedIn 表达", "level": "B1-B2"},
+            {"id": "negotiation", "name": "商务谈判", "desc": "价格谈判、合同条款协商场景", "level": "C1"},
+            {"id": "client-call", "name": "客户电话/视频会议", "desc": "英文电话会议与客户沟通场景", "level": "B2"},
+            {"id": "daily-life", "name": "海外生活", "desc": "租房、就医、出行等海外日常对话", "level": "A2-B1"},
+            {"id": "travel", "name": "商务出差", "desc": "机场、酒店、餐厅等出差场景", "level": "A2-B1"},
+        ],
+        "active": {"word": "builtin", "dialogue": "builtin"},
+        "note": "切换词源/对话源功能开发中。当前使用内置源（builtin），后续可用 ?source=xxx 参数切换。"
+    }
 
 
 # ==================== 管理后台 ====================
