@@ -210,7 +210,7 @@ tr:hover td{background:#f9fafb}
 
       <div class="card" id="daily-words-card">
         <div class="card-title">
-          <span>今日单词推荐 (<span id="daily-word-count">0</span>/0 已完成)</span>
+          <span>今日单词（已完成 <span id="daily-word-count">0</span>/0）</span>
           <div>
             <button class="btn sm ghost" onclick="logDailyWords()" style="margin-right:6px">全标记</button>
             <button class="btn sm ghost" onclick="navigate('review')">去复习</button>
@@ -266,7 +266,7 @@ tr:hover td{background:#f9fafb}
 
       <div class="card" id="daily-dialog-card">
         <div class="card-title">
-          <span>今日对话推荐 (<span id="daily-dialog-count">0</span> 段)</span>
+          <span>今日对话（<span id="daily-dialog-count">0</span> 段）</span>
           <div style="display:flex;gap:8px;align-items:center">
             <label style="margin:0;font-size:12px">每天</label>
             <select id="dd-count" style="width:60px;padding:4px 6px" onchange="saveDialogPrefs()">
@@ -361,7 +361,7 @@ tr:hover td{background:#f9fafb}
       </div>
       <div style="display:flex;gap:8px;margin-bottom:16px">
         <button class="btn outline sm" onclick="setReviewTab('word')" id="rtab-word">单词复习</button>
-        <button class="btn outline sm" onclick="setReviewTab('dialog')" id="rtab-dialog">对话复习 (<span id="rtab-dialog-count">0</span>)</button>
+        <button class="btn outline sm" onclick="setReviewTab('dialog')" id="rtab-dialog">对话复习（<span id="rtab-dialog-count">0</span> 段）</button>
       </div>
       <div id="review-word-area">
         <div class="page-header" style="margin-bottom:12px"><div><h3 style="font-size:18px">单词复习</h3></div></div>
