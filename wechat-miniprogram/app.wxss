@@ -25,11 +25,18 @@ page {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 12rpx;
   margin-bottom: 20rpx;
   padding: 0 4rpx;
 }
+.page-header > view:first-child {
+  flex: 1;
+  min-width: 0;
+  word-break: break-all;
+}
 .page-header h2 { font-size: 40rpx; font-weight: 700; margin: 0; }
-.sub { font-size: 24rpx; color: #64748b; margin-top: 4rpx; }
+.sub { font-size: 24rpx; color: #64748b; margin-top: 4rpx; word-break: break-all; }
 
 /* ===== 按钮 ===== */
 .btn {

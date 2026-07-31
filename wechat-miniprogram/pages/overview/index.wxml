@@ -5,9 +5,9 @@
       <view class="sub">按月查看学习日历，掌握每日进度</view>
     </view>
     <view class="row">
-      <button class="btn outline sm" bindtap="prevMonth">\u25c0</button>
+      <button class="btn outline sm" bindtap="prevMonth">◀</button>
       <text style="font-weight:600;font-size:32rpx;padding:0 20rpx">{{monthLabel}}</text>
-      <button class="btn outline sm" bindtap="nextMonth">\u25b6</button>
+      <button class="btn outline sm" bindtap="nextMonth">▶</button>
     </view>
   </view>
 
