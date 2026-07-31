@@ -24,7 +24,6 @@
     <block wx:for="{{dailyDialogs}}" wx:key="id">
       <view class="dialog-item">
         <view class="dialog-meta">
-          <text class="tag {{item.catCls}}">{{item.catName}}</text>
           <text wx:if="{{item.learned}}" class="badge">已学</text>
           <text wx:else class="badge new">今日推荐</text>
           <text class="title">{{item.scene}}</text>
@@ -54,12 +53,10 @@
       <block wx:for="{{stg.dialogues}}" wx:for-item="d" wx:key="id">
         <view class="dialog-item">
           <view class="dialog-meta">
-            <text class="tag {{d.catCls}}">{{d.catName}}</text>
             <text wx:if="{{d.learned}}" class="badge">已学</text>
             <text wx:else class="badge new">待学</text>
             <text class="title">{{d.scene}}</text>
           </view>
-          <view style="font-size:26rpx;color:#64748b;margin-bottom:10rpx">{{d.desc}}</view>
           <view wx:if="{{d.expanded}}" class="dialog-body">
             <view wx:for="{{d.body}}" wx:for-item="l" wx:key="*this" class="line">
               <text class="speaker">{{l.s}}:</text><text>{{l.t}}</text>
