@@ -1,16 +1,29 @@
 <nav-drawer title="资源中心" current="resources">
-  <view wx:for="{{cats}}" wx:key="key" class="res-block">
-    <view class="res-head" data-k="{{item.key}}" bindtap="toggleCat">
-      <text>{{item.name}}</text>
-      <text class="res-arrow">{{collapsed[item.key] ? '▸' : '▾'}}</text>
+  <view class="page-header">
+    <view>
+      <text class="h2">资源中心</text>
+      <view class="sub">官方来源 · 链接已验证 · 每日更新内容源</view>
     </view>
-    <view wx:if="{{!collapsed[item.key]}}" class="grid-3">
-      <view wx:for="{{item.list}}" wx:for-item="r" wx:key="url" class="res-card" data-url="{{r.url}}" bindtap="openLink">
-        <view class="res-name">{{r.title}}</view>
-        <view class="res-desc muted">{{r.desc || r.type || ''}}</view>
-        <view class="res-link">复制链接 ↗</view>
-      </view>
-    </view>
+    <input class="input" style="width:360rpx" placeholder="搜索资源..." bindinput="onSearch" value="{{searchText}}"></input>
   </view>
-  <view class="empty" wx:if="{{!cats.length}}">暂无资源</view>
+
+  <block wx:for="{{categories}}" wx:for-item="cat" wx:key="key">
+    <view class="res-cat-header" bindtap="toggleCat" data-key="{{cat.key}}">
+      {{cat.icon}} {{cat.label}} {{cat.collapsed ? '▸' : '▾'}}
+    </view>
+    <view wx:if="{{!cat.collapsed}}">
+      <view wx:for="{{cat.items}}" wx:for-item="r" wx:key="name" class="card resource-card">
+        <view class="src">{{r.src}} · {{r.cat}}</view>
+        <view class="name">{{r.name}}</view>
+        <view class="desc">{{r.desc}}</view>
+        <view class="row" style="justify-content:space-between;margin-top:12rpx">
+          <text class="link" bindtap="copyLink" data-url="{{r.url}}">访问 →</text>
+          <button class="btn sm {{r.faved ? 'outline' : 'ghost'}}" bindtap="toggleFav" data-name="{{r.name}}" data-url="{{r.url}}">
+            {{r.faved ? '取消收藏' : '收藏'}}
+          </button>
+        </view>
+      </view>
+      <view wx:if="{{!cat.items.length}}" class="empty">无匹配资源</view>
+    </view>
+  </block>
 </nav-drawer>

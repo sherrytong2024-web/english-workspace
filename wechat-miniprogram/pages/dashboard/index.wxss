@@ -1,16 +1,2 @@
-.stat { text-align: center; padding: 20rpx 10rpx; }
-.stat-num { font-size: 44rpx; font-weight: 700; color: #3b82f6; }
-.dw-item { display: flex; align-items: center; padding: 14rpx 0; border-bottom: 1rpx solid #f1f5f9; }
-.dw-check { width: 40rpx; height: 40rpx; border-radius: 50%; border: 2rpx solid #cbd5e1; color: #fff; text-align: center; line-height: 40rpx; margin-right: 16rpx; flex-shrink: 0; }
-.dw-check.on { background: #3b82f6; border-color: #3b82f6; }
-.dw-main { display: flex; flex-direction: column; }
-.dw-word { font-weight: 600; font-size: 30rpx; }
-.dw-meaning { font-size: 24rpx; }
-.rec-item { display: flex; gap: 16rpx; align-items: center; padding: 16rpx 0; border-bottom: 1rpx solid #f1f5f9; }
-.rec-thumb { width: 72rpx; height: 72rpx; border-radius: 12rpx; background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 36rpx; flex-shrink: 0; }
-.rec-main { flex: 1; min-width: 0; }
-.rec-title { font-weight: 600; font-size: 28rpx; }
-.rec-meta { font-size: 22rpx; }
-.log-item { display: flex; gap: 16rpx; padding: 12rpx 0; border-bottom: 1rpx solid #f1f5f9; }
-.log-time { font-size: 22rpx; width: 110rpx; flex-shrink: 0; }
-.log-text { flex: 1; font-size: 26rpx; }
+.h2 { font-size: 40rpx; font-weight: 700; }
+.path-list { font-size: 26rpx; color: #64748b; line-height: 2; }

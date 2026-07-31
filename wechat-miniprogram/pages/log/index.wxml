@@ -1,18 +1,49 @@
 <nav-drawer title="学习记录" current="log">
-  <view class="card">
-    <view class="card-title"><text>📅 按日期筛选</text></view>
-    <picker mode="date" value="{{filterDate}}" bindchange="onDateChange">
-      <view class="picker">{{filterDate || '点击选择日期'}}</view>
-    </picker>
-    <button class="btn sm outline" bindtap="resetFilter">显示全部</button>
+  <view class="page-header">
+    <view>
+      <text class="h2">学习记录</text>
+      <view class="sub">所有学习活动自动记录</view>
+    </view>
+    <button class="btn outline sm" bindtap="clearLog">清空记录</button>
+  </view>
+
+  <view class="log-stats">
+    <view class="stat-box">
+      <view class="label">总学习活动</view>
+      <view class="value">{{stats.total}}</view>
+    </view>
+    <view class="stat-box">
+      <view class="label">单词新增</view>
+      <view class="value">{{stats.words}}</view>
+    </view>
+    <view class="stat-box">
+      <view class="label">对话学习</view>
+      <view class="value">{{stats.dialogs}}</view>
+    </view>
+    <view class="stat-box">
+      <view class="label">资源收藏</view>
+      <view class="value">{{stats.favs}}</view>
+    </view>
   </view>
 
   <view class="card">
-    <view class="card-title"><text>📝 活动历史 ({{list.length}})</text></view>
-    <view wx:for="{{list}}" wx:key="t" class="log-item">
-      <text class="log-time muted">{{item.t}}</text>
-      <text class="log-text">{{item.text}}</text>
+    <view class="card-title">活动历史</view>
+    <view class="row" style="margin-bottom:16rpx">
+      <text style="font-size:24rpx">按日期筛选:</text>
+      <picker mode="date" value="{{filterDate}}" bindchange="onDateFilter">
+        <view class="input" style="width:260rpx">{{filterDate || '选择日期'}}</view>
+      </picker>
+      <button class="btn sm outline" bindtap="resetFilter">显示全部</button>
     </view>
-    <view class="empty" wx:if="{{!list.length}}">暂无记录</view>
+    <view wx:if="{{filterInfo}}" class="muted" style="font-size:22rpx;margin-bottom:10rpx">{{filterInfo}}</view>
+
+    <view wx:if="{{filteredLog.length}}">
+      <view wx:for="{{filteredLog}}" wx:key="*this" class="log-row">
+        <text>{{item.t}}</text>
+        <text class="tag {{item.cls}}">{{item.typeName}}</text>
+        <text>{{item.content}}</text>
+      </view>
+    </view>
+    <view wx:else class="empty">暂无记录</view>
   </view>
 </nav-drawer>

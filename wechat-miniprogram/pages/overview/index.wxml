@@ -1,27 +1,62 @@
 <nav-drawer title="学习概览" current="overview">
-  <view class="card">
-    <view class="cal-head">
-      <text class="cal-nav" bindtap="prevMonth">‹</text>
-      <text class="cal-title">{{year}}年{{month}}月</text>
-      <text class="cal-nav" bindtap="nextMonth">›</text>
+  <view class="page-header">
+    <view>
+      <text class="h2">学习概览</text>
+      <view class="sub">按月查看学习日历，掌握每日进度</view>
     </view>
-    <view class="cal-week">
-      <text wx:for="{{weekNames}}" wx:key="*this" class="cal-cell cal-w">{{item}}</text>
-    </view>
-    <view class="cal-grid">
-      <view wx:for="{{days}}" wx:key="ds" class="cal-cell {{item.empty ? 'empty' : ''}} {{selected === item.ds ? 'sel' : ''}}" data-ds="{{item.ds}}" bindtap="showDay">
-        <text class="cal-day" wx:if="{{!item.empty}}">{{item.day}}</text>
-        <text class="cal-dot" wx:if="{{item.count > 0}}">{{item.count}}</text>
-      </view>
+    <view class="row">
+      <button class="btn outline sm" bindtap="prevMonth">\u25c0</button>
+      <text style="font-weight:600;font-size:32rpx;padding:0 20rpx">{{monthLabel}}</text>
+      <button class="btn outline sm" bindtap="nextMonth">\u25b6</button>
     </view>
   </view>
 
-  <view class="card" wx:if="{{selected}}">
-    <view class="card-title"><text>📅 {{selected}} 活动 ({{detail.length}})</text></view>
-    <view wx:for="{{detail}}" wx:key="t" class="log-item">
-      <text class="log-time muted">{{item.t}}</text>
-      <text class="log-text">{{item.text}}</text>
+  <view class="grid-2" style="margin-bottom:20rpx">
+    <view class="stat-box" style="grid-column:span 2" bindtap="refreshMotivation">
+      <view class="label">今日一句</view>
+      <view class="quote-text">{{motivationText}}</view>
+      <view class="quote-author" wx:if="{{motivationAuthor}}">{{motivationAuthor}}</view>
     </view>
-    <view class="empty" wx:if="{{!detail.length}}">当天无活动</view>
+    <view class="stat-box">
+      <view class="label">连续学习</view>
+      <view class="value">{{streak}}</view>
+      <view class="delta">天</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">
+      <text>{{calTitle}}</text>
+      <text style="font-weight:400;font-size:24rpx;color:#64748b">点选日期查看详情</text>
+    </view>
+    <table class="calendar-table">
+      <thead>
+        <tr>
+          <th wx:for="{{weekdays}}" wx:key="*this">{{item}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr wx:for="{{calRows}}" wx:for-item="row" wx:key="*this">
+          <td wx:for="{{row}}" wx:for-item="cell" wx:key="*this"
+              style="background:{{cell.bg}};border:{{cell.border}};border-radius:8rpx;font-weight:{{cell.fw}};font-size:28rpx"
+              bindtap="{{cell.tap ? 'showDayDetail' : ''}}"
+              data-ds="{{cell.ds}}">
+            {{cell.day || ''}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </view>
+
+  <view class="card" wx:if="{{dayDetail}}" id="day-detail-card">
+    <view class="card-title">{{dayDetailTitle}}</view>
+    <view wx:if="{{dayDetailItems.length}}">
+      <view wx:for="{{dayDetailItems}}" wx:key="*this" class="log-row">
+        <text class="tag {{item.cls}}">{{item.typeName}}</text>
+        <text class="muted" style="font-size:22rpx;margin:0 10rpx">{{item.time}}</text>
+        <text>{{item.content}}</text>
+      </view>
+    </view>
+    <view wx:else class="empty">当日无记录</view>
   </view>
 </nav-drawer>

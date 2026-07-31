@@ -293,9 +293,59 @@ const RECOMMEND_POOL = [
   {type:'dialog',title:'餐厅预订与点餐',src:'内置对话',desc:'电话预订餐厅及到店点餐，含推荐与过敏说明',url:'#dialog-d8',tag:'daily',level:'B1'}
 ];;
 
+
+// ===== 资源库（网页版硬编码，所有真实官方链接）=====
+const RESOURCES = {
+  video: [
+    {src:'YouTube',name:'Bloomberg Markets and Finance',desc:'全球财经新闻、市场分析、CEO访谈，24小时直播与点播',url:'https://www.youtube.com/@BloombergMarketsFinance',cat:'finance'},
+    {src:'YouTube',name:'CNBC Television',desc:'美国主流财经电视网，覆盖美股、宏观经济、企业财报',url:'https://www.youtube.com/@CNBCtelevision',cat:'finance'},
+    {src:'YouTube',name:'Financial Times',desc:'英国《金融时报》官方频道，深度财经分析',url:'https://www.youtube.com/@FinancialTimes',cat:'finance'},
+    {src:'YouTube',name:'The Economist',desc:'《经济学人》官方视频，全球政经深度报道',url:'https://www.youtube.com/@TheEconomist',cat:'finance'},
+    {src:'YouTube',name:'BBC Learning English',desc:'BBC官方英语教学频道，分级课程、每日新闻英语',url:'https://www.youtube.com/@BBCLearningEnglish',cat:'learning'},
+    {src:'YouTube',name:'VOA Learning English',desc:'美国之音慢速英语，适合听力入门与跟读',url:'https://www.youtube.com/@VOALearningEnglish',cat:'learning'},
+    {src:'YouTube',name:'TED',desc:'TED Talks官方频道，跨学科演讲，适合高级听力和表达',url:'https://www.youtube.com/@TED',cat:'learning'},
+    {src:'YouTube',name:'BBC News',desc:'BBC新闻官方频道，英式英语标准口音',url:'https://www.youtube.com/@BBCNews',cat:'news'}
+  ],
+  podcast: [
+    {src:'NPR',name:'Planet Money',desc:'NPR王牌经济播客，用故事讲经济学，适合中高级',url:'https://www.npr.org/podcasts/510289/planet-money',cat:'finance'},
+    {src:'WSJ',name:'The Journal',desc:'《华尔街日报》��方播客，每日深度商业故事',url:'https://www.wsj.com/podcasts/the-journal',cat:'finance'},
+    {src:'Bloomberg',name:'Bloomberg Surveillance',desc:'Bloomberg早间播报，市场开盘前的深度分析',url:'https://www.bloomberg.com/audio/podcasts/bloomberg-surveillance/',cat:'finance'},
+    {src:'Bloomberg',name:'Masters in Business',desc:'Bloomberg资深主持人对话金融巨头',url:'https://www.bloomberg.com/audio/podcasts/masters-in-business/',cat:'finance'},
+    {src:'APM',name:'Marketplace',desc:'美国公共媒体财经播客，日常商业解读',url:'https://www.marketplace.org/shows/marketplace/',cat:'finance'},
+    {src:'BBC',name:'6 Minute English',desc:'BBC经典英语学习播客，6分钟一个主题',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english',cat:'learning'},
+    {src:'BBC',name:'The English We Speak',desc:'BBC地道英语口语短语，3分钟一集',url:'https://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak',cat:'learning'},
+    {src:'HBR',name:'HBR IdeaCast',desc:'《哈佛商业评论》官方播客，管理与商业思维',url:'https://hbr.org/podcasts/ideacast',cat:'biz'}
+  ],
+  dict: [
+    {src:'Oxford',name:"Oxford Learner's Dictionary",desc:'牛津高阶学习者词典，权威释义与例句',url:'https://www.oxfordlearnersdictionaries.com/',cat:'tool'},
+    {src:'Cambridge',name:'Cambridge Dictionary',desc:'剑桥词典，含英美发音、级别标注',url:'https://dictionary.cambridge.org/',cat:'tool'},
+    {src:'Merriam-Webster',name:'Merriam-Webster',desc:'美国权威词典，含每日一词',url:'https://www.merriam-webster.com/',cat:'tool'},
+    {src:'YouGlish',name:'YouGlish',desc:'在YouTube真实语境中搜索单词用法',url:'https://youglish.com/',cat:'tool'},
+    {src:'DeepL',name:'DeepL Translate',desc:'高质量翻译，辅助理解复杂句',url:'https://www.deepl.com/',cat:'tool'},
+    {src:'Grammarly',name:'Grammarly',desc:'英文写作语法检查，求职邮件必备',url:'https://www.grammarly.com/',cat:'tool'}
+  ],
+  biz: [
+    {src:'HBR',name:'Harvard Business Review',desc:'哈佛商业评论，管��与领导力文章',url:'https://hbr.org/',cat:'biz'},
+    {src:'MIT',name:'MIT Sloan Management Review',desc:'MIT斯隆管理评论，前沿管理研究',url:'https://sloanreview.mit.edu/',cat:'biz'},
+    {src:'Stanford GSB',name:'Stanford GSB Insights',desc:'斯坦福商学院观点与研究',url:'https://www.gsb.stanford.edu/insights',cat:'biz'},
+    {src:'McKinsey',name:'McKinsey Insights',desc:'麦肯锡咨询行业研究报告',url:'https://www.mckinsey.com/insights',cat:'biz'},
+    {src:'BCG',name:'BCG Perspectives',desc:'波士顿咨询集团行业洞察',url:'https://www.bcg.com/insights',cat:'biz'},
+    {src:'Wharton',name:'Wharton Knowledge',desc:'沃顿商学院商业研究内容',url:'https://knowledge.wharton.upenn.edu/',cat:'biz'}
+  ],
+  news: [
+    {src:'Reuters',name:'Reuters',desc:'路透社全球财经新闻，每日更新',url:'https://www.reuters.com/',cat:'news'},
+    {src:'Bloomberg',name:'Bloomberg',desc:'彭博财经新闻与市场数据',url:'https://www.bloomberg.com/',cat:'news'},
+    {src:'FT',name:'Financial Times',desc:'《金融时报》全��财经深度报道',url:'https://www.ft.com/',cat:'news'},
+    {src:'WSJ',name:'The Wall Street Journal',desc:'《华尔街日报》美国财经主流媒体',url:'https://www.wsj.com/',cat:'news'},
+    {src:'The Economist',name:'The Economist',desc:'《经济学人》全球政经周刊',url:'https://www.economist.com/',cat:'news'},
+    {src:'CNBC',name:'CNBC',desc:'CNBC财经新闻与市场直播',url:'https://www.cnbc.com/',cat:'news'}
+  ]
+};
+
 module.exports = {
   CATS: CATS,
   SEED_WORDS: SEED_WORDS,
   SEED_DIALOGS: SEED_DIALOGS,
-  RECOMMEND_POOL: RECOMMEND_POOL
+  RECOMMEND_POOL: RECOMMEND_POOL,
+  RESOURCES: RESOURCES
 };

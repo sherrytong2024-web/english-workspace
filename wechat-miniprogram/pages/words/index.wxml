@@ -1,51 +1,141 @@
 <nav-drawer title="单词本" current="words">
-  <view class="card">
-    <view class="card-title"><text>📅 今日单词 ({{doneCount}}/{{dailyTotal}} 已完成)</text><button class="btn sm ghost" bindtap="logDailyWords">学完标记</button></view>
-    <view wx:if="{{dailyWords.length}}">
-      <view wx:for="{{dailyWords}}" wx:key="word" class="dw-item" data-word="{{item.word}}" bindtap="toggleDailyWord">
-        <text class="dw-check {{item.done ? 'on' : ''}}">{{item.done ? '✓' : ''}}</text>
-        <view class="dw-main"><text class="dw-word">{{item.word}}</text><text class="dw-meaning muted">{{item.meaning}}</text></view>
+  <!-- 页头：词源选择 + 操作按钮 -->
+  <view class="page-header">
+    <view>
+      <text class="h2">单词本</text>
+      <view class="sub">分类管理 · 复习 · 自动记录学习历史</view>
+    </view>
+    <view class="row">
+      <button class="btn ghost" bindtap="goReview">开始复习</button>
+      <button class="btn" bindtap="showAddForm">+ 添加单词</button>
+    </view>
+  </view>
+
+  <!-- 今日单词 -->
+  <view class="card" wx:if="{{dailyGroups.length}}">
+    <view class="card-title">
+      <text>今日单词</text>
+      <view>
+        <button class="btn sm ghost" bindtap="logDailyWords">全标记</button>
+        <button class="btn sm ghost" bindtap="goReview">去复习</button>
       </view>
     </view>
-    <view class="empty" wx:else>暂无</view>
-  </view>
-
-  <view class="card">
-    <view class="card-title"><text>🔍 筛选</text></view>
-    <view class="filter-row">
-      <text class="chip {{filter === 'all' ? 'on' : ''}}" data-k="all" bindtap="setFilter">全部</text>
-      <text wx:for="{{cats}}" wx:key="key" class="chip {{filter === item.key ? 'on' : ''}}" data-k="{{item.key}}" bindtap="setFilter">{{item.name}}</text>
+    <scroll-view scroll-x="true" style="width:100%">
+      <block wx:for="{{dailyGroups}}" wx:for-item="group" wx:for-index="gi" wx:key="*this">
+        <view wx:if="{{gi > 0}}" style="text-align:center;color:#64748b;font-size:22rpx;padding:16rpx 0">第 {{gi + 1}} 组（10 个）</view>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:60rpx">✓</th>
+              <th style="min-width:200rpx">单词</th>
+              <th style="min-width:200rpx">释义</th>
+              <th>分类</th>
+              <th style="min-width:300rpx">例句</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr wx:for="{{group}}" wx:for-item="w" wx:key="word">
+              <td>
+                <checkbox checked="{{w.done}}" bindtap="toggleDailyWord" data-word="{{w.word}}"></checkbox>
+              </td>
+              <td>
+                <text style="font-weight:600">{{w.word}}</text>
+                <view wx:if="{{w.phonetic}}" style="font-size:22rpx;color:#64748b">{{w.phonetic}}</view>
+              </td>
+              <td>{{w.meaning}}</td>
+              <td>
+                <text class="tag {{w.catCls}}">{{w.catName}}</text>
+              </td>
+              <td style="font-size:24rpx;color:#64748b;max-width:400rpx;word-break:break-all">{{w.example}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </block>
+    </scroll-view>
+    <view class="progress-bar" style="margin-top:16rpx">
+      <view class="fill" style="width:{{dwProgress}}%"></view>
     </view>
-    <input class="search-input" placeholder="搜索单词或释义" value="{{search}}" bindinput="onSearch" />
+    <view style="text-align:center;margin-top:16rpx" wx:if="{{allDailyDone}}">
+      <button class="btn" bindtap="addMoreDailyWords">+ 再学 10 个</button>
+    </view>
   </view>
 
-  <view class="card">
-    <view class="card-title"><text>➕ 添加单词</text></view>
-    <input class="form-input" placeholder="单词" data-field="word" value="{{form.word}}" bindinput="onFormInput" />
-    <input class="form-input" placeholder="释义" data-field="meaning" value="{{form.meaning}}" bindinput="onFormInput" />
-    <input class="form-input" placeholder="音标(可选)" data-field="phonetic" value="{{form.phonetic}}" bindinput="onFormInput" />
-    <input class="form-input" placeholder="例句(可选)" data-field="example" value="{{form.example}}" bindinput="onFormInput" />
-    <button class="btn" bindtap="addWord">添加</button>
+  <!-- 分类筛选 -->
+  <view class="filter-bar">
+    <text wx:for="{{filterCats}}" wx:key="key"
+          class="filter-chip {{item.key === curFilter ? 'active' : ''}}"
+          bindtap="setFilter" data-key="{{item.key}}">{{item.name}}</text>
   </view>
 
+  <!-- 词库表格 -->
   <view class="card">
-    <view class="card-title"><text>📚 词库</text><text class="muted">第 {{page}}/{{totalPages}} 页</text></view>
-    <view wx:for="{{list}}" wx:key="word" class="word-row">
-      <view class="wr-top"><text class="wr-word">{{item.word}}</text><text wx:if="{{item.mastered}}" class="badge">已掌握</text></view>
-      <view class="wr-phon muted">{{item.phonetic}}</view>
-      <view class="wr-mean">{{item.meaning}}</view>
-      <view class="wr-cat"><text class="tag">{{item.catName}}</text></view>
-      <view class="wr-ex muted">{{item.example}}</view>
-      <view class="wr-act">
-        <text class="link" data-word="{{item.word}}" bindtap="delWord">删除</text>
-        <text class="link" data-word="{{item.word}}" bindtap="markMastered">{{item.mastered ? '取消掌握' : '标记掌握'}}</text>
+    <view class="card-title">
+      <text>词库 ({{filteredCount}})</text>
+      <input class="input" style="width:360rpx" placeholder="搜索单词或释义..." bindinput="onSearch" value="{{searchText}}"></input>
+    </view>
+    <scroll-view scroll-x="true" style="width:100%">
+      <table>
+        <thead>
+          <tr>
+            <th style="min-width:200rpx">单词</th>
+            <th style="min-width:180rpx">音标</th>
+            <th style="min-width:200rpx">释义</th>
+            <th>分类</th>
+            <th style="min-width:300rpx">例句</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr wx:for="{{pagedWords}}" wx:key="word">
+            <td>
+              <text style="font-weight:600">{{item.word}}</text>
+              <text wx:if="{{item.mastered}}" class="badge">已掌握</text>
+            </td>
+            <td style="color:#64748b">{{item.phonetic}}</td>
+            <td>{{item.meaning}}</td>
+            <td>
+              <text class="tag {{item.catCls}}">{{item.catName}}</text>
+            </td>
+            <td style="font-size:24rpx;color:#64748b;max-width:400rpx;word-break:break-all">{{item.example}}</td>
+            <td>
+              <button class="btn sm outline" bindtap="delWord" data-word="{{item.word}}">删除</button>
+              <button class="btn sm ghost" bindtap="markMastered" data-word="{{item.word}}">
+                {{item.mastered ? '取消掌握' : '标记掌握'}}
+              </button>
+            </td>
+          </tr>
+          <tr wx:if="{{!pagedWords.length}}">
+            <td colspan="6" class="empty">没有匹配的单词，点击右上角添加</td>
+          </tr>
+        </tbody>
+      </table>
+    </scroll-view>
+    <view wx:if="{{totalPages > 1}}" style="display:flex;justify-content:center;align-items:center;gap:16rpx;margin-top:20rpx">
+      <button class="btn sm outline" bindtap="goPage" data-p="{{curPage - 1}}" disabled="{{curPage <= 1}}">上一页</button>
+      <text class="muted">第 {{curPage}} / {{totalPages}} 页</text>
+      <button class="btn sm outline" bindtap="goPage" data-p="{{curPage + 1}}" disabled="{{curPage >= totalPages}}">下一页</button>
+    </view>
+  </view>
+
+  <!-- 添加新单词表单 -->
+  <view class="card" wx:if="{{showAddForm}}">
+    <view class="card-title">添加新单词</view>
+    <view class="grid-2">
+      <view class="form-row"><view class="form-label">单词</view><input class="input" value="{{newWord.word}}" bindinput="onNewWordField" data-field="word"></input></view>
+      <view class="form-row"><view class="form-label">音标 (可选)</view><input class="input" value="{{newWord.phonetic}}" bindinput="onNewWordField" data-field="phonetic" placeholder="/wɜːrd/"></input></view>
+      <view class="form-row"><view class="form-label">释义</view><input class="input" value="{{newWord.meaning}}" bindinput="onNewWordField" data-field="meaning"></input></view>
+      <view class="form-row">
+        <view class="form-label">分类</view>
+        <picker mode="selector" range="{{catOptions}}" range-key="name" value="{{newWord.catIdx}}" bindchange="onCatChange">
+          <view class="input">{{catOptions[newWord.catIdx].name}}</view>
+        </picker>
       </view>
+      <view class="form-row" style="grid-column:span 2"><view class="form-label">例句 (可选)</view><textarea class="input" value="{{newWord.example}}" bindinput="onNewWordField" data-field="example"></textarea></view>
+      <view class="form-row" style="grid-column:span 2"><view class="form-label">备注 (可选)</view><input class="input" value="{{newWord.note}}" bindinput="onNewWordField" data-field="note"></input></view>
     </view>
-    <view class="empty" wx:if="{{!list.length}}">没有匹配单词</view>
-    <view class="pager" wx:if="{{totalPages > 1}}">
-      <button class="btn sm outline" data-p="{{page - 1}}" bindtap="goPage" disabled="{{page <= 1}}">上一页</button>
-      <text class="muted">第 {{page}} / {{totalPages}} 页</text>
-      <button class="btn sm outline" data-p="{{page + 1}}" bindtap="goPage" disabled="{{page >= totalPages}}">下一页</button>
+    <view class="row" style="margin-top:16rpx">
+      <button class="btn" bindtap="saveWord">��存</button>
+      <button class="btn outline" bindtap="hideAddForm">取消</button>
     </view>
   </view>
 </nav-drawer>

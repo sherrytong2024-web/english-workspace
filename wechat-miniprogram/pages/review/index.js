@@ -1,61 +1,159 @@
-const app = getApp();
-const stateLib = require('../../utils/state.js');
+var app = getApp();
+var catMap = { finance: '金融职场', biz: '商业会议', daily: '日常', travel: '旅游' };
+var catClsMap = { finance: 'fin', biz: 'biz', daily: 'daily', travel: 'travel' };
+var catTagCls = { finance: 'fin', professional: 'pro', daily: 'daily', travel: 'travel', academic: 'pro' };
+var catTagName = { finance: '金融', professional: '职场', daily: '日常', travel: '旅游', academic: '学术' };
 
 Page({
-  data: { tab: 'dialog', dialogs: [], words: [], expanded: '' },
+  data: {
+    reviewTab: 'word',
+    reviewDialogCount: 0,
+    reviewDialogs: [],
+    // 闪卡
+    reviewWord: null,
+    reviewIdx: 0,
+    reviewTotal: 0,
+    totalWords: 0,
+    flipped: false,
+    reviewProgress: 0,
+    masteredCount: 0,
+    completedTotal: 0
+  },
+
+  onLoad: function () {
+    var self = this;
+    app.onReady(function () { self.render(); });
+  },
+
   onShow: function () {
-    this.state = app.state;
-    app.onReady(() => { this.state = app.state; this.render(); });
-    if (this.state.allDialogues && this.state.allDialogues.length) this.render();
-    else this.setData({ dialogs: [], words: [] });
+    if (app.state) this.render();
   },
+
   render: function () {
-    const s = this.state;
-    const all = s.allDialogues || [];
-    if (this.data.tab === 'dialog') {
-      const ds = all.filter(function (d) {
-        return (s.learnedDialogs || []).indexOf(d.id) >= 0;
-      }).map(function (d) {
-        return {
-          id: d.id, scene: d.scene,
-          body: (d.body || []).map(function (l, i) { return Object.assign({ _i: i }, l); }),
-          keywords: d.keywords || []
-        };
+    this.renderReview();
+    this.renderReviewDialogs();
+  },
+
+  /* ===== 单词闪卡 ===== */
+  renderReview: function () {
+    var s = app.state;
+    // 只复习用户实际完成过的每日��词
+    var completedWords = [];
+    (s.completedDailyWords || []).forEach(function (k) {
+      var i = k.indexOf(':');
+      var w = i >= 0 ? k.slice(i + 1) : k;
+      if (completedWords.indexOf(w) < 0) completedWords.push(w);
+    });
+
+    var mastered = s.reviewState.mastered || [];
+    var unmastered = (s.words || []).filter(function (w) {
+      return completedWords.indexOf(w.word) >= 0 && mastered.indexOf(w.word) < 0;
+    });
+
+    if (!unmastered.length) {
+      this.setData({
+        reviewWord: null,
+        reviewTotal: 0,
+        totalWords: (s.words || []).length,
+        masteredCount: mastered.length,
+        completedTotal: completedWords.length,
+        reviewProgress: 0
       });
-      this.setData({ dialogs: ds });
-    } else {
-      const ws = s.words.filter(function (w) {
-        return s.reviewState.mastered.indexOf(w.word) >= 0;
-      }).map(function (w) {
-        return { word: w.word, meaning: w.meaning, phonetic: w.phonetic };
-      });
-      this.setData({ words: ws });
+      return;
     }
+
+    var idx = (s.reviewState.idx || 0) % unmastered.length;
+    var w = unmastered[idx];
+
+    this.setData({
+      reviewWord: {
+        word: w.word,
+        phonetic: w.phonetic || '',
+        meaning: w.meaning || '',
+        example: w.example || '',
+        catCls: catTagCls[w.cat] || 'pro',
+        catName: catTagName[w.cat] || w.cat || ''
+      },
+      reviewIdx: idx,
+      reviewTotal: unmastered.length,
+      totalWords: (s.words || []).length,
+      flipped: false,
+      reviewProgress: mastered.length / Math.max(1, mastered.length + completedWords.length) * 100,
+      masteredCount: mastered.length,
+      completedTotal: completedWords.length
+    });
   },
+
+  flipCard: function () {
+    this.setData({ flipped: !this.data.flipped });
+  },
+
+  nextCard: function () {
+    app.state.reviewState.idx = (app.state.reviewState.idx || 0) + 1;
+    app.saveState();
+    this.renderReview();
+  },
+
+  prevCard: function () {
+    app.state.reviewState.idx = Math.max(0, (app.state.reviewState.idx || 0) - 1);
+    app.saveState();
+    this.renderReview();
+  },
+
+  markMasteredCard: function () {
+    var w = this.data.reviewWord;
+    if (!w) return;
+    var mastered = app.state.reviewState.mastered;
+    if (mastered.indexOf(w.word) < 0) {
+      mastered.push(w.word);
+      app.addLog('review', '复习掌���: ' + w.word);
+    }
+    app.saveState();
+    app.syncProgress();
+    this.nextCard();
+    wx.showToast({ title: '已标记掌握', icon: 'none' });
+  },
+
+  /* ===== 对话复习 ===== */
+  renderReviewDialogs: function () {
+    var s = app.state;
+    var learned = s.learnedDialogs || [];
+    this.setData({ reviewDialogCount: learned.length });
+
+    if (!learned.length) {
+      this.setData({ reviewDialogs: [] });
+      return;
+    }
+
+    var list = (s.allDialogues || []).filter(function (d) { return learned.indexOf(d.id) >= 0; });
+    this.setData({
+      reviewDialogs: list.map(function (d) {
+        return {
+          id: d.id,
+          scene: d.scene || '',
+          catName: catMap[d.cat] || d.cat || '',
+          catCls: catClsMap[d.cat] || 'pro',
+          level: d.level || '',
+          desc: d.desc || '',
+          body: d.body || []
+        };
+      })
+    });
+  },
+
+  removeFromReview: function (e) {
+    var id = e.currentTarget.dataset.id;
+    app.state.learnedDialogs = (app.state.learnedDialogs || []).filter(function (x) { return x !== id; });
+    app.saveState();
+    app.syncProgress();
+    this.renderReviewDialogs();
+    wx.showToast({ title: '已移出复习', icon: 'none' });
+  },
+
   setTab: function (e) {
-    this.setData({ tab: e.currentTarget.dataset.tab, expanded: '' });
-    this.render();
-  },
-  toggleBody: function (e) {
-    const id = e.currentTarget.dataset.id;
-    this.setData({ expanded: this.data.expanded === id ? '' : id });
-  },
-  toggleLearned: function (e) {
-    const id = e.currentTarget.dataset.id;
-    const s = this.state;
-    const idx = s.learnedDialogs.indexOf(id);
-    if (idx >= 0) s.learnedDialogs.splice(idx, 1);
-    else s.learnedDialogs.push(id);
-    app.saveState();
-    this.render();
-  },
-  markMastered: function (e) {
-    const word = e.currentTarget.dataset.word;
-    const s = this.state;
-    const idx = s.reviewState.mastered.indexOf(word);
-    if (idx >= 0) s.reviewState.mastered.splice(idx, 1);
-    else s.reviewState.mastered.push(word);
-    app.saveState();
-    this.render();
+    var tab = e.currentTarget.dataset.tab;
+    this.setData({ reviewTab: tab });
+    if (tab === 'word') this.renderReview();
+    if (tab === 'dialog') this.renderReviewDialogs();
   }
 });

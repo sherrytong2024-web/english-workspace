@@ -1,37 +1,74 @@
 <nav-drawer title="复习" current="review">
-  <view class="card">
-    <view class="tab-row">
-      <text class="tab {{tab === 'dialog' ? 'on' : ''}}" data-tab="dialog" bindtap="setTab">已学对话</text>
-      <text class="tab {{tab === 'word' ? 'on' : ''}}" data-tab="word" bindtap="setTab">已掌握单词</text>
+  <view class="page-header">
+    <view>
+      <text class="h2">复习</text>
+      <view class="sub">单词复习 · 对话回看</view>
     </view>
   </view>
 
-  <view class="card" wx:if="{{tab === 'dialog'}}">
-    <view class="card-title"><text>💬 已学对话 ({{dialogs.length}})</text></view>
-    <view wx:for="{{dialogs}}" wx:key="id" class="dialog-item">
-      <view class="d-scene">{{item.scene}}</view>
-      <view wx:if="{{expanded === item.id}}" class="d-body">
-        <view wx:for="{{item.body}}" wx:for-item="line" wx:key="_i" class="d-line">
-          <text class="d-speaker">{{line.s}}:</text><text>{{line.t}}</text>
+  <view class="row" style="margin-bottom:20rpx">
+    <button class="btn sm {{reviewTab === 'word' ? '' : 'outline'}}" bindtap="setTab" data-tab="word">单词复习</button>
+    <button class="btn sm {{reviewTab === 'dialog' ? '' : 'outline'}}" bindtap="setTab" data-tab="dialog">
+      对话复习（{{reviewDialogCount}} 段）
+    </button>
+  </view>
+
+  <!-- 单词复习（闪卡） -->
+  <view wx:if="{{reviewTab === 'word'}}">
+    <view class="card" wx:if="{{reviewWord}}">
+      <view style="font-size:24rpx;color:#64748b;margin-bottom:12rpx">
+        翻转卡片 (第 {{reviewIdx + 1}} / {{reviewTotal}} 个，共 {{totalWords}} 词)
+      </view>
+      <view class="flash-card" bindtap="flipCard">
+        <view class="category">
+          <text class="tag {{reviewWord.catCls}}">{{reviewWord.catName}}</text>
+        </view>
+        <view class="word" style="{{flipped ? 'font-size:48rpx;' : 'font-size:56rpx;'}}">{{reviewWord.word}}</view>
+        <view class="phonetic">{{reviewWord.phonetic}}</view>
+        <view wx:if="{{flipped}}" class="meaning">{{reviewWord.meaning}}</view>
+        <view wx:if="{{flipped}}" class="example">{{reviewWord.example}}</view>
+        <view wx:if="{{!flipped}}" style="font-size:24rpx;color:#94a3b8">点击卡片显示释义</view>
+      </view>
+      <view class="review-bar">
+        <button class="btn ghost" bindtap="prevCard">上一个</button>
+        <button class="btn" bindtap="markMasteredCard">已掌握</button>
+        <button class="btn outline" bindtap="nextCard">下一个</button>
+      </view>
+      <view class="progress-bar" style="margin-top:24rpx">
+        <view class="fill" style="width:{{reviewProgress}}%"></view>
+      </view>
+      <view style="text-align:center;color:#64748b;font-size:24rpx;margin-top:12rpx">
+        已掌握 {{masteredCount}} / {{completedTotal}} 个已学单词
+      </view>
+    </view>
+    <view wx:else class="card">
+      <view class="empty">暂无待复习的单词。先去单词本完成一些每日单词吧</view>
+    </view>
+  </view>
+
+  <!-- 对话复习 -->
+  <view wx:if="{{reviewTab === 'dialog'}}">
+    <view wx:if="{{reviewDialogs.length}}">
+      <view wx:for="{{reviewDialogs}}" wx:key="id" class="dialog-item">
+        <view class="dialog-meta">
+          <text class="tag {{item.catCls}}">{{item.catName}}</text>
+          <text style="font-size:24rpx">难度: {{item.level}}</text>
+          <text class="badge">已学</text>
+          <text class="title">{{item.scene}}</text>
+        </view>
+        <view style="font-size:26rpx;color:#64748b;margin-bottom:12rpx">{{item.desc}}</view>
+        <view class="dialog-body">
+          <view wx:for="{{item.body}}" wx:for-item="l" wx:key="*this" class="line">
+            <text class="speaker">{{l.s}}:</text>{{l.t}}
+          </view>
+        </view>
+        <view class="dialog-actions">
+          <button class="btn sm ghost" bindtap="removeFromReview" data-id="{{item.id}}">移出复习</button>
         </view>
       </view>
-      <view class="d-keywords muted">关键表达: <text wx:for="{{item.keywords}}" wx:for-item="k" wx:key="*this" class="tag">{{k}}</text></view>
-      <view class="d-actions">
-        <text class="link" data-id="{{item.id}}" bindtap="toggleBody">{{expanded === item.id ? '收起' : '展开'}}</text>
-        <text class="link" data-id="{{item.id}}" bindtap="toggleLearned">取消已学</text>
-      </view>
     </view>
-    <view class="empty" wx:if="{{!dialogs.length}}">还没有已学对话</view>
-  </view>
-
-  <view class="card" wx:if="{{tab === 'word'}}">
-    <view class="card-title"><text>📚 已掌握单词 ({{words.length}})</text></view>
-    <view wx:for="{{words}}" wx:key="word" class="word-row">
-      <view class="wr-top"><text class="wr-word">{{item.word}}</text></view>
-      <view class="wr-phon muted">{{item.phonetic}}</view>
-      <view class="wr-mean">{{item.meaning}}</view>
-      <view class="wr-act"><text class="link" data-word="{{item.word}}" bindtap="markMastered">取消掌握</text></view>
+    <view wx:else class="card">
+      <view class="empty">还没有学过的对话，去对话练习页面学习吧</view>
     </view>
-    <view class="empty" wx:if="{{!words.length}}">还没有已掌握单词</view>
   </view>
 </nav-drawer>

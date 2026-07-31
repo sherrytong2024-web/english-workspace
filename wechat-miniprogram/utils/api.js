@@ -1,4 +1,4 @@
-// API 封装 — 调用线上 Render 后端
+// API \u5c01\u88c5 \u2014 \u8c03\u7528\u7ebf\u4e0a Render \u540e\u7aef
 const API_BASE = 'https://english-workspace.onrender.com';
 
 function api(method, path, data) {
@@ -21,7 +21,7 @@ function api(method, path, data) {
 }
 
 module.exports = {
-  getWords: (params) => api('GET', '/api/words?' + (params || 'size=2000')),
+  getWords: () => api('GET', '/api/words?size=2000'),
   getDialogues: () => api('GET', '/api/dialogues?size=2000'),
   getResources: () => api('GET', '/api/resources?size=500'),
   getRecommend: () => api('GET', '/api/daily/recommend'),
@@ -30,6 +30,7 @@ module.exports = {
   putProgress: (uid, data) => api('PUT', '/api/progress/' + (uid || 'default'), data),
   getLogs: (uid) => api('GET', '/api/logs?user_id=' + (uid || 'default')),
   postLog: (data) => api('POST', '/api/logs', data),
+  postWord: (data) => api('POST', '/api/words', data),
   getSources: () => api('GET', '/api/sources'),
   getStats: () => api('GET', '/api/stats'),
 };

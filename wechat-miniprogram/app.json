@@ -1,13 +1,13 @@
 {
   "pages": [
-    "pages/dashboard/index",
+    "pages/overview/index",
+    "pages/recommend/index",
     "pages/words/index",
     "pages/dialogues/index",
-    "pages/resources/index",
-    "pages/recommend/index",
-    "pages/log/index",
     "pages/review/index",
-    "pages/overview/index"
+    "pages/resources/index",
+    "pages/log/index",
+    "pages/dashboard/index"
   ],
   "window": {
     "navigationStyle": "custom",

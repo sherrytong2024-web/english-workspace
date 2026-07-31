@@ -1,7 +1,7 @@
 <view class="nav-root">
   <view class="topbar" style="padding-top:{{statusBarHeight}}px">
     <view class="topbar-inner" style="height:88rpx">
-      <view class="menu-btn" bindtap="toggleDrawer">☰</view>
+      <view class="menu-btn" bindtap="toggleDrawer">\u2630</view>
       <view class="topbar-title">{{title}}</view>
       <view class="topbar-spacer"></view>
     </view>
@@ -12,13 +12,18 @@
   <view class="drawer {{drawerOpen ? 'open' : ''}}" style="padding-top:{{statusBarHeight}}px">
     <view class="drawer-header">
       <text class="drawer-logo">EN Workspace</text>
-      <view class="drawer-close" bindtap="closeDrawer">✕</view>
+      <view class="drawer-close" bindtap="closeDrawer">\u2715</view>
     </view>
     <view class="drawer-list">
-      <view wx:for="{{pages}}" wx:key="key" class="drawer-item {{item.key === current ? 'active' : ''}}" data-key="{{item.key}}" bindtap="goPage">
-        <text class="di-icon">{{item.icon}}</text>
-        <text class="di-label">{{item.label}}</text>
-      </view>
+      <block wx:for="{{groups}}" wx:for-item="group" wx:key="label">
+        <view class="drawer-section">{{group.label}}</view>
+        <view wx:for="{{group.items}}" wx:for-item="item" wx:key="key"
+              class="drawer-item {{item.key === current ? 'active' : ''}}"
+              data-key="{{item.key}}" bindtap="goPage">
+          <text class="di-icon">{{item.icon}}</text>
+          <text class="di-label">{{item.label}}</text>
+        </view>
+      </block>
     </view>
   </view>
 
