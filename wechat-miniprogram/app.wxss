@@ -1,6 +1,4 @@
-/* ===== 基础：WXML 最安全的 CSS 子集 ===== */
-/* 规则：不用 gap、不用 :first-child、flex-wrap 仅必要时用、所有间隔用 margin/padding */
-
+/* ===== 基础 ===== */
 page {
   background: #f1f5f9;
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
@@ -21,38 +19,40 @@ page {
   font-weight: 700;
   font-size: 32rpx;
   margin-bottom: 18rpx;
+  display: block;
 }
 
-.card-title > text,
-.card-title > view > text:first-child {
+.card-title-text {
   display: block;
   margin-bottom: 12rpx;
+  font-weight: 700;
+  font-size: 32rpx;
 }
 
 /* ===== 页头（竖排） ===== */
 .page-header {
   margin-bottom: 28rpx;
 }
-.page-header .ph-title {
+.ph-title {
   font-size: 44rpx;
   font-weight: 800;
   color: #0f172a;
   margin-bottom: 8rpx;
   display: block;
 }
-.page-header .sub {
+.sub {
   font-size: 24rpx;
   color: #64748b;
   margin-bottom: 16rpx;
   display: block;
 }
-.page-header .ph-actions {
+.ph-actions {
   display: block;
 }
-.page-header .ph-actions > button {
+.ph-actions button {
+  display: inline-block;
   margin-right: 12rpx;
   margin-bottom: 10rpx;
-  display: inline-block;
 }
 
 /* ===== 按钮 ===== */
@@ -66,6 +66,7 @@ page {
   font-weight: 500;
   line-height: 1.4;
   text-align: center;
+  border: none;
 }
 .btn::after { border: none; }
 .btn.ghost { background: #eef2ff; color: #3b82f6; }
@@ -80,6 +81,8 @@ page {
   border-radius: 20rpx;
   font-size: 22rpx;
   margin-right: 8rpx;
+  background: #e2e8f0;
+  color: #475569;
 }
 .tag.fin { background: #dbeafe; color: #1e40af; }
 .tag.pro { background: #ede9fe; color: #5b21b6; }
@@ -127,15 +130,17 @@ page {
   padding: 22rpx 14rpx;
   text-align: center;
   border: 1rpx solid #f1f5f9;
+  display: block;
 }
-.stat-box .label { font-size: 24rpx; color: #64748b; font-weight: 500; }
-.stat-box .value { font-size: 48rpx; font-weight: 800; color: #0f172a; margin: 10rpx 0 4rpx; }
-.stat-box .delta { font-size: 22rpx; color: #94a3b8; }
+.stat-box .label { font-size: 24rpx; color: #64748b; font-weight: 500; display: block; }
+.stat-box .value { font-size: 48rpx; font-weight: 800; color: #0f172a; margin: 10rpx 0 4rpx; display: block; }
+.stat-box .delta { font-size: 22rpx; color: #94a3b8; display: block; }
 
 /* ===== 表格 ===== */
 table {
   width: 100%;
   font-size: 26rpx;
+  border-collapse: collapse;
 }
 th {
   font-weight: 600;
@@ -159,19 +164,27 @@ td {
   margin: 16rpx 0;
   overflow: hidden;
 }
-.progress-bar .fill {
+.progress-fill {
   height: 100%;
   background: #3b82f6;
 }
 
-/* ===== 网格 ===== */
-.grid-2 { display: flex; flex-wrap: wrap; }
-.grid-2 > * { width: calc(50% - 8rpx); margin-right: 8rpx; margin-bottom: 16rpx; }
-.grid-2 > *:nth-child(2n) { margin-right: 0; }
-
-.grid-4 { display: flex; flex-wrap: wrap; }
-.grid-4 > * { width: calc(50% - 7rpx); margin-right: 7rpx; margin-bottom: 14rpx; }
-.grid-4 > *:nth-child(2n) { margin-right: 0; }
+/* ===== 网格（flex box） ===== */
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+.grid-half {
+  width: 50%;
+  padding-right: 8rpx;
+  box-sizing: border-box;
+}
+.grid-half-right {
+  width: 50%;
+  padding-left: 8rpx;
+  box-sizing: border-box;
+  margin-bottom: 14rpx;
+}
 
 /* ===== 对话 ===== */
 .dialog-item {
@@ -180,23 +193,23 @@ td {
   padding: 18rpx;
   margin-bottom: 16rpx;
   border: 1rpx solid #f1f5f9;
+  display: block;
 }
 .dialog-meta {
   margin-bottom: 10rpx;
   font-size: 24rpx;
 }
-.dialog-meta > * {
+.dialog-meta-tag {
   display: inline-block;
   margin-right: 8rpx;
   margin-bottom: 6rpx;
 }
-.dialog-meta .title {
+.dialog-meta-title {
   font-weight: 600;
   font-size: 28rpx;
   color: #0f172a;
   display: block;
   margin-top: 6rpx;
-  margin-right: 0;
 }
 .dialog-body {
   background: #f0f9ff;
@@ -205,14 +218,20 @@ td {
   margin-bottom: 12rpx;
   border-left: 4rpx solid #3b82f6;
 }
-.dialog-body .line {
+.dialog-line {
   padding: 8rpx 0;
   font-size: 26rpx;
   line-height: 1.6;
   border-bottom: 1rpx dashed #e0f2fe;
+  display: block;
 }
-.dialog-body .line:last-child { border-bottom: none; }
-.dialog-body .speaker {
+.dialog-line-last {
+  padding: 8rpx 0;
+  font-size: 26rpx;
+  line-height: 1.6;
+  display: block;
+}
+.dialog-speaker {
   font-weight: 700;
   color: #3b82f6;
   margin-right: 10rpx;
@@ -221,7 +240,7 @@ td {
 .dialog-actions {
   margin-top: 12rpx;
 }
-.dialog-actions > * {
+.dialog-actions button {
   display: inline-block;
   margin-right: 8rpx;
   margin-bottom: 8rpx;
@@ -229,7 +248,7 @@ td {
 .dialog-keywords {
   margin-bottom: 10rpx;
 }
-.dialog-keywords > .tag {
+.dialog-keywords .tag {
   margin-right: 6rpx;
   margin-bottom: 6rpx;
 }
@@ -241,17 +260,20 @@ td {
   padding: 20rpx;
   margin-bottom: 14rpx;
   background: #fff;
+  display: block;
 }
-.resource-card .src { font-size: 22rpx; color: #94a3b8; }
-.resource-card .name { font-weight: 700; font-size: 28rpx; margin: 8rpx 0; color: #0f172a; }
-.resource-card .desc { font-size: 24rpx; color: #64748b; margin-bottom: 12rpx; line-height: 1.5; }
+.resource-card .src { font-size: 22rpx; color: #94a3b8; display: block; }
+.resource-card .name { font-weight: 700; font-size: 28rpx; margin: 8rpx 0; color: #0f172a; display: block; }
+.resource-card .desc { font-size: 24rpx; color: #64748b; margin-bottom: 12rpx; line-height: 1.5; display: block; }
 .resource-card .link { font-size: 24rpx; color: #3b82f6; font-weight: 600; }
+
 .res-cat-header {
   font-weight: 700;
   font-size: 30rpx;
   padding: 20rpx 0 14rpx;
   margin-bottom: 14rpx;
   border-bottom: 2rpx solid #e2e8f0;
+  display: block;
 }
 .res-collapsed { display: none; }
 
@@ -261,29 +283,29 @@ td {
   border-radius: 24rpx;
   padding: 60rpx 32rpx;
   margin-bottom: 24rpx;
+  display: block;
 }
-.flash-card .category { font-size: 24rpx; margin-bottom: 16rpx; }
-.flash-card .word { font-size: 56rpx; font-weight: 800; color: #0f172a; margin-bottom: 12rpx; text-align: center; }
-.flash-card .phonetic { font-size: 28rpx; color: #64748b; margin-bottom: 12rpx; text-align: center; }
-.flash-card .meaning { font-size: 36rpx; font-weight: 600; color: #1e40af; margin-bottom: 8rpx; text-align: center; }
-.flash-card .example { font-size: 26rpx; color: #475569; font-style: italic; text-align: center; }
+.flash-card .category { font-size: 24rpx; margin-bottom: 16rpx; display: block; text-align: center; }
+.flash-card .word { font-size: 56rpx; font-weight: 800; color: #0f172a; margin-bottom: 12rpx; text-align: center; display: block; }
+.flash-card .phonetic { font-size: 28rpx; color: #64748b; margin-bottom: 12rpx; text-align: center; display: block; }
+.flash-card .meaning { font-size: 36rpx; font-weight: 600; color: #1e40af; margin-bottom: 8rpx; text-align: center; display: block; }
+.flash-card .example { font-size: 26rpx; color: #475569; font-style: italic; text-align: center; display: block; }
 .review-bar { text-align: center; margin-bottom: 16rpx; }
-.review-bar > button { display: inline-block; margin: 0 8rpx; }
+.review-bar button { display: inline-block; margin: 0 8rpx; }
 
 /* ===== 博客/歌曲 ===== */
-.blog-card { }
-.blog-card .src { font-size: 22rpx; color: #94a3b8; }
-.blog-card .name { font-weight: 700; font-size: 30rpx; margin: 10rpx 0; color: #0f172a; line-height: 1.4; }
-.blog-card .desc { font-size: 26rpx; color: #64748b; margin-bottom: 14rpx; line-height: 1.5; }
+.blog-card .src { font-size: 22rpx; color: #94a3b8; display: block; }
+.blog-card .name { font-weight: 700; font-size: 30rpx; margin: 10rpx 0; color: #0f172a; line-height: 1.4; display: block; }
+.blog-card .desc { font-size: 26rpx; color: #64748b; margin-bottom: 14rpx; line-height: 1.5; display: block; }
 .blog-card .link { font-size: 26rpx; color: #3b82f6; font-weight: 600; }
 
-.song-card { text-align: center; padding: 24rpx 20rpx; margin-bottom: 16rpx; background: #fff; border-radius: 16rpx; border: 1rpx solid #f1f5f9; }
+.song-card { text-align: center; padding: 24rpx 20rpx; margin-bottom: 16rpx; background: #fff; border-radius: 16rpx; border: 1rpx solid #f1f5f9; display: block; }
 .song-card .song-art { width: 180rpx; height: 180rpx; border-radius: 20rpx; margin: 0 auto; display: block; }
 .song-card .song-art-placeholder { width: 180rpx; height: 180rpx; border-radius: 20rpx; background: #e0e7ff; line-height: 180rpx; font-size: 72rpx; margin: 0 auto; text-align: center; }
 .song-card .song-play { margin-top: 16rpx; width: 100%; }
-.song-card .song-no-preview { font-size: 22rpx; color: #94a3b8; margin-top: 12rpx; }
+.song-card .song-no-preview { font-size: 22rpx; color: #94a3b8; margin-top: 12rpx; display: block; }
 .song-card .song-actions { margin-top: 18rpx; text-align: center; }
-.song-card .song-actions > button { display: inline-block; margin: 0 6rpx; }
+.song-card .song-actions button { display: inline-block; margin: 0 6rpx; }
 .song-card.liked { border: 2rpx solid #ef4444; }
 .song-card.disliked { opacity: 0.5; }
 
@@ -294,15 +316,15 @@ td {
 
 /* ===== 仪表盘 ===== */
 .weekly-list { font-size: 26rpx; }
-.weekly-list .item { padding: 14rpx 0; border-bottom: 1rpx solid #f1f5f9; }
+.weekly-list .item { padding: 14rpx 0; border-bottom: 1rpx solid #f1f5f9; display: block; }
 .weekly-list .day { font-weight: 700; color: #3b82f6; margin-right: 16rpx; }
-.recommend-preview { padding: 16rpx; background: #f8fafc; border-radius: 12rpx; border: 1rpx solid #e2e8f0; }
+.recommend-preview { padding: 16rpx; background: #f8fafc; border-radius: 12rpx; border: 1rpx solid #e2e8f0; display: block; }
 .recommend-preview .thumb { font-size: 48rpx; margin-right: 16rpx; }
 .recommend-preview .title { font-weight: 600; font-size: 28rpx; color: #0f172a; }
 .recommend-preview .meta { font-size: 22rpx; color: #64748b; margin-top: 4rpx; }
 
 /* ===== 表单 ===== */
-.form-label { font-size: 24rpx; color: #64748b; margin-bottom: 8rpx; font-weight: 500; }
+.form-label { font-size: 24rpx; color: #64748b; margin-bottom: 8rpx; font-weight: 500; display: block; }
 .input, textarea, picker {
   display: block;
   width: 100%;
@@ -319,19 +341,14 @@ textarea { min-height: 120rpx; }
 
 /* ===== 杂项 ===== */
 .muted { color: #64748b; }
-.empty { color: #94a3b8; text-align: center; padding: 60rpx 0; font-size: 26rpx; }
-.section-title { font-weight: 700; font-size: 32rpx; margin: 28rpx 0 18rpx; color: #0f172a; }
+.empty { color: #94a3b8; text-align: center; padding: 60rpx 0; font-size: 26rpx; display: block; }
+.section-title { font-weight: 700; font-size: 32rpx; margin: 28rpx 0 18rpx; color: #0f172a; display: block; }
 .scroll-x { overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
-.log-stats > .stat-box { margin-bottom: 14rpx; }
 
-/* ===== nav-drawer 内容区 ===== */
-/* 确保 .content 里的所有内容块不会溢出 */
-.nav-root .content {
-  padding: 0 24rpx 40rpx 24rpx;
-  box-sizing: border-box;
-  width: 100%;
-}
-.nav-root .content > * {
-  max-width: 100%;
-  box-sizing: border-box;
-}
+
+/* === 兼容旧 class 名（WXML 还在用） === */
+.line { padding: 8rpx 0; font-size: 26rpx; line-height: 1.6; display: block; }
+.speaker { font-weight: 700; color: #3b82f6; margin-right: 10rpx; font-size: 24rpx; }
+.fill { height: 100%; background: #3b82f6; }
+.form-row { margin-bottom: 16rpx; }
+.title { font-weight: 600; font-size: 28rpx; color: #0f172a; }
