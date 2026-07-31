@@ -391,3 +391,8 @@ textarea { min-height: 120rpx; }
 .song-bar-bg { flex: 1; height: 8rpx; background: #e2e8f0; border-radius: 4rpx; overflow: hidden; }
 .song-bar-fg { height: 100%; background: #3b82f6; }
 .song-slider { flex: 1; margin: 0; }
+
+
+/* === 对话标题 + 关键词（替代徽章/紫色 pro） === */
+.dialog-title-text { font-size: 30rpx; font-weight: 700; color: #0f172a; margin-bottom: 12rpx; display: block; line-height: 1.4; }
+.dialog-keyword { display: inline-block; padding: 4rpx 14rpx; border-radius: 20rpx; font-size: 22rpx; background: #f1f5f9; color: #475569; margin-right: 8rpx; margin-bottom: 6rpx; }

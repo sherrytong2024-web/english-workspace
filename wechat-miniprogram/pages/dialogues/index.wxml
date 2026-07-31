@@ -23,11 +23,7 @@
     </view>
     <block wx:for="{{dailyDialogs}}" wx:key="id">
       <view class="dialog-item">
-        <view class="dialog-meta">
-          <text wx:if="{{item.learned}}" class="badge">已学</text>
-          <text wx:else class="badge new">今日推荐</text>
-          <text class="title">{{item.scene}}</text>
-        </view>
+        <view class="dialog-title-text">{{item.scene}}</view>
         <view class="dialog-body" style="max-height:240rpx;overflow-y:auto">
           <view wx:for="{{item.body}}" wx:for-item="l" wx:key="*this" class="line">
             <text class="speaker">{{l.s}}:</text><text>{{l.t}}</text>
@@ -52,18 +48,14 @@
       </view>
       <block wx:for="{{stg.dialogues}}" wx:for-item="d" wx:key="id">
         <view class="dialog-item">
-          <view class="dialog-meta">
-            <text wx:if="{{d.learned}}" class="badge">已学</text>
-            <text wx:else class="badge new">待学</text>
-            <text class="title">{{d.scene}}</text>
-          </view>
+          <view class="dialog-title-text">{{d.scene}}</view>
           <view wx:if="{{d.expanded}}" class="dialog-body">
             <view wx:for="{{d.body}}" wx:for-item="l" wx:key="*this" class="line">
               <text class="speaker">{{l.s}}:</text><text>{{l.t}}</text>
             </view>
           </view>
           <view class="dialog-keywords">
-            <text wx:for="{{d.keywords}}" wx:for-item="k" wx:key="*this" class="tag pro">{{k}}</text>
+            <text wx:for="{{d.keywords}}" wx:for-item="k" wx:key="*this" class="dialog-keyword">{{k}}</text>
           </view>
           <view class="dialog-actions">
             <button class="btn sm outline" bindtap="toggleDialogBody" data-id="{{d.id}}">{{d.expanded ? '收起对话' : '展开对话'}}</button>
