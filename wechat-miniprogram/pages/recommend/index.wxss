@@ -1,13 +1,1 @@
-.h2 { font-size: 40rpx; font-weight: 700; }
-.src { font-size: 22rpx; color: #94a3b8; }
-.blog-card .name { font-weight: 600; font-size: 28rpx; margin: 8rpx 0; line-height: 1.4; }
-.blog-card .desc {
-  font-size: 24rpx;
-  color: #64748b;
-  margin-bottom: 12rpx;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.blog-card .link { font-size: 24rpx; color: #3b82f6; }
+/* 统一样式见 app.wxss */

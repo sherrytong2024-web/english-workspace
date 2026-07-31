@@ -1,74 +1,57 @@
 <nav-drawer title="EN Workspace" current="dashboard">
   <view class="page-header">
-    <view class="ph-title">{{greeting}}</view>
-  <view class="sub">{{todayDate}}</view>
-    <button class="btn ghost" bindtap="goRecommend">今日推荐 →</button>
-  </view>
-
-  <!-- 四格统计 -->
-  <view class="grid-4">
-    <view class="stat-box">
-      <view class="label">累计单词</view>
-      <view class="value">{{statWords}}</view>
-      <view class="delta">本工作台记录</view>
-    </view>
-    <view class="stat-box">
-      <view class="label">完成对话</view>
-      <view class="value">{{statDialogs}}</view>
-      <view class="delta">段</view>
-    </view>
-    <view class="stat-box">
-      <view class="label">本周学习天数</view>
-      <view class="value">{{statDays}}</view>
-      <view class="delta">天</view>
-    </view>
-    <view class="stat-box">
-      <view class="label">收藏资源</view>
-      <view class="value">{{statFavs}}</view>
-      <view class="delta">个</view>
+    <text class="ph-title">{{greeting}}</text>
+    <text class="sub">{{todayDate}}</text>
+    <view class="ph-actions">
+      <button class="btn ghost" bindtap="goRecommend">今日推荐 →</button>
     </view>
   </view>
 
-  <!-- 本周概览 + 今日推荐预览 -->
-  <view class="grid-2" style="margin-bottom:20rpx">
-    <view class="card">
-      <view class="card-title">
-        <text>本周学习概览</text>
-        <button class="btn sm ghost" bindtap="goLog">查看全部</button>
-      </view>
-      <view wx:if="{{weeklyActivity.length}}" class="weekly-list">
-        <view wx:for="{{weeklyActivity}}" wx:key="date" class="item">
-          <text class="day">{{item.date}}</text>
+  <view style="display:flex;flex-wrap:wrap;margin-bottom:20rpx">
+    <view class="stat-box" style="width:calc(50% - 7rpx);margin-right:7rpx;margin-bottom:14rpx">
+      <view class="label">累计单词</view><view class="value">{{statWords}}</view><view class="delta">本工作台记录</view>
+    </view>
+    <view class="stat-box" style="width:calc(50% - 7rpx);margin-bottom:14rpx">
+      <view class="label">完成对话</view><view class="value">{{statDialogs}}</view><view class="delta">段</view>
+    </view>
+    <view class="stat-box" style="width:calc(50% - 7rpx);margin-right:7rpx">
+      <view class="label">本周学习天数</view><view class="value">{{statDays}}</view><view class="delta">天</view>
+    </view>
+    <view class="stat-box" style="width:calc(50% - 7rpx)">
+      <view class="label">收藏资源</view><view class="value">{{statFavs}}</view><view class="delta">个</view>
+    </view>
+  </view>
+
+  <view style="display:flex;flex-wrap:wrap;margin-bottom:20rpx">
+    <view class="card" style="width:calc(50% - 8rpx);margin-right:8rpx">
+      <view class="card-title">本周学习概览</view>
+      <view wx:if="{{weeklyActivity.length}}">
+        <view wx:for="{{weeklyActivity}}" wx:key="date" style="padding:12rpx 0;border-bottom:1rpx solid #f1f5f9;font-size:26rpx">
+          <text style="font-weight:700;color:#3b82f6;margin-right:8rpx">{{item.date}}</text>
           <text>{{item.count}} 项活动</text>
         </view>
       </view>
       <view wx:else class="empty">暂无活动记录</view>
     </view>
-    <view class="card">
+    <view class="card" style="width:calc(50% - 8rpx)">
       <view class="card-title">今日推荐</view>
-      <view class="recommend-preview" wx:if="{{recType}}">
-        <text class="thumb">{{recIcon}}</text>
-        <view>
-          <view class="title">{{recTitle}}</view>
-          <view class="meta">{{recMeta}}</view>
-        </view>
+      <view style="padding:12rpx;background:#f8fafc;border-radius:8rpx;margin-bottom:12rpx;font-size:24rpx">
+        <text>📅 每日推荐已就绪</text>
       </view>
-      <view style="margin-top:16rpx;padding:16rpx;background:#f0fdf4;border-radius:12rpx;font-size:26rpx">
-        <text style="font-weight:600">今日单词</text>: {{dwDone}}/{{dwTotal}} 已完成
-        <button class="btn sm ghost" bindtap="goWords">去学习 →</button>
+      <view style="padding:14rpx;background:#f0fdf4;border-radius:10rpx;font-size:26rpx">
+        <text style="font-weight:600">今日单词:</text> {{dwDone}}/{{dwTotal}} 已完成
       </view>
     </view>
   </view>
 
-  <!-- 学习路径建议 -->
   <view class="card">
     <view class="card-title">学习路径建议（金融硕士求职方向）</view>
-    <view class="path-list">
-      <view>① <text style="font-weight:600">词汇层</text>：金融专业核心词 + 日常高频词，每日 15-20 个</view>
-      <view>② <text style="font-weight:600">听读层</text>：Bloomberg / CNBC 早间播报跟读，建立金融语境</view>
-      <view>③ <text style="font-weight:600">口语层</text>：金融面试 + 客户对话 + 路演场景模拟</view>
-      <view>④ <text style="font-weight:600">实战���</text>：每周 2 段完整对话跟读录音，模仿语调</view>
-      <view>⑤ <text style="font-weight:600">输出层</text>：用英语写一段市场评论，对照 FT/Bloomberg 修正</view>
+    <view style="font-size:26rpx;color:#64748b;line-height:2.2">
+      <view>① 词汇层：金融专业核心词 + 日常高频词，每日 15-20 个</view>
+      <view>② 听读层：Bloomberg / CNBC 早间播报跟读，建立金融语境</view>
+      <view>③ 口语层：金融面试 + 客户对话 + 路演场景模拟</view>
+      <view>④ 实战层：每周 2 段完整对话跟读录音，模仿语调</view>
+      <view>⑤ 输出层：用英语写一段市场评论，对照 FT/Bloomberg 修正</view>
     </view>
   </view>
 </nav-drawer>

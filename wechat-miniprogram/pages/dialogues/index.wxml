@@ -1,24 +1,24 @@
 <nav-drawer title="对话练习" current="dialogues">
   <!-- 页头 -->
   <view class="page-header">
-    <view class="ph-title">对话练习</view>
-  <view class="sub">分场景完整对话 · 每日推荐 · 已学对话自动进入复习</view>
+    <text class="ph-title">对话练习</text>
+    <text class="sub">分场景完整对话 · 每日推荐 · 已学对话自动进入复习</text>
   </view>
 
-  <!-- 今日对话卡片 -->
+  <!-- 今日对话 -->
   <view class="card">
     <view class="card-title">
-      <text>今日对话（{{dailyDialogs.length}} 段）</text>
-      <view class="row" style="gap:6rpx">
+      <text>今日对话��{{dailyDialogs.length}} 段）</text>
+      <view style="margin-top:10rpx">
         <text style="font-size:22rpx">每天</text>
-        <picker mode="selector" range="{{countOptions}}" value="{{ddCountIdx}}" bindchange="onCountChange">
-          <view style="width:80rpx;text-align:center;padding:6rpx;border:1rpx solid #e2e8f0;border-radius:6rpx;font-size:24rpx">{{ddCountIdx + 1}}</view>
+        <picker mode="selector" range="{{countOptions}}" value="{{ddCountIdx}}" bindchange="onCountChange" style="display:inline-block;width:120rpx;margin:0 8rpx">
+          <text>{{ddCountIdx + 1}}</text>
         </picker>
         <text style="font-size:22rpx">段，类型</text>
-        <picker mode="selector" range="{{catSelectNames}}" value="{{ddCatIdx}}" bindchange="onCatChange">
-          <view style="width:140rpx;text-align:center;padding:6rpx;border:1rpx solid #e2e8f0;border-radius:6rpx;font-size:24rpx">{{catSelectNames[ddCatIdx]}}</view>
+        <picker mode="selector" range="{{catSelectNames}}" value="{{ddCatIdx}}" bindchange="onCatChange" style="display:inline-block;width:180rpx;margin:0 8rpx">
+          <text>{{catSelectNames[ddCatIdx]}}</text>
         </picker>
-        <button class="btn sm ghost" bindtap="refreshDailyDialogs">换一批</button>
+        <button class="btn sm ghost" style="margin-left:8rpx" bindtap="refreshDailyDialogs">换一批</button>
       </view>
     </view>
     <block wx:for="{{dailyDialogs}}" wx:key="id">
@@ -32,29 +32,25 @@
         </view>
         <view class="dialog-body" style="max-height:240rpx;overflow-y:auto">
           <view wx:for="{{item.body}}" wx:for-item="l" wx:key="*this" class="line">
-            <text class="speaker">{{l.s}}:</text>{{l.t}}
+            <text class="speaker">{{l.s}}:</text><text>{{l.t}}</text>
           </view>
         </view>
         <view class="dialog-actions">
-          <button class="btn sm {{item.learned ? 'outline' : ''}}" bindtap="toggleLearned" data-id="{{item.id}}">
-            {{item.learned ? '取消已学' : '学完标记'}}
-          </button>
+          <button class="btn sm {{item.learned ? 'outline' : ''}}" bindtap="toggleLearned" data-id="{{item.id}}">{{item.learned ? '取消已学' : '学完标记'}}</button>
         </view>
       </view>
     </block>
-    <view wx:if="{{!dailyDialogs.length}}" class="empty">当前分类暂无对话，请调整设置</view>
+    <view wx:if="{{!dailyDialogs.length}}" class="empty">当前分类暂无对话</view>
   </view>
 
-  <!-- 全部对话（按阶段分组） -->
-  <view style="margin-bottom:12rpx;font-size:24rpx;color:#64748b">
-    全部对话 · {{stages.length}} 个场景 · {{allDialogues.length}} 段
-  </view>
+  <!-- 全部对话 -->
+  <view style="margin-bottom:12rpx;font-size:24rpx;color:#64748b">全部对话 · {{stages.length}} 个场景 · {{allDialogs.length}} 段</view>
 
   <block wx:for="{{stages}}" wx:for-item="stg" wx:for-index="si" wx:key="name">
-    <view class="card" style="border-left:6rpx solid {{stg.color}};padding:20rpx;margin-bottom:20rpx">
-      <view class="card-title" style="font-size:28rpx;margin-bottom:14rpx">
+    <view class="card" style="border-left:6rpx solid {{stg.color}}">
+      <view class="card-title" style="margin-bottom:14rpx">
         <text>{{si + 1}}. {{stg.name}}</text>
-        <text style="font-weight:400;font-size:24rpx;color:#64748b">({{stg.dialogues.length}} 段)</text>
+        <text style="font-weight:400;font-size:24rpx;color:#64748b;display:block;margin-top:4rpx">({{stg.dialogues.length}} 段)</text>
       </view>
       <block wx:for="{{stg.dialogues}}" wx:for-item="d" wx:key="id">
         <view class="dialog-item">
@@ -65,10 +61,10 @@
             <text wx:else class="badge new">待学</text>
             <text class="title">{{d.scene}}</text>
           </view>
-          <view style="font-size:26rpx;color:#64748b;margin-bottom:12rpx">{{d.desc}}</view>
+          <view style="font-size:26rpx;color:#64748b;margin-bottom:10rpx">{{d.desc}}</view>
           <view wx:if="{{d.expanded}}" class="dialog-body">
             <view wx:for="{{d.body}}" wx:for-item="l" wx:key="*this" class="line">
-              <text class="speaker">{{l.s}}:</text>{{l.t}}
+              <text class="speaker">{{l.s}}:</text><text>{{l.t}}</text>
             </view>
           </view>
           <view class="dialog-keywords">
@@ -76,9 +72,7 @@
           </view>
           <view class="dialog-actions">
             <button class="btn sm outline" bindtap="toggleDialogBody" data-id="{{d.id}}">{{d.expanded ? '收起对话' : '展开对话'}}</button>
-            <button class="btn sm {{d.learned ? 'outline' : ''}}" bindtap="toggleLearned" data-id="{{d.id}}">
-              {{d.learned ? '取消已学' : '标记已学'}}
-            </button>
+            <button class="btn sm {{d.learned ? 'outline' : ''}}" bindtap="toggleLearned" data-id="{{d.id}}">{{d.learned ? '取消已学' : '标记已学'}}</button>
             <button class="btn sm ghost" bindtap="copyDialog" data-id="{{d.id}}">复制对话</button>
           </view>
         </view>

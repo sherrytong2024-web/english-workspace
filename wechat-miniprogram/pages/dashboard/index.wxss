@@ -1,2 +1,1 @@
-.h2 { font-size: 40rpx; font-weight: 700; }
-.path-list { font-size: 26rpx; color: #64748b; line-height: 2; }
+/* 统一样式见 app.wxss */

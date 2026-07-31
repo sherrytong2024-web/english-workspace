@@ -1,2 +1,1 @@
-.h2 { font-size: 40rpx; font-weight: 700; }
-.form-label { font-size: 24rpx; color: #64748b; margin-bottom: 6rpx; }
+/* 统一样式见 app.wxss */

@@ -1,10 +1,1 @@
-.h2 { font-size: 40rpx; font-weight: 700; }
-.quote-text { font-size: 30rpx; line-height: 1.6; color: #1e293b; font-style: italic; padding: 10rpx 0; }
-.quote-author { font-size: 22rpx; color: #64748b; margin-top: 6rpx; }
-.log-row {
-  display: flex;
-  align-items: center;
-  padding: 12rpx 0;
-  border-bottom: 1rpx solid #f1f5f9;
-  font-size: 26rpx;
-}
+/* 统一样式见 app.wxss */

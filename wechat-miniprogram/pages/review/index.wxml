@@ -1,47 +1,37 @@
 <nav-drawer title="复习" current="review">
   <view class="page-header">
-    <view class="ph-title">复习</view>
-  <view class="sub">单词复习 · 对话回看</view>
+    <text class="ph-title">复习</text>
+    <text class="sub">单词复习 · 对话回看</text>
   </view>
 
-  <view class="row" style="margin-bottom:20rpx">
-    <button class="btn sm {{reviewTab === 'word' ? '' : 'outline'}}" bindtap="setTab" data-tab="word">单词复习</button>
-    <button class="btn sm {{reviewTab === 'dialog' ? '' : 'outline'}}" bindtap="setTab" data-tab="dialog">
-      对话复习（{{reviewDialogCount}} 段）
-    </button>
+  <view style="margin-bottom:20rpx">
+    <button class="btn sm {{reviewTab === 'word' ? '' : 'outline'}}" style="margin-right:12rpx;margin-bottom:10rpx" bindtap="setTab" data-tab="word">单词复习</button>
+    <button class="btn sm {{reviewTab === 'dialog' ? '' : 'outline'}}" bindtap="setTab" data-tab="dialog">对话复习（{{reviewDialogCount}} 段）</button>
   </view>
 
-  <!-- 单词复习（闪卡） -->
-  <view wx:if="{{reviewTab === 'word'}}">
-    <view class="card" wx:if="{{reviewWord}}">
-      <view style="font-size:24rpx;color:#64748b;margin-bottom:12rpx">
-        翻转卡片 (第 {{reviewIdx + 1}} / {{reviewTotal}} 个，共 {{totalWords}} 词)
-      </view>
+  <!-- 单词复习 -->
+  <view wx:if="{{reviewTab === 'word' && reviewWord}}">
+    <view class="card">
+      <view style="font-size:24rpx;color:#64748b;margin-bottom:12rpx">翻转卡片 (第 {{reviewIdx + 1}} / {{reviewTotal}} · 共 {{totalWords}} 词)</view>
       <view class="flash-card" bindtap="flipCard">
-        <view class="category">
-          <text class="tag {{reviewWord.catCls}}">{{reviewWord.catName}}</text>
-        </view>
-        <view class="word" style="{{flipped ? 'font-size:48rpx;' : 'font-size:56rpx;'}}">{{reviewWord.word}}</view>
+        <view class="category"><text class="tag {{reviewWord.catCls}}">{{reviewWord.catName}}</text></view>
+        <view class="word" style="{{flipped ? 'font-size:48rpx' : ''}}">{{reviewWord.word}}</view>
         <view class="phonetic">{{reviewWord.phonetic}}</view>
         <view wx:if="{{flipped}}" class="meaning">{{reviewWord.meaning}}</view>
         <view wx:if="{{flipped}}" class="example">{{reviewWord.example}}</view>
-        <view wx:if="{{!flipped}}" style="font-size:24rpx;color:#94a3b8">点击卡片显示释义</view>
+        <view wx:if="{{!flipped}}" style="font-size:24rpx;color:#94a3b8;text-align:center">点击卡片显示释义</view>
       </view>
       <view class="review-bar">
         <button class="btn ghost" bindtap="prevCard">上一个</button>
         <button class="btn" bindtap="markMasteredCard">已掌握</button>
         <button class="btn outline" bindtap="nextCard">下一个</button>
       </view>
-      <view class="progress-bar" style="margin-top:24rpx">
-        <view class="fill" style="width:{{reviewProgress}}%"></view>
-      </view>
-      <view style="text-align:center;color:#64748b;font-size:24rpx;margin-top:12rpx">
-        已掌握 {{masteredCount}} / {{completedTotal}} 个已学单词
-      </view>
+      <view class="progress-bar"><view class="fill" style="width:{{reviewProgress}}%"></view></view>
+      <view style="text-align:center;color:#64748b;font-size:24rpx;margin-top:12rpx">已掌握 {{masteredCount}} / {{completedTotal}} 个已学单词</view>
     </view>
-    <view wx:else class="card">
-      <view class="empty">暂无待复习的单词。先去单词本完成一些每日单词吧</view>
-    </view>
+  </view>
+  <view wx:elif="{{reviewTab === 'word'}}" class="card">
+    <view class="empty">暂无待复习的单词，先去单词本完成一些每日单词吧</view>
   </view>
 
   <!-- 对话复习 -->
@@ -54,10 +44,10 @@
           <text class="badge">已学</text>
           <text class="title">{{item.scene}}</text>
         </view>
-        <view style="font-size:26rpx;color:#64748b;margin-bottom:12rpx">{{item.desc}}</view>
+        <view style="font-size:26rpx;color:#64748b;margin-bottom:10rpx">{{item.desc}}</view>
         <view class="dialog-body">
           <view wx:for="{{item.body}}" wx:for-item="l" wx:key="*this" class="line">
-            <text class="speaker">{{l.s}}:</text>{{l.t}}
+            <text class="speaker">{{l.s}}:</text><text>{{l.t}}</text>
           </view>
         </view>
         <view class="dialog-actions">
@@ -65,8 +55,6 @@
         </view>
       </view>
     </view>
-    <view wx:else class="card">
-      <view class="empty">还没有学过的对话，去对话练习页面学习吧</view>
-    </view>
+    <view wx:else class="card"><view class="empty">还没有学过的对话</view></view>
   </view>
 </nav-drawer>

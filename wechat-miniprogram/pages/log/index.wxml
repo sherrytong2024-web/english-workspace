@@ -1,44 +1,41 @@
 <nav-drawer title="学习记录" current="log">
   <view class="page-header">
-    <view class="ph-title">学习记录</view>
-  <view class="sub">所有学习活动自动记录</view>
-    <button class="btn outline sm" bindtap="clearLog">清空记录</button>
+    <text class="ph-title">学习记录</text>
+    <text class="sub">所有学习活动自动记录</text>
+    <view class="ph-actions">
+      <button class="btn outline sm" bindtap="clearLog">清空记录</button>
+    </view>
   </view>
 
-  <view class="log-stats">
-    <view class="stat-box">
-      <view class="label">总学习活动</view>
-      <view class="value">{{stats.total}}</view>
+  <view style="display:flex;flex-wrap:wrap;margin-bottom:20rpx">
+    <view class="stat-box" style="width:calc(50% - 7rpx);margin-right:7rpx;margin-bottom:14rpx">
+      <view class="label">总学习活动</view><view class="value">{{stats.total}}</view>
     </view>
-    <view class="stat-box">
-      <view class="label">单词新增</view>
-      <view class="value">{{stats.words}}</view>
+    <view class="stat-box" style="width:calc(50% - 7rpx);margin-bottom:14rpx">
+      <view class="label">单词新增</view><view class="value">{{stats.words}}</view>
     </view>
-    <view class="stat-box">
-      <view class="label">对话学习</view>
-      <view class="value">{{stats.dialogs}}</view>
+    <view class="stat-box" style="width:calc(50% - 7rpx);margin-right:7rpx">
+      <view class="label">对话学习</view><view class="value">{{stats.dialogs}}</view>
     </view>
-    <view class="stat-box">
-      <view class="label">资源收藏</view>
-      <view class="value">{{stats.favs}}</view>
+    <view class="stat-box" style="width:calc(50% - 7rpx)">
+      <view class="label">资源收藏</view><view class="value">{{stats.favs}}</view>
     </view>
   </view>
 
   <view class="card">
     <view class="card-title">活动历史</view>
-    <view class="row" style="margin-bottom:16rpx">
-      <text style="font-size:24rpx">按日期筛选:</text>
+    <view style="margin-bottom:16rpx">
+      <text style="font-size:24rpx;color:#64748b;display:block;margin-bottom:8rpx">按日期筛选:</text>
       <picker mode="date" value="{{filterDate}}" bindchange="onDateFilter">
-        <view class="input" style="width:260rpx">{{filterDate || '选择日期'}}</view>
+        <view class="input" style="margin-bottom:8rpx">{{filterDate || '选择日期'}}</view>
       </picker>
       <button class="btn sm outline" bindtap="resetFilter">显示全部</button>
     </view>
-    <view wx:if="{{filterInfo}}" class="muted" style="font-size:22rpx;margin-bottom:10rpx">{{filterInfo}}</view>
-
+    <view wx:if="{{filterInfo}}" style="font-size:22rpx;color:#64748b;margin-bottom:10rpx">{{filterInfo}}</view>
     <view wx:if="{{filteredLog.length}}">
-      <view wx:for="{{filteredLog}}" wx:key="*this" class="log-row">
-        <text>{{item.t}}</text>
-        <text class="tag {{item.cls}}">{{item.typeName}}</text>
+      <view wx:for="{{filteredLog}}" wx:key="*this" style="padding:12rpx 0;border-bottom:1rpx solid #f1f5f9;font-size:26rpx">
+        <text style="font-size:22rpx;color:#94a3b8;display:block">{{item.t}}</text>
+        <text class="tag {{item.cls}}" style="margin-top:4rpx;margin-right:8rpx">{{item.typeName}}</text>
         <text>{{item.content}}</text>
       </view>
     </view>
