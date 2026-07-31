@@ -352,3 +352,42 @@ textarea { min-height: 120rpx; }
 .fill { height: 100%; background: #3b82f6; }
 .form-row { margin-bottom: 16rpx; }
 .title { font-weight: 600; font-size: 28rpx; color: #0f172a; }
+
+
+/* === 日历（flex grid 替代 table） === */
+.cal-week { display: flex; margin-bottom: 8rpx; }
+.cal-cell { flex: 1; text-align: center; padding: 16rpx 0; border-radius: 10rpx; font-size: 28rpx; margin: 0 3rpx; }
+.cal-weekday { font-size: 24rpx; color: #64748b; padding: 8rpx 0; }
+.cal-day { background: #f9fafb; border: 1rpx solid #e2e8f0; }
+
+
+/* === log 4格统计 2x2 === */
+.log-stats { display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: 20rpx; }
+.log-stat { width: 48%; margin-bottom: 14rpx; box-sizing: border-box; }
+
+
+/* === 今日单词卡片 === */
+.dw-group-sep { text-align: center; color: #64748b; font-size: 22rpx; padding: 12rpx 0; }
+.dw-card { display: flex; align-items: flex-start; padding: 16rpx 12rpx; border-bottom: 1rpx solid #f1f5f9; }
+.dw-card:last-of-type { border-bottom: none; }
+.dw-check { width: 44rpx; height: 44rpx; border: 2rpx solid #cbd5e1; border-radius: 50%; margin-right: 16rpx; margin-top: 6rpx; display: flex; align-items: center; justify-content: center; font-size: 28rpx; color: #fff; box-sizing: border-box; }
+.dw-checked { background: #10b981; border-color: #10b981; }
+.dw-body { flex: 1; min-width: 0; }
+.dw-head { display: flex; align-items: center; gap: 10rpx; margin-bottom: 4rpx; }
+.dw-word { font-weight: 700; font-size: 32rpx; color: #0f172a; }
+.dw-phonetic { display: block; font-size: 22rpx; color: #64748b; margin-bottom: 4rpx; }
+.dw-meaning { display: block; font-size: 28rpx; color: #1e293b; margin-bottom: 4rpx; }
+.dw-example { display: block; font-size: 24rpx; color: #94a3b8; line-height: 1.5; }
+
+
+/* === 歌曲卡（带进度条） === */
+.song-head { display: flex; align-items: center; gap: 16rpx; margin-bottom: 14rpx; }
+.song-info { flex: 1; min-width: 0; }
+.song-title { font-size: 30rpx; font-weight: 700; color: #0f172a; display: block; }
+.song-artist { font-size: 24rpx; color: #64748b; margin-top: 4rpx; display: block; }
+.song-play-btn { width: 80rpx; height: 80rpx; border-radius: 50%; background: #3b82f6; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 36rpx; }
+.song-progress { display: flex; align-items: center; gap: 10rpx; margin: 14rpx 0; }
+.song-time { font-size: 22rpx; color: #64748b; min-width: 60rpx; }
+.song-bar-bg { flex: 1; height: 8rpx; background: #e2e8f0; border-radius: 4rpx; overflow: hidden; }
+.song-bar-fg { height: 100%; background: #3b82f6; }
+.song-slider { flex: 1; margin: 0; }

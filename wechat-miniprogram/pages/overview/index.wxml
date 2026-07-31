@@ -27,20 +27,15 @@
       <text>{{calTitle}}</text>
       <text style="font-weight:400;font-size:24rpx;color:#64748b;display:block;margin-top:4rpx">点选日期查看详情</text>
     </view>
-    <table class="calendar-table">
-      <thead>
-        <tr><th wx:for="{{weekdays}}" wx:key="*this">{{item}}</th></tr>
-      </thead>
-      <tbody>
-        <tr wx:for="{{calRows}}" wx:for-item="row" wx:key="*this">
-          <td wx:for="{{row}}" wx:for-item="cell" wx:key="*this"
-              style="background:{{cell.bg}};border:{{cell.border}};font-weight:{{cell.fw}};font-size:28rpx"
-              bindtap="{{cell.tap ? 'showDayDetail' : ''}}" data-ds="{{cell.ds}}">
-            {{cell.day || ''}}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <view class="cal-week">
+      <text wx:for="{{weekdays}}" wx:key="*this" class="cal-cell cal-weekday">{{item}}</text>
+    </view>
+    <view wx:for="{{calRows}}" wx:for-item="row" wx:key="*this" class="cal-week">
+      <text wx:for="{{row}}" wx:for-item="cell" wx:key="*this"
+            class="cal-cell cal-day"
+            style="background:{{cell.bg}};border:{{cell.border}};font-weight:{{cell.fw}}"
+            bindtap="{{cell.tap ? 'showDayDetail' : ''}}" data-ds="{{cell.ds}}">{{cell.day || ''}}</text>
+    </view>
   </view>
 
   <view class="card" wx:if="{{dayDetail}}">

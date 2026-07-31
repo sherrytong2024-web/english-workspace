@@ -25,7 +25,6 @@
       <view class="dialog-item">
         <view class="dialog-meta">
           <text class="tag {{item.catCls}}">{{item.catName}}</text>
-          <text style="font-size:24rpx">难度: {{item.level}}</text>
           <text wx:if="{{item.learned}}" class="badge">已学</text>
           <text wx:else class="badge new">今日推荐</text>
           <text class="title">{{item.scene}}</text>
@@ -56,7 +55,6 @@
         <view class="dialog-item">
           <view class="dialog-meta">
             <text class="tag {{d.catCls}}">{{d.catName}}</text>
-            <text style="font-size:24rpx">难度: {{d.level}}</text>
             <text wx:if="{{d.learned}}" class="badge">已学</text>
             <text wx:else class="badge new">待学</text>
             <text class="title">{{d.scene}}</text>

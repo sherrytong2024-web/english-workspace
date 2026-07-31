@@ -7,17 +7,17 @@
     </view>
   </view>
 
-  <view style="display:flex;flex-wrap:wrap;margin-bottom:20rpx">
-    <view class="stat-box" style="width:calc(50% - 7rpx);margin-right:7rpx;margin-bottom:14rpx">
+  <view class="log-stats">
+    <view class="stat-box log-stat">
       <view class="label">总学习活动</view><view class="value">{{stats.total}}</view>
     </view>
-    <view class="stat-box" style="width:calc(50% - 7rpx);margin-bottom:14rpx">
+    <view class="stat-box log-stat">
       <view class="label">单词新增</view><view class="value">{{stats.words}}</view>
     </view>
-    <view class="stat-box" style="width:calc(50% - 7rpx);margin-right:7rpx">
+    <view class="stat-box log-stat">
       <view class="label">对话学习</view><view class="value">{{stats.dialogs}}</view>
     </view>
-    <view class="stat-box" style="width:calc(50% - 7rpx)">
+    <view class="stat-box log-stat">
       <view class="label">资源收藏</view><view class="value">{{stats.favs}}</view>
     </view>
   </view>

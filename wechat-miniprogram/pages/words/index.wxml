@@ -9,44 +9,31 @@
     </view>
   </view>
 
-  <!-- 今日单词 -->
+  <!-- 今日单词（卡片式） -->
   <view class="card" wx:if="{{dailyGroups.length}}">
     <view class="card-title">
       <text>今日单词</text>
       <view style="margin-top:10rpx">
-        <button class="btn sm ghost" style="margin-right:10rpx;margin-bottom:8rpx" bindtap="logDailyWords">全标记</button>
-        <button class="btn sm ghost" style="margin-right:10rpx;margin-bottom:8rpx" bindtap="goReview">去复习</button>
+        <button class="btn sm ghost" style="margin-right:10rpx" bindtap="logDailyWords">全标记</button>
+        <button class="btn sm ghost" bindtap="goReview">去复习</button>
       </view>
     </view>
-    <scroll-view scroll-x="true" style="width:100%">
-      <block wx:for="{{dailyGroups}}" wx:for-item="group" wx:for-index="gi" wx:key="*this">
-        <view wx:if="{{gi > 0}}" style="text-align:center;color:#64748b;font-size:22rpx;padding:12rpx 0">第 {{gi + 1}} 组（10 个）</view>
-        <table>
-          <thead>
-            <tr>
-              <th style="width:60rpx">✓</th>
-              <th style="min-width:180rpx">单词</th>
-              <th style="min-width:200rpx">释义</th>
-              <th>分类</th>
-              <th style="min-width:300rpx">例句</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr wx:for="{{group}}" wx:for-item="w" wx:key="word">
-              <td><checkbox checked="{{w.done}}" bindtap="toggleDailyWord" data-word="{{w.word}}"></checkbox></td>
-              <td>
-                <text style="font-weight:600;display:block">{{w.word}}</text>
-                <text wx:if="{{w.phonetic}}" style="font-size:22rpx;color:#64748b;display:block">{{w.phonetic}}</text>
-              </td>
-              <td style="word-break:break-all">{{w.meaning}}</td>
-              <td><text class="tag {{w.catCls}}">{{w.catName}}</text></td>
-              <td style="font-size:24rpx;color:#64748b;max-width:400rpx;word-break:break-all">{{w.example}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </block>
-    </scroll-view>
-    <view class="progress-bar"><view class="fill" style="width:{{dwProgress}}%"></view></view>
+    <block wx:for="{{dailyGroups}}" wx:for-item="group" wx:for-index="gi" wx:key="*this">
+      <view wx:if="{{gi > 0}}" class="dw-group-sep">第 {{gi + 1}} 组（10 个）</view>
+      <view wx:for="{{group}}" wx:for-item="w" wx:key="word" class="dw-card" bindtap="toggleDailyWord" data-word="{{w.word}}">
+        <view class="dw-check {{w.done ? 'dw-checked' : ''}}">{{w.done ? '✓' : ''}}</view>
+        <view class="dw-body">
+          <view class="dw-head">
+            <text class="dw-word">{{w.word}}</text>
+            <text class="tag {{w.catCls}}">{{w.catName}}</text>
+          </view>
+          <text wx:if="{{w.phonetic}}" class="dw-phonetic">{{w.phonetic}}</text>
+          <text class="dw-meaning">{{w.meaning}}</text>
+          <text wx:if="{{w.example}}" class="dw-example">{{w.example}}</text>
+        </view>
+      </view>
+    </block>
+    <view class="progress-bar" style="margin-top:16rpx"><view class="fill" style="width:{{dwProgress}}%"></view></view>
     <view style="text-align:center;margin-top:16rpx" wx:if="{{allDailyDone}}">
       <button class="btn" bindtap="addMoreDailyWords">+ 再学 10 个</button>
     </view>

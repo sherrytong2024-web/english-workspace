@@ -1,4 +1,5 @@
 <nav-drawer title="每日推荐" current="recommend">
+  <wxs src="./format.wxs" module="fmt" />
   <view class="page-header">
     <text class="ph-title">每日推荐</text>
     <text class="sub">{{recommendDate}}</text>
@@ -10,9 +11,9 @@
   <view class="section-title">📰 今日博客/学习资源</view>
   <view wx:if="{{blogs.length}}">
     <view wx:for="{{blogs}}" wx:key="url" class="card">
-      <view style="font-size:22rpx;color:#94a3b8;margin-bottom:4rpx">{{item.source}}</view>
-      <view style="font-weight:700;font-size:30rpx;line-height:1.4;margin-bottom:8rpx">{{item.title}}</view>
-      <view style="font-size:26rpx;color:#64748b;line-height:1.5;margin-bottom:12rpx">{{item.summary}}</view>
+      <view class="blog-src">{{item.source}}</view>
+      <view class="blog-name">{{item.title}}</view>
+      <view class="blog-desc">{{item.summary}}</view>
       <text class="link" bindtap="copyLink" data-url="{{item.url}}">阅读全文 →</text>
     </view>
   </view>
@@ -21,15 +22,33 @@
   <view class="section-title">🎵 随机英文歌曲</view>
   <view wx:if="{{songs.length}}">
     <view wx:for="{{songs}}" wx:key="id" class="song-card" style="{{item.liked ? 'border:2rpx solid #ef4444' : ''}} {{item.disliked ? 'opacity:0.5' : ''}}">
-      <image wx:if="{{item.artwork_url}}" class="song-art" src="{{item.artwork_url}}" mode="aspectFill"></image>
-      <view wx:else class="song-art-placeholder">🎵</view>
-      <view style="font-weight:600;font-size:28rpx;margin-top:16rpx">{{item.title}}</view>
-      <view style="font-size:24rpx;color:#64748b;margin-top:4rpx">{{item.artist}}</view>
-      <block wx:if="{{item.preview_url}}">
-        <audio id="audio-{{item.id}}" src="{{item.preview_url}}" style="margin-top:12rpx;width:100%"></audio>
-      </block>
-      <view wx:else style="font-size:22rpx;color:#94a3b8;margin-top:12rpx">无预览</view>
-      <view style="text-align:center;margin-top:18rpx">
+      <view class="song-head">
+        <image wx:if="{{item.artwork_url}}" class="song-art" src="{{item.artwork_url}}" mode="aspectFill"></image>
+        <view wx:else class="song-art-placeholder">🎵</view>
+        <view class="song-info">
+          <view class="song-title">{{item.title}}</view>
+          <view class="song-artist">{{item.artist}}</view>
+        </view>
+        <view class="song-play-btn" bindtap="togglePlay" data-id="{{item.id}}" data-url="{{item.preview_url}}">
+          <text wx:if="{{playingId === item.id}}">⏸</text>
+          <text wx:else>▶</text>
+        </view>
+      </view>
+      <view wx:if="{{item.preview_url}}" class="song-progress">
+        <text class="song-time">{{fmt.toClock(playingId === item.id ? playPos : 0)}}</text>
+        <slider wx:if="{{playingId === item.id}}"
+                class="song-slider"
+                value="{{playPct}}"
+                min="0" max="100"
+                activeColor="#3b82f6"
+                backgroundColor="#e2e8f0"
+                block-size="16"
+                bindchanging="seekSong" />
+        <view wx:else class="song-bar-bg"><view class="song-bar-fg" style="width:0%"></view></view>
+        <text class="song-time">{{fmt.toClock(playingId === item.id ? playDur : 30)}}</text>
+      </view>
+      <view wx:else class="song-no-preview">无预览</view>
+      <view class="song-actions">
         <button class="btn sm {{item.liked ? '' : 'outline'}}" style="margin-right:10rpx" bindtap="toggleSong" data-id="{{item.id}}" data-type="like">{{item.liked ? '❤️ 已喜欢' : '♡ 喜欢'}}</button>
         <button class="btn sm {{item.disliked ? 'danger' : 'ghost'}}" bindtap="toggleSong" data-id="{{item.id}}" data-type="dislike">{{item.disliked ? '✕ 已跳过' : '跳过'}}</button>
       </view>
