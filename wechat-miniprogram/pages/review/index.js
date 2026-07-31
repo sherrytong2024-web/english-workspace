@@ -37,7 +37,7 @@ Page({
   /* ===== 单词闪卡 ===== */
   renderReview: function () {
     var s = app.state;
-    // 只复习用户实际完成过的每日��词
+    // 只复习用户实际完成过的每日单词
     var completedWords = [];
     (s.completedDailyWords || []).forEach(function (k) {
       var i = k.indexOf(':');
@@ -106,7 +106,7 @@ Page({
     var mastered = app.state.reviewState.mastered;
     if (mastered.indexOf(w.word) < 0) {
       mastered.push(w.word);
-      app.addLog('review', '复习掌���: ' + w.word);
+      app.addLog('review', '复习掌握: ' + w.word);
     }
     app.saveState();
     app.syncProgress();

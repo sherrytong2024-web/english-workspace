@@ -8,7 +8,7 @@
   <!-- 今日对话 -->
   <view class="card">
     <view class="card-title">
-      <text>今日对话��{{dailyDialogs.length}} 段）</text>
+      <text>今日对话 ({{dailyDialogs.length}} 段)</text>
       <view style="margin-top:10rpx">
         <text style="font-size:22rpx">每天</text>
         <picker mode="selector" range="{{countOptions}}" value="{{ddCountIdx}}" bindchange="onCountChange" style="display:inline-block;width:120rpx;margin:0 8rpx">
