@@ -1,23 +1,26 @@
-const RECOMMEND_POOL = require('../../utils/data.js').RECOMMEND_POOL;
-const NAMES = { video: '📺 财经视频', podcast: '🎧 学习播客', dict: '📚 词典工具', biz: '💼 职场商业', news: '📰 新闻市场' };
-const ORDER = ['video', 'podcast', 'dict', 'biz', 'news'];
+const app = getApp();
 
 Page({
-  data: { cats: [], collapsed: {} },
-  onShow: function () { this.render(); },
+  data: { cats: [], collapsed: {}, loading: true },
+  onShow: function () {
+    this.state = app.state;
+    app.onReady(() => { this.state = app.state; this.render(); });
+    if (this.state.resources && this.state.resources.length) this.render();
+  },
   render: function () {
+    const all = this.state.resources || [];
+    if (!all.length) { this.setData({ loading: true, cats: [] }); return; }
     const map = {};
-    RECOMMEND_POOL.forEach(function (r) {
-      let c = r.cat || 'news';
-      if (ORDER.indexOf(c) < 0) c = 'news';
+    all.forEach(function (r) {
+      const c = r.cat || 'other';
       (map[c] = map[c] || []).push(r);
     });
-    const cats = ORDER.filter(function (c) { return map[c] && map[c].length; }).map(function (c) {
-      return { key: c, name: NAMES[c] || c, list: map[c] };
+    const cats = Object.keys(map).map(function (c) {
+      return { key: c, name: c, list: map[c] };
     });
     const collapsed = {};
     cats.forEach(function (c, i) { collapsed[c.key] = i !== 0; });
-    this.setData({ cats: cats, collapsed: collapsed });
+    this.setData({ cats: cats, collapsed: collapsed, loading: false });
   },
   toggleCat: function (e) {
     const k = e.currentTarget.dataset.k;

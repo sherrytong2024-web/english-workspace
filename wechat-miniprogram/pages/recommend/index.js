@@ -1,33 +1,29 @@
 const app = getApp();
-const stateLib = require('../../utils/state.js');
+const api = require('../../utils/api.js');
 
 Page({
-  data: { list: [], cats: [], prefsCat: 'all', seed: 0 },
+  data: { blogs: [], songs: [], loading: true },
   onShow: function () {
-    this.state = app.state;
-    this.render();
+    this.fetchRecommend();
   },
-  render: function () {
-    const s = this.state;
-    const list = stateLib.getTodayRecommend(s, this.data.seed);
-    const cats = Object.keys(stateLib.catName).map(function (k) {
-      return { key: k, name: stateLib.catName[k] };
+  fetchRecommend: function () {
+    var self = this;
+    self.setData({ loading: true });
+    api.getRecommend().then(function (data) {
+      self.setData({ blogs: data.blogs || [], songs: data.songs || [], loading: false });
+    }).catch(function () {
+      self.setData({ loading: false, error: '加载失败，请重试' });
+      wx.showToast({ title: '加载失败', icon: 'none' });
     });
-    this.setData({ list: list, cats: cats, prefsCat: s.prefs.cat });
-  },
-  setCat: function (e) {
-    const cat = e.currentTarget.dataset.cat;
-    this.state.prefs.cat = cat;
-    app.saveState();
-    this.setData({ seed: 0, prefsCat: cat });
-    this.render();
-  },
-  changeBatch: function () {
-    this.setData({ seed: this.data.seed + Math.floor(Math.random() * 100) + 1 });
-    this.render();
   },
   openLink: function (e) {
     const url = e.currentTarget.dataset.url;
     wx.setClipboardData({ data: url, success: function () { wx.showToast({ title: '链接已复制', icon: 'none' }); } });
-  }
+  },
+  playSong: function (e) {
+    const url = e.currentTarget.dataset.url;
+    if (!url) { wx.showToast({ title: '无预览', icon: 'none' }); return; }
+    wx.setClipboardData({ data: url, success: function () { wx.showToast({ title: '预览链接已复制', icon: 'none' }); } });
+  },
+  refresh: function () { this.fetchRecommend(); }
 });

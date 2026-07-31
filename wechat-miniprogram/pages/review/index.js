@@ -1,22 +1,24 @@
 const app = getApp();
 const stateLib = require('../../utils/state.js');
-const SEED_DIALOGS = require('../../utils/data.js').SEED_DIALOGS;
 
 Page({
   data: { tab: 'dialog', dialogs: [], words: [], expanded: '' },
   onShow: function () {
     this.state = app.state;
-    this.render();
+    app.onReady(() => { this.state = app.state; this.render(); });
+    if (this.state.allDialogues && this.state.allDialogues.length) this.render();
+    else this.setData({ dialogs: [], words: [] });
   },
   render: function () {
     const s = this.state;
+    const all = s.allDialogues || [];
     if (this.data.tab === 'dialog') {
-      const ds = SEED_DIALOGS.filter(function (d) {
-        return s.learnedDialogs.indexOf(d.id) >= 0;
+      const ds = all.filter(function (d) {
+        return (s.learnedDialogs || []).indexOf(d.id) >= 0;
       }).map(function (d) {
         return {
           id: d.id, scene: d.scene,
-          body: d.body.map(function (l, i) { return Object.assign({ _i: i }, l); }),
+          body: (d.body || []).map(function (l, i) { return Object.assign({ _i: i }, l); }),
           keywords: d.keywords || []
         };
       });
