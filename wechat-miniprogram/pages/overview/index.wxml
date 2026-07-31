@@ -1,10 +1,8 @@
 <nav-drawer title="学习概览" current="overview">
   <view class="page-header">
-    <view>
-      <text class="h2">学习概览</text>
-      <view class="sub">按月查看学习日历，掌握每日进度</view>
-    </view>
-    <view class="row">
+    <view class="ph-title">学习概览</view>
+  <view class="sub">按月查看学习日历，掌握每日进度</view>
+    <view class="ph-actions">
       <button class="btn outline sm" bindtap="prevMonth">◀</button>
       <text style="font-weight:600;font-size:32rpx;padding:0 20rpx">{{monthLabel}}</text>
       <button class="btn outline sm" bindtap="nextMonth">▶</button>

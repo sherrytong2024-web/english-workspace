@@ -1,10 +1,8 @@
 <nav-drawer title="对话练习" current="dialogues">
   <!-- 页头 -->
   <view class="page-header">
-    <view>
-      <text class="h2">对话练习</text>
-      <view class="sub">分场景完整对话 · 每日推荐 · 已学对话自动进入复习</view>
-    </view>
+    <view class="ph-title">对话练习</view>
+  <view class="sub">分场景完整对话 · 每日推荐 · 已学对话自动进入复习</view>
   </view>
 
   <!-- 今日对话卡片 -->

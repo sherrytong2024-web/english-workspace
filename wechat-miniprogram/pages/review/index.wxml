@@ -1,9 +1,7 @@
 <nav-drawer title="复习" current="review">
   <view class="page-header">
-    <view>
-      <text class="h2">复习</text>
-      <view class="sub">单词复习 · 对话回看</view>
-    </view>
+    <view class="ph-title">复习</view>
+  <view class="sub">单词复习 · 对话回看</view>
   </view>
 
   <view class="row" style="margin-bottom:20rpx">

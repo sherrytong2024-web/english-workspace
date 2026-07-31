@@ -1,9 +1,7 @@
 <nav-drawer title="学习记录" current="log">
   <view class="page-header">
-    <view>
-      <text class="h2">学习记录</text>
-      <view class="sub">所有学习活动自动记录</view>
-    </view>
+    <view class="ph-title">学习记录</view>
+  <view class="sub">所有学习活动自动记录</view>
     <button class="btn outline sm" bindtap="clearLog">清空记录</button>
   </view>
 

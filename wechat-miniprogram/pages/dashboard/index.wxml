@@ -1,9 +1,7 @@
 <nav-drawer title="EN Workspace" current="dashboard">
   <view class="page-header">
-    <view>
-      <text class="h2">{{greeting}}</text>
-      <view class="sub">{{todayDate}}</view>
-    </view>
+    <view class="ph-title">{{greeting}}</view>
+  <view class="sub">{{todayDate}}</view>
     <button class="btn ghost" bindtap="goRecommend">今日推荐 →</button>
   </view>
 

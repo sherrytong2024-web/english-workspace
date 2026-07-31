@@ -1,9 +1,7 @@
 <nav-drawer title="资源中心" current="resources">
   <view class="page-header">
-    <view>
-      <text class="h2">资源中心</text>
-      <view class="sub">官方来源 · 链接已验证 · 每日更新内容源</view>
-    </view>
+    <view class="ph-title">资源中心</view>
+  <view class="sub">官方来源 · 链接已验证 · 每日更新内容源</view>
     <input class="input" style="width:360rpx" placeholder="搜索资源..." bindinput="onSearch" value="{{searchText}}"></input>
   </view>
 

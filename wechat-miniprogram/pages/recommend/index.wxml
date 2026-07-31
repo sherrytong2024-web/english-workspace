@@ -1,9 +1,7 @@
 <nav-drawer title="每日推荐" current="recommend">
   <view class="page-header">
-    <view>
-      <text class="h2">每日推荐</text>
-      <view class="sub">{{recommendDate}}</view>
-    </view>
+    <view class="ph-title">每日推荐</view>
+  <view class="sub">{{recommendDate}}</view>
     <button class="btn" bindtap="refreshRecommend">⟳ 换一批</button>
   </view>
 
